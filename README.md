@@ -70,3 +70,10 @@ Basta abrir o link do site oficial já hospedado online:
 
 Este é um **projeto pessoal de fã, totalmente gratuito e sem fins lucrativos**, desenvolvido apenas para estudo e auxílio pessoal durante a jogatina.
 *Pokémon* e todos os nomes de personagens, jogos, criaturas e marcas associadas são propriedades intelectuais e marcas registradas da **Nintendo**, **Creatures Inc.** e **GAME FREAK**. *Pokémon Unbound* e *Pokémon Lazarus* são projetos criados por seus respectivos desenvolvedores na comunidade de fãs.
+
+---
+
+## 🔍 Palavras-Chave (Keywords / Tags)
+
+`Pokémon Team Recommendations` • `Pokemon Team Builder` • `Planejador de Equipes Pokémon` • `Montar Time Pokémon` • `Construtor de Equipes Pokémon` • `Melhores Equipes Pokémon` • `Melhor Time Pokémon` • `Calculadora de Sinergia Pokémon` • `Cobertura de Tipos Pokémon` • `Pokemon Team Planner` • `Best Pokemon Team` • `Pokemon FireRed Team Builder` • `Pokemon Emerald Team Builder` • `Pokemon Platinum Team Builder` • `Pokemon HeartGold SoulSilver Team` • `Pokemon Black White Team Builder` • `Pokemon Scarlet Violet Team Builder` • `Pokemon Legends Z-A` • `Pokemon Unbound Team Builder` • `Pokemon Lazarus Team Builder` • `Moveset Pokémon` • `EVs e IVs Pokémon` • `Pokédex Completa`
+
