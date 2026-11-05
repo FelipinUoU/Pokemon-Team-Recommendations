@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://felipinuou.github.io/Pokemon-Team-Recommendations/sitemap.xml
