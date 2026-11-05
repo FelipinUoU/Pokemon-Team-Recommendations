@@ -1264,7 +1264,6 @@
             </div>
             <p class="text-xs text-on-surface-variant mt-0.5">
               ${slot.pokemon.name}: <strong class="text-on-surface">${ENGINE.getPokemonCategory ? ENGINE.getPokemonCategory(slot.pokemon) : 'Pokémon'}</strong>
-              ${eff.activeMechanicNote ? ` • <span class="text-primary font-semibold">🧬 ${eff.activeMechanicNote}</span>` : ''}
             </p>
           </div>
         </div>
