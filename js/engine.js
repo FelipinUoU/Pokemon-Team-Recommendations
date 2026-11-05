@@ -530,6 +530,133 @@ window.POKE_ENGINE = (function () {
     return results;
   }
 
+  // Dex clássicas de Hoenn, Sinnoh, Unova B2W2, Kalos, Alola, Galar, Hisui e Paldea (Pokémon de gerações anteriores presentes na Pokédex Regional)
+  const HOENN_RETURNING_DEX = new Set([
+    25, 26, 27, 28, 37, 38, 39, 40, 41, 42, 43, 44, 45, 54, 55, 63, 64, 65, 66, 67, 68, 72, 73, 74, 75, 76,
+    81, 82, 84, 85, 88, 89, 100, 101, 109, 110, 111, 112, 116, 117, 118, 119, 120, 121, 127, 129, 130,
+    169, 170, 171, 172, 174, 177, 178, 182, 183, 184, 202, 203, 214, 222, 227, 230, 231, 232
+  ]);
+  const SINNOH_RETURNING_DEX = new Set([
+    25, 26, 35, 36, 41, 42, 54, 55, 63, 64, 65, 66, 67, 68, 72, 73, 74, 75, 76, 77, 78, 81, 82, 92, 93, 94,
+    95, 108, 111, 112, 113, 114, 118, 119, 122, 123, 125, 126, 129, 130, 133, 134, 135, 136, 137, 143,
+    163, 164, 169, 172, 173, 175, 176, 183, 184, 185, 190, 193, 194, 195, 196, 197, 198, 200, 201, 203,
+    207, 208, 212, 214, 215, 220, 221, 223, 224, 226, 228, 229, 233, 239, 240, 242,
+    265, 266, 267, 268, 269, 278, 279, 280, 281, 282, 299, 307, 308, 315, 333, 334, 339, 340, 349, 350, 355, 356, 357, 358, 359, 361, 362
+  ]);
+  const B2W2_RETURNING_DEX = new Set([
+    25, 26, 27, 28, 35, 36, 37, 38, 39, 40, 41, 42, 54, 55, 58, 59, 60, 61, 62, 74, 75, 76, 81, 82, 88, 89,
+    95, 108, 109, 110, 113, 114, 116, 117, 120, 121, 123, 125, 126, 127, 129, 130, 131, 132, 133, 134, 135, 136,
+    147, 148, 149, 169, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 183, 184, 185, 186, 191, 192, 193,
+    196, 197, 206, 207, 208, 212, 213, 214, 215, 220, 221, 222, 223, 224, 225, 226, 227, 230, 239, 240, 242, 246, 247, 248,
+    270, 271, 272, 276, 277, 278, 279, 280, 281, 282, 283, 284, 287, 288, 289, 298, 299, 300, 301, 302, 303, 304, 305, 306,
+    315, 316, 317, 318, 319, 320, 321, 322, 323, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338,
+    341, 342, 343, 344, 353, 354, 357, 359, 360, 363, 364, 365, 371, 372, 373, 374, 375, 376,
+    406, 407, 415, 416, 418, 419, 425, 426, 427, 428, 434, 435, 436, 437, 438, 440, 442, 443, 444, 445, 446, 447, 448,
+    451, 452, 453, 454, 456, 457, 458, 461, 462, 463, 465, 466, 467, 468, 469, 470, 471, 472, 473, 475, 476, 478
+  ]);
+
+  // Retorna informações dos 2 modos do Switch: "Pokédex (Regional do Jogo)" vs "National Dex (da Época do Jogo)"
+  function getDexScopeInfo(game) {
+    if (!game) {
+      return {
+        regionalLabel: 'Pokédex Regional',
+        nationalLabel: 'National Dex',
+        eraNationalGen: 9
+      };
+    }
+    const eraGen = game.id === 'fangame-unbound' ? 8 : (game.generation === 99 ? 9 : game.generation);
+    const maxDexByGen = { 1: 151, 2: 251, 3: 386, 4: 493, 5: 649, 6: 721, 7: 809, 8: 905, 9: 1025 };
+    const natMaxNum = maxDexByGen[eraGen] || 1025;
+    return {
+      regionalLabel: `Pokédex (${game.region})`,
+      nationalLabel: `National Dex (Até Gen ${eraGen} • #${natMaxNum})`,
+      eraNationalGen: eraGen,
+      natMaxNum
+    };
+  }
+
+  // Verifica se um Pokémon pertence à Pokédex Regional do jogo ou à National Dex da época em que o jogo foi lançado
+  function isPokemonAvailableInGame(mon, game, useNationalDex = false) {
+    if (!game) return true;
+    const { eraNationalGen } = getDexScopeInfo(game);
+
+    // Formas de Hisui só aparecem em Legends: Arceus, Gen 9, Unbound e Lazarus
+    if (mon.id.endsWith('-hisui') && !['gen8-pla', 'gen9-sv', 'gen9-lza', 'fangame-unbound', 'fangame-lazarus'].includes(game.id)) {
+      return false;
+    }
+
+    // 1. Limite máximo da época em que o jogo foi lançado (nunca mostra Pokémon de gerações futuras ao jogo!)
+    if (mon.gen > eraNationalGen) {
+      return false;
+    }
+
+    // 2. Se o Switch estiver em "National Dex", libera toda a National Dex existente na geração em que o jogo foi lançado!
+    if (useNationalDex) {
+      return true;
+    }
+
+    // 3. Se o Switch estiver em "Pokédex" (padrão), mostra a Pokédex Regional da campanha daquele jogo:
+    const isFeatured = (game.featuredMons || []).some(f => f.toLowerCase() === mon.id.toLowerCase());
+    const isStarter = (game.starters || []).includes(mon.starterRef) || (game.starters || []).includes(mon.id);
+
+    switch (game.id) {
+      case 'gen1-rb':
+      case 'gen1-yellow':
+      case 'gen3-frlg': // Remake de Kanto: Pokédex Regional = exatamente os 151 de Kanto; National Dex = 386 da Gen 3!
+        return mon.dex >= 1 && mon.dex <= 151 && mon.gen === 1;
+
+      case 'gen7-lgpe':
+        return (mon.dex >= 1 && mon.dex <= 151) || mon.dex === 808 || mon.dex === 809;
+
+      case 'gen2-gsc':
+        return mon.dex >= 1 && mon.dex <= 251 && mon.gen <= 2;
+
+      case 'gen4-hgss': // Remake de Johto: Pokédex Regional = 256 de Johto/Kanto; National Dex = 493 da Gen 4!
+        return (mon.dex >= 1 && mon.dex <= 251 && mon.gen <= 2) || [424, 438, 439, 463, 465, 469, 473].includes(mon.dex);
+
+      case 'gen5-bw': // Black/White 1: Pokédex Regional de Unova possui exclusivamente os 156 Pokémon da Gen 5!
+        return mon.gen === 5;
+
+      case 'gen3-rse':
+        return mon.gen === 3 || HOENN_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
+
+      case 'gen6-oras': // Remake de Hoenn: Pokédex Regional = Hoenn Dex + evoluções diretas adicionadas no ORAS; National Dex = 721 da Gen 6!
+        return mon.gen === 3 || HOENN_RETURNING_DEX.has(mon.dex) || [406, 407, 433, 462, 464, 475, 476, 477, 478].includes(mon.dex) || isFeatured || isStarter;
+
+      case 'gen4-dpp':
+      case 'gen8-bdsp': // Remake de Sinnoh: Pokédex Regional = Sinnoh Dex; National Dex = National Dex da época!
+        return mon.gen === 4 || SINNOH_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
+
+      case 'gen5-b2w2': // Black 2/White 2: New Unova Dex
+        return mon.gen === 5 || B2W2_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
+
+      case 'gen6-xy':
+        return mon.gen === 6 || mon.gen === 1 || Boolean(mon.mega) || SINNOH_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
+
+      case 'gen7-sm-usum':
+        return mon.gen === 7 || mon.id.endsWith('-alola') || mon.gen === 1 || HOENN_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
+
+      case 'gen8-swsh':
+        return mon.gen === 8 || mon.id.endsWith('-galar') || B2W2_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
+
+      case 'gen8-pla':
+        return mon.id.endsWith('-hisui') || mon.gen === 4 || SINNOH_RETURNING_DEX.has(mon.dex) || (mon.dex >= 899 && mon.dex <= 905) || isFeatured || isStarter;
+
+      case 'gen9-sv':
+        return mon.gen === 9 || mon.id.endsWith('-paldea') || B2W2_RETURNING_DEX.has(mon.dex) || SINNOH_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
+
+      case 'gen9-lza':
+        return mon.gen === 6 || Boolean(mon.mega) || mon.gen === 9 || HOENN_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
+
+      case 'fangame-unbound':
+        return mon.gen <= 7 || mon.id.endsWith('-hisui') || isFeatured || isStarter;
+
+      case 'fangame-lazarus':
+      default:
+        return mon.gen <= eraNationalGen;
+    }
+  }
+
   // ==========================================================================
   // MOTOR DE RECOMENDAÇÃO DE POKÉMON PARA A EQUIPE (COBERTURA DE FRAQUEZAS E DEFESAS)
   // ==========================================================================
@@ -542,11 +669,9 @@ window.POKE_ENGINE = (function () {
 
     const candidates = POKEMON.filter(mon => {
       if (!filterOptions.includeCurrentTeam && currentIds.has(mon.id)) return false;
-      // Filtra por disponibilidade na geração do jogo (a menos que filterOptions.allowNationalDex esteja ativo)
-      if (!filterOptions.allowNationalDex && game && game.maxDexGen) {
-        const isFeatured = (game.featuredMons || []).some(f => f.toLowerCase() === mon.id.toLowerCase());
-        const isStarter = (game.starters || []).includes(mon.starterRef) || (game.starters || []).includes(mon.id);
-        if (!isFeatured && !isStarter && mon.gen > game.maxDexGen) return false;
+      // Filtra respeitando o jogo selecionado e o Switch entre "Pokédex (Regional)" vs "National Dex (da Época do Jogo)"
+      if (!isPokemonAvailableInGame(mon, game, Boolean(filterOptions.allowNationalDex))) {
+        return false;
       }
       // Se não estiver pesquisando nem no modo Pokédex completa, prioriza formas finais nas recomendações
       if (!filterOptions.includePreEvos && !filterOptions.searchQuery && mon.isFinalEvo === false) {
@@ -836,6 +961,8 @@ window.POKE_ENGINE = (function () {
     getRecommendedMovesForPokemon,
     getRecommendedItemsForPokemon,
     getRecommendedPokemonForTeam,
+    getDexScopeInfo,
+    isPokemonAvailableInGame,
     createOptimizedSlot,
     fetchPokemonFromPokeAPI,
     getSpriteUrl

@@ -635,6 +635,27 @@
         activeTypes.map(t => `<option value="${t}" ${state.pickerType === t ? 'selected' : ''}>${TYPES[t].icon} ${TYPES[t].name}</option>`).join('');
     }
 
+    const scopeInfo = ENGINE.getDexScopeInfo ? ENGINE.getDexScopeInfo(game) : { eraNationalGen: game.generation || 9, natMaxNum: 1025 };
+    const pickerSwitchEl = document.getElementById('picker-dex-scope-switch');
+    if (pickerSwitchEl) {
+      pickerSwitchEl.innerHTML = `
+        <button type="button" data-picker-dex-scope="pokedex" class="px-3 py-1.5 rounded-lg font-headline text-xs transition-all cursor-pointer ${
+          !state.pickerNatDex
+            ? 'bg-primary-container text-on-primary-container font-bold shadow'
+            : 'text-on-surface-variant hover:text-on-surface font-semibold'
+        }">
+          📖 Pokédex (${game.region})
+        </button>
+        <button type="button" data-picker-dex-scope="national" class="px-3 py-1.5 rounded-lg font-headline text-xs transition-all cursor-pointer ${
+          state.pickerNatDex
+            ? 'bg-primary-container text-on-primary-container font-bold shadow'
+            : 'text-on-surface-variant hover:text-on-surface font-semibold'
+        }">
+          🌐 National Dex (Gen 1–${scopeInfo.eraNationalGen})
+        </button>
+      `;
+    }
+
     const candidates = ENGINE.getRecommendedPokemonForTeam(state.team, game, {
       typeFilter: state.pickerType,
       searchQuery: state.pickerSearch,
@@ -653,7 +674,7 @@
 
     if (countBarEl) {
       countBarEl.innerHTML = `
-        <span>Encontrados <strong class="text-primary">${candidates.length} Pokémon</strong> disponíveis ${state.pickerNatDex ? 'na National Dex Completa' : `em ${game.name}`}</span>
+        <span>Encontrados <strong class="text-primary">${candidates.length} Pokémon</strong> na <strong>${state.pickerNatDex ? `National Dex da época de ${game.name} (Até Gen ${scopeInfo.eraNationalGen} • #${scopeInfo.natMaxNum})` : `Pokédex Regional de ${game.region} (${game.name})`}</strong></span>
         <span>Clique em qualquer card para selecionar no <strong class="text-on-surface">Slot #${state.pickerTargetSlot + 1}</strong></span>
       `;
     }
@@ -1289,7 +1310,28 @@
     const game = getCurrentGame();
     const listEl = document.getElementById('recommended-pokemon-grid');
     const typeFilterEl = document.getElementById('rec-type-filter');
+    const bottomSwitchEl = document.getElementById('bottom-dex-scope-switch');
     if (!listEl) return;
+
+    const scopeInfo = ENGINE.getDexScopeInfo ? ENGINE.getDexScopeInfo(game) : { eraNationalGen: game.generation || 9 };
+    if (bottomSwitchEl) {
+      bottomSwitchEl.innerHTML = `
+        <button type="button" data-bottom-dex-scope="pokedex" class="px-3 py-1.5 rounded-lg font-headline text-xs transition-all cursor-pointer ${
+          !state.allowNationalDex
+            ? 'bg-primary-container text-on-primary-container font-bold shadow'
+            : 'text-on-surface-variant hover:text-on-surface font-semibold'
+        }">
+          📖 Pokédex (${game.region})
+        </button>
+        <button type="button" data-bottom-dex-scope="national" class="px-3 py-1.5 rounded-lg font-headline text-xs transition-all cursor-pointer ${
+          state.allowNationalDex
+            ? 'bg-primary-container text-on-primary-container font-bold shadow'
+            : 'text-on-surface-variant hover:text-on-surface font-semibold'
+        }">
+          🌐 National Dex (Gen 1–${scopeInfo.eraNationalGen})
+        </button>
+      `;
+    }
 
     if (typeFilterEl) {
       const activeTypes = ENGINE.getActiveTypesForGame(game);
@@ -1626,6 +1668,8 @@
         const g = getCurrentGame();
         state.selectedVersion = g.versions[0];
         state.showAllInBottomGrid = false;
+        state.allowNationalDex = false;
+        state.pickerNatDex = false;
 
         const pickerTypeSelect = document.getElementById('picker-type-filter');
         if (pickerTypeSelect) pickerTypeSelect.innerHTML = '<option value="all">Todos os Tipos</option>';
@@ -1669,6 +1713,21 @@
 
     // Delegação global de cliques
     document.body.addEventListener('click', async e => {
+      // Switch entre Pokédex Regional e National Dex da época no Modal
+      const pickerScopeBtn = e.target.closest('[data-picker-dex-scope]');
+      if (pickerScopeBtn) {
+        state.pickerNatDex = pickerScopeBtn.dataset.pickerDexScope === 'national';
+        renderPokedexPickerModalContent();
+        return;
+      }
+
+      // Switch entre Pokédex Regional e National Dex da época na Grade Inferior
+      const bottomScopeBtn = e.target.closest('[data-bottom-dex-scope]');
+      if (bottomScopeBtn) {
+        state.allowNationalDex = bottomScopeBtn.dataset.bottomDexScope === 'national';
+        renderAll();
+        return;
+      }
       // Ações do Menu Lateral de Equipes Salvas
       const loadSavedBtn = e.target.closest('[data-load-saved]');
       if (loadSavedBtn) {
