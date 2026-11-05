@@ -948,7 +948,10 @@ window.POKE_ENGINE = (function () {
       ability: (pokemon.abilities && pokemon.abilities[0]) || 'Overgrow',
       nature: pokemon.bestNature || 'Adamant (+Atk, -SpA)',
       item: null,
-      moves: [null, null, null, null]
+      moves: [null, null, null, null],
+      evIvEnabled: false,
+      ivs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+      evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }
     };
 
     const currentAnalysis = analyzeTeam(currentTeamSlots, game);

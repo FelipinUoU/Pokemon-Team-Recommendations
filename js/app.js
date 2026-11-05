@@ -79,7 +79,10 @@
         ability: s.ability,
         nature: s.nature,
         item: s.item,
-        moves: s.moves
+        moves: s.moves,
+        evIvEnabled: Boolean(s.evIvEnabled),
+        ivs: s.ivs ? { ...s.ivs } : { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+        evs: s.evs ? { ...s.evs } : { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }
       };
     });
   }
@@ -91,6 +94,7 @@
       if (!item || !item.pokemonId) return;
       const mon = findPokemonById(item.pokemonId);
       if (!mon) return;
+      const defStats = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
       result[idx] = {
         pokemon: mon,
         mechanic: item.mechanic || null,
@@ -100,7 +104,10 @@
         ability: item.ability || (mon.abilities && mon.abilities[0]) || 'Overgrow',
         nature: item.nature || mon.bestNature || 'Adamant (+Atk, -SpA)',
         item: item.item || null,
-        moves: Array.isArray(item.moves) ? [...item.moves] : [null, null, null, null]
+        moves: Array.isArray(item.moves) ? [...item.moves] : [null, null, null, null],
+        evIvEnabled: Boolean(item.evIvEnabled),
+        ivs: item.ivs ? { ...defStats, ...item.ivs } : { ...defStats },
+        evs: item.evs ? { ...defStats, ...item.evs } : { ...defStats }
       };
     });
     return result;
@@ -731,6 +738,58 @@
   // ==========================================================================
   // 3. PAINEL DE EDIÇÃO PROFUNDA DO POKÉMON ATIVO (STITCH 4-TAB DEEP EDITOR)
   // ==========================================================================
+  function computeSingleStatDisplay(statKey, baseVal, natureObj, slot, pokemonId) {
+    const iv = (slot.ivs && typeof slot.ivs[statKey] === 'number') ? slot.ivs[statKey] : 0;
+    const ev = (slot.evs && typeof slot.evs[statKey] === 'number') ? slot.evs[statKey] : 0;
+    const evIvOn = Boolean(slot.evIvEnabled);
+
+    if (!evIvOn) {
+      let calcVal = baseVal;
+      let modTag = '';
+      let valClass = 'text-on-surface';
+      if (natureObj.up === statKey) {
+        calcVal = Math.floor(baseVal * 1.1);
+        modTag = `<span class="text-[10px] text-tertiary font-mono ml-1">(+10% ↑ • Base ${baseVal})</span>`;
+        valClass = 'text-tertiary';
+      } else if (natureObj.down === statKey) {
+        calcVal = Math.floor(baseVal * 0.9);
+        modTag = `<span class="text-[10px] text-error font-mono ml-1">(-10% ↓ • Base ${baseVal})</span>`;
+        valClass = 'text-error';
+      }
+      const pct = Math.min(100, Math.round((calcVal / 180) * 100));
+      return { calcVal, modTag, valClass, pct, iv, ev };
+    }
+
+    // Cálculo com EVs e IVs ativados (Status Editado Nv. 100)
+    const evBonus = Math.floor(ev / 4);
+    let calcVal = baseVal;
+    let modTag = '';
+    let valClass = (iv > 0 || ev > 0) ? 'text-primary' : 'text-on-surface';
+
+    if (statKey === 'hp') {
+      calcVal = pokemonId === 'shedinja' ? 1 : (2 * baseVal + iv + evBonus + 110);
+      modTag = `<span class="text-[10px] text-on-surface-variant font-mono ml-1">(Base ${baseVal} • +${iv} IV • +${evBonus} EV)</span>`;
+    } else {
+      const rawStat = 2 * baseVal + iv + evBonus + 5;
+      let natureMult = 1.0;
+      let natLabel = '';
+      if (natureObj.up === statKey) {
+        natureMult = 1.1;
+        natLabel = ' • +10%↑';
+        valClass = 'text-tertiary';
+      } else if (natureObj.down === statKey) {
+        natureMult = 0.9;
+        natLabel = ' • -10%↓';
+        valClass = 'text-error';
+      }
+      calcVal = Math.floor(rawStat * natureMult);
+      modTag = `<span class="text-[10px] ${natureObj.up === statKey ? 'text-tertiary' : (natureObj.down === statKey ? 'text-error' : 'text-on-surface-variant')} font-mono ml-1">(Base ${baseVal}${natLabel})</span>`;
+    }
+
+    const pct = Math.min(100, Math.round((calcVal / 520) * 100));
+    return { calcVal, modTag, valClass, pct, iv, ev };
+  }
+
   function renderActiveSlotEditor(teamAnalysis) {
     const container = document.getElementById('slot-detail-editor');
     if (!container) return;
@@ -785,13 +844,21 @@
           <div data-select-move-slot="${idx}" class="p-3 rounded-xl bg-surface-container-lowest border-2 ${
             isCurrentMoveSlot ? 'border-primary shadow-md' : 'border-outline-variant/25 hover:border-outline-variant/60'
           } cursor-pointer transition-all" style="border-left: 4px solid ${t.color}">
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-mono text-[10px] text-on-surface-variant uppercase">ATAQUE #${idx + 1} • ${mv.category}</span>
-              ${renderTypeBadge(mv.type, 'xs')}
-            </div>
-            <div class="font-headline font-bold text-sm text-on-surface truncate">${mv.name}</div>
-            <div class="text-[11px] font-mono text-on-surface-variant mt-1">
-              Poder: <strong class="text-on-surface">${mv.power || '—'}</strong> • Prec: <strong class="text-on-surface">${mv.acc}%</strong>
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0 flex-1">
+                <span class="font-mono text-[10px] text-on-surface-variant uppercase block mb-0.5">ATAQUE #${idx + 1} • ${mv.category}</span>
+                <div class="font-headline font-bold text-sm text-on-surface truncate">${mv.name}</div>
+                <div class="text-[11px] font-mono text-on-surface-variant mt-1">
+                  Poder: <strong class="text-on-surface">${mv.power || '—'}</strong> • Prec: <strong class="text-on-surface">${mv.acc}%</strong>
+                </div>
+              </div>
+              <div class="flex flex-col items-end gap-1.5 shrink-0">
+                ${renderTypeBadge(mv.type, 'xs')}
+                <button type="button" data-remove-move-slot="${idx}" class="px-2 py-0.5 rounded bg-error-container/25 hover:bg-error-container/50 text-error border border-error/35 font-mono text-[10px] font-bold flex items-center gap-0.5 transition-colors cursor-pointer" title="Tirar este ataque escolhido">
+                  <span class="material-symbols-outlined text-[12px]">close</span>
+                  Tirar
+                </button>
+              </div>
             </div>
           </div>
         `;
@@ -1025,6 +1092,10 @@
       const idealNature = slot.pokemon.bestNature || 'Adamant (+Atk, -SpA)';
       const abilityDesc = ENGINE.getAbilityDescription ? ENGINE.getAbilityDescription(eff.ability) : '';
 
+      if (!slot.ivs) slot.ivs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+      if (!slot.evs) slot.evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+      const evIvOn = Boolean(slot.evIvEnabled);
+
       const statNames = [
         { k: 'hp', label: 'HP', val: eff.stats.hp, color: '#30c88f' },
         { k: 'atk', label: 'Attack', val: eff.stats.atk, color: '#38bdf8' },
@@ -1034,42 +1105,73 @@
         { k: 'spe', label: 'Speed', val: eff.stats.spe, color: '#56e5a9' }
       ];
 
+      const allMaxed = evIvOn && statNames.every(s => (slot.ivs[s.k] === 31) && (slot.evs[s.k] === 252));
+
       let adjustedTotal = 0;
       const computedStats = statNames.map(s => {
-        let calcVal = s.val;
-        let modTag = '';
-        let valClass = 'text-on-surface';
-        if (natureObj.up === s.k) {
-          calcVal = Math.floor(s.val * 1.1);
-          modTag = `<span class="text-[10px] text-tertiary font-mono ml-1">(+10% ↑ • Base ${s.val})</span>`;
-          valClass = 'text-tertiary';
-        } else if (natureObj.down === s.k) {
-          calcVal = Math.floor(s.val * 0.9);
-          modTag = `<span class="text-[10px] text-error font-mono ml-1">(-10% ↓ • Base ${s.val})</span>`;
-          valClass = 'text-error';
-        }
-        adjustedTotal += calcVal;
-        return { ...s, calcVal, modTag, valClass };
+        const rowInfo = computeSingleStatDisplay(s.k, s.val, natureObj, slot, slot.pokemon.id);
+        adjustedTotal += rowInfo.calcVal;
+        return { ...s, ...rowInfo };
       });
 
       tabBodyHtml = `
         <div class="p-space-lg grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
           <!-- Left 7 Cols: Base Stats Bars & Ability/Nature -->
           <div class="lg:col-span-7 space-y-space-sm">
-            <div class="flex items-center justify-between mb-2">
-              <h4 class="font-headline font-bold text-sm text-on-surface uppercase tracking-wider">Atributos (${eff.name})</h4>
-              <span class="font-mono text-xs text-primary font-bold">Total Base (BST): ${eff.bst} ${adjustedTotal !== eff.bst ? `• Com Natureza: ${adjustedTotal}` : ''}</span>
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <h4 class="font-headline font-bold text-sm text-on-surface uppercase tracking-wider">Atributos (${eff.name})</h4>
+                <button type="button" data-toggle-ev-iv="true" class="px-2.5 py-1 rounded-lg font-headline font-bold text-[11px] flex items-center gap-1.5 border transition-all cursor-pointer ${
+                  evIvOn
+                    ? 'bg-primary-container text-on-primary-container border-primary shadow-sm'
+                    : 'bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant border-outline-variant/30'
+                }" title="Ativar ou desativar edição de EVs e IVs">
+                  <span class="material-symbols-outlined text-[14px]">${evIvOn ? 'toggle_on' : 'toggle_off'}</span>
+                  EVs &amp; IVs: ${evIvOn ? 'Ativado' : 'Desativado'}
+                </button>
+                ${evIvOn ? `
+                  <button type="button" data-max-all-ev-iv="true" class="px-2.5 py-1 rounded-lg font-headline font-bold text-[11px] flex items-center gap-1 border transition-all cursor-pointer ${
+                    allMaxed
+                      ? 'bg-surface-container-highest text-on-surface border-outline-variant/40 hover:bg-error-container/25 hover:text-error'
+                      : 'bg-secondary-container/25 hover:bg-secondary-container/40 text-secondary border-secondary/40'
+                  }" title="Ver como o Pokémon fica com todos os EVs (252) e IVs (31) no máximo">
+                    <span class="material-symbols-outlined text-[14px]">${allMaxed ? 'restart_alt' : 'bolt'}</span>
+                    ${allMaxed ? 'Zerar EVs & IVs' : 'Todos EVs & IVs no Máximo'}
+                  </button>
+                ` : ''}
+              </div>
+              <span id="stats-total-summary" class="font-mono text-xs text-primary font-bold">
+                ${evIvOn
+                  ? `BST Base: ${eff.bst} • Total Status Editados: ${adjustedTotal}`
+                  : `Total Base (BST): ${eff.bst} ${adjustedTotal !== eff.bst ? `• Com Natureza: ${adjustedTotal}` : ''}`
+                }
+              </span>
             </div>
-            <div class="space-y-2.5 bg-surface-container-low p-space-md rounded-xl border border-outline-variant/15">
+            <div class="space-y-3 bg-surface-container-low p-space-md rounded-xl border border-outline-variant/15">
               ${computedStats.map(s => {
-                const pct = Math.min(100, Math.round((s.calcVal / 180) * 100));
                 return `
-                  <div class="grid grid-cols-12 items-center gap-2 text-xs">
-                    <span class="col-span-2 font-mono text-on-surface-variant">${s.label}</span>
-                    <span class="col-span-3 font-mono font-bold ${s.valClass} text-right">${s.calcVal}${s.modTag}</span>
-                    <div class="col-span-7 h-2.5 bg-surface-container-lowest rounded-full overflow-hidden">
-                      <div class="h-full rounded-full transition-all" style="width:${pct}%; background:${s.color}"></div>
+                  <div class="space-y-1.5 ${evIvOn ? 'pb-2.5 border-b border-outline-variant/15 last:border-b-0 last:pb-0' : ''}">
+                    <div class="grid grid-cols-12 items-center gap-2 text-xs">
+                      <span class="col-span-2 font-mono font-semibold text-on-surface-variant">${s.label}</span>
+                      <span id="stat-val-${s.k}" class="col-span-4 font-mono font-bold ${s.valClass} text-right">${s.calcVal}${s.modTag}</span>
+                      <div class="col-span-6 h-2.5 bg-surface-container-lowest rounded-full overflow-hidden">
+                        <div id="stat-bar-${s.k}" class="h-full rounded-full transition-all" style="width:${s.pct}%; background:${s.color}"></div>
+                      </div>
                     </div>
+                    ${evIvOn ? `
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-2 pt-1 text-[11px] font-mono">
+                        <div class="flex items-center gap-2 bg-surface-container-lowest/80 px-2.5 py-1.5 rounded-lg border border-outline-variant/15">
+                          <span class="text-primary font-bold w-7 shrink-0">IV</span>
+                          <input type="range" min="0" max="31" step="1" value="${s.iv}" data-stat-iv="${s.k}" class="ev-iv-slider flex-1" />
+                          <span id="iv-val-${s.k}" class="text-on-surface font-bold w-11 text-right shrink-0">${s.iv}/31</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-surface-container-lowest/80 px-2.5 py-1.5 rounded-lg border border-outline-variant/15">
+                          <span class="text-secondary font-bold w-7 shrink-0">EV</span>
+                          <input type="range" min="0" max="252" step="4" value="${s.ev}" data-stat-ev="${s.k}" class="ev-iv-slider ev-slider flex-1" />
+                          <span id="ev-val-${s.k}" class="text-on-surface font-bold w-14 text-right shrink-0">${s.ev}/252</span>
+                        </div>
+                      </div>
+                    ` : ''}
                   </div>
                 `;
               }).join('')}
@@ -1918,11 +2020,60 @@
         return;
       }
 
+      // Remover / Tirar ataque escolhido de um dos 4 slots de golpe
+      const remMoveBtn = e.target.closest('[data-remove-move-slot]');
+      if (remMoveBtn) {
+        e.stopPropagation();
+        const mIdx = Number(remMoveBtn.dataset.removeMoveSlot);
+        const slot = state.team[state.activeSlotIndex];
+        if (slot && slot.pokemon && Array.isArray(slot.moves)) {
+          slot.moves[mIdx] = null;
+          state.activeMoveSlotIndex = mIdx;
+          renderAll();
+          showToast('🗑️ Ataque removido do slot!');
+        }
+        return;
+      }
+
       // Selecionar qual dos 4 slots de ataque está sendo editado
       const moveSlotEl = e.target.closest('[data-select-move-slot]');
       if (moveSlotEl) {
         state.activeMoveSlotIndex = Number(moveSlotEl.dataset.selectMoveSlot);
         renderAll();
+        return;
+      }
+
+      // Ativar ou Desativar edição de EVs e IVs nos Atributos
+      if (e.target.closest('[data-toggle-ev-iv]')) {
+        const slot = state.team[state.activeSlotIndex];
+        if (slot && slot.pokemon) {
+          slot.evIvEnabled = !slot.evIvEnabled;
+          if (!slot.ivs) slot.ivs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+          if (!slot.evs) slot.evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+          renderAll();
+        }
+        return;
+      }
+
+      // Botão para colocar Todos EVs (252) e IVs (31) no Máximo (ou zerar caso já estejam no máximo)
+      if (e.target.closest('[data-max-all-ev-iv]')) {
+        const slot = state.team[state.activeSlotIndex];
+        if (slot && slot.pokemon) {
+          slot.evIvEnabled = true;
+          const keys = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+          if (!slot.ivs) slot.ivs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+          if (!slot.evs) slot.evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+          const alreadyMax = keys.every(k => slot.ivs[k] === 31 && slot.evs[k] === 252);
+          keys.forEach(k => {
+            slot.ivs[k] = alreadyMax ? 0 : 31;
+            slot.evs[k] = alreadyMax ? 0 : 252;
+          });
+          renderAll();
+          showToast(alreadyMax
+            ? `↺ EVs e IVs de ${slot.pokemon.name} foram zerados!`
+            : `⚡ Todos os EVs (252) e IVs (31) de ${slot.pokemon.name} no máximo!`
+          );
+        }
         return;
       }
 
@@ -2099,6 +2250,73 @@
       } else if (e.target.id === 'picker-nat-dex') {
         state.pickerNatDex = e.target.checked;
         renderPokedexPickerModalContent();
+      } else if (e.target.dataset && (e.target.dataset.statIv || e.target.dataset.statEv)) {
+        saveToStorage();
+      }
+    });
+
+    // Atualização em tempo real ao arrastar as barras escalonáveis de IVs (0–31) e EVs (0–252)
+    document.body.addEventListener('input', e => {
+      const ivKey = e.target.dataset ? e.target.dataset.statIv : null;
+      const evKey = e.target.dataset ? e.target.dataset.statEv : null;
+      if (!ivKey && !evKey) return;
+
+      const slot = state.team[state.activeSlotIndex];
+      if (!slot || !slot.pokemon) return;
+      if (!slot.ivs) slot.ivs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+      if (!slot.evs) slot.evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+
+      const statKey = ivKey || evKey;
+      const numVal = Math.max(0, Number(e.target.value) || 0);
+      if (ivKey) {
+        slot.ivs[statKey] = Math.min(31, numVal);
+        const ivLabel = document.getElementById(`iv-val-${statKey}`);
+        if (ivLabel) ivLabel.textContent = `${slot.ivs[statKey]}/31`;
+      } else {
+        slot.evs[statKey] = Math.min(252, numVal);
+        const evLabel = document.getElementById(`ev-val-${statKey}`);
+        if (evLabel) evLabel.textContent = `${slot.evs[statKey]}/252`;
+      }
+
+      const game = getCurrentGame();
+      const eff = ENGINE.getEffectivePokemonState(slot, game);
+      const natureObj = ENGINE.getNatureInfo ? ENGINE.getNatureInfo(slot.nature) : { id: slot.nature, up: null, down: null };
+      const keys = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+
+      let totalEdited = 0;
+      keys.forEach(k => {
+        const info = computeSingleStatDisplay(k, eff.stats[k], natureObj, slot, slot.pokemon.id);
+        totalEdited += info.calcVal;
+        if (k === statKey) {
+          const valEl = document.getElementById(`stat-val-${k}`);
+          if (valEl) {
+            valEl.className = `col-span-4 font-mono font-bold ${info.valClass} text-right`;
+            valEl.innerHTML = `${info.calcVal}${info.modTag}`;
+          }
+          const barEl = document.getElementById(`stat-bar-${k}`);
+          if (barEl) {
+            barEl.style.width = `${info.pct}%`;
+          }
+        }
+      });
+
+      const summaryEl = document.getElementById('stats-total-summary');
+      if (summaryEl) {
+        summaryEl.textContent = `BST Base: ${eff.bst} • Total Status Editados: ${totalEdited}`;
+      }
+
+      const maxBtn = document.querySelector('[data-max-all-ev-iv]');
+      if (maxBtn) {
+        const allMaxed = keys.every(k => slot.ivs[k] === 31 && slot.evs[k] === 252);
+        maxBtn.className = `px-2.5 py-1 rounded-lg font-headline font-bold text-[11px] flex items-center gap-1 border transition-all cursor-pointer ${
+          allMaxed
+            ? 'bg-surface-container-highest text-on-surface border-outline-variant/40 hover:bg-error-container/25 hover:text-error'
+            : 'bg-secondary-container/25 hover:bg-secondary-container/40 text-secondary border-secondary/40'
+        }`;
+        maxBtn.innerHTML = `
+          <span class="material-symbols-outlined text-[14px]">${allMaxed ? 'restart_alt' : 'bolt'}</span>
+          ${allMaxed ? 'Zerar EVs & IVs' : 'Todos EVs & IVs no Máximo'}
+        `;
       }
     });
 

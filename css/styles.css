@@ -180,3 +180,51 @@ body.sidebar-closed #main-workspace {
     transform: scale(1.14) rotate(8deg);
   }
 }
+
+/* Scalable Range Sliders for EVs & IVs */
+.ev-iv-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: #080e1d;
+  border: 1px solid rgba(65, 71, 84, 0.55);
+  outline: none;
+  cursor: pointer;
+}
+
+.ev-iv-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #38bdf8;
+  border: 2px solid #0d1322;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
+  cursor: pointer;
+  transition: transform 0.12s ease, background-color 0.12s ease;
+}
+
+.ev-iv-slider.ev-slider::-webkit-slider-thumb {
+  background: #30c88f;
+  box-shadow: 0 0 6px rgba(48, 200, 143, 0.6);
+}
+
+.ev-iv-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.ev-iv-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #38bdf8;
+  border: 2px solid #0d1322;
+  cursor: pointer;
+}
+
+.ev-iv-slider.ev-slider::-moz-range-thumb {
+  background: #30c88f;
+}
