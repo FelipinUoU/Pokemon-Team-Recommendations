@@ -614,7 +614,6 @@
     if (!state.pickerOpen) return;
     const game = getCurrentGame();
     const titleEl = document.getElementById('picker-modal-title');
-    const subEl = document.getElementById('picker-modal-subtitle');
     const countBarEl = document.getElementById('picker-count-bar');
     const gridEl = document.getElementById('picker-pokemon-grid');
     const typeSelectEl = document.getElementById('picker-type-filter');
@@ -624,9 +623,6 @@
       titleEl.textContent = currentSlotMon
         ? `🔄 Trocar Pokémon do Slot #${state.pickerTargetSlot + 1} (Atual: ${currentSlotMon.name})`
         : `🔍 Escolher Pokémon para o Slot #${state.pickerTargetSlot + 1}`;
-    }
-    if (subEl) {
-      subEl.textContent = `Exibindo todos os Pokémon disponíveis em ${game.name} — Pesquise pelo Nome ou pelo Número da Pokédex (#001 a #1025)`;
     }
 
     if (typeSelectEl && typeSelectEl.options.length <= 1) {
