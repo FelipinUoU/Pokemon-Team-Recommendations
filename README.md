@@ -51,10 +51,17 @@ O projeto foi construído utilizando tecnologias web puras (sem necessidade de s
 
 ---
 
-## 🚀 Como Executar no seu Computador
+## 🚀 Como Acessar ou Executar
 
-1. Faça o download ou clone a pasta do projeto no seu PC.
-2. Dê um duplo clique no arquivo [`index.html`](./index.html) para abri-lo em qualquer navegador moderno (Chrome, Edge, Firefox, Brave, Opera).
+Você pode usar o projeto de duas formas:
+
+### 🌐 1. Acessar Online (Direto pelo Navegador)
+Basta abrir o link do site oficial já hospedado online:
+👉 **[https://felipinuou.github.io/Pokemon-Team-Recommendations/](https://felipinuou.github.io/Pokemon-Team-Recommendations/)**
+
+### 💻 2. Rodar Localmente no seu Computador
+1. Baixe ou clone este repositório no seu computador.
+2. Abra o arquivo [`index.html`](./index.html) em qualquer navegador moderno (Chrome, Edge, Firefox, Brave, Opera).
 3. Pronto! Suas equipes criadas e salvas ficarão armazenadas localmente no seu computador.
 
 ---
