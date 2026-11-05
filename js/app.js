@@ -2105,6 +2105,19 @@
       localStorage.removeItem('poketeam_pro_state_v2');
     } catch (e) {}
     loadFromStorage();
+
+    // "Minhas Equipes" só aparece aberta ao abrir o site se já houver 1 ou mais equipes salvas
+    const sidebarEl = document.getElementById('saved-teams-sidebar');
+    if (sidebarEl) {
+      if (state.savedTeams && state.savedTeams.length > 0) {
+        sidebarEl.classList.remove('collapsed');
+        document.body.classList.remove('sidebar-closed');
+      } else {
+        sidebarEl.classList.add('collapsed');
+        document.body.classList.add('sidebar-closed');
+      }
+    }
+
     renderAll();
   });
 })();
