@@ -522,7 +522,6 @@
             <div class="flex-1 min-w-0">
               <div class="flex items-baseline justify-between gap-1">
                 <h3 class="font-headline font-extrabold text-base text-on-surface truncate">${eff.name}</h3>
-                <span class="font-mono text-xs text-primary font-bold shrink-0">BST ${eff.bst}</span>
               </div>
 
               <div class="flex flex-wrap gap-1 my-1.5">
