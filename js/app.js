@@ -440,13 +440,9 @@
                 <span class="material-symbols-outlined text-primary text-3xl">add_circle</span>
               </div>
               <h3 class="font-headline font-bold text-sm text-on-surface mb-1">Escolher Pokémon para o Slot #${idx + 1}</h3>
-              <p class="text-xs text-on-surface-variant max-w-[260px] mb-3">
+              <p class="text-xs text-on-surface-variant max-w-[260px]">
                 Abra a Pokédex de <strong>${game.name}</strong> e pesquise por Nome ou Nº (#001–#1025)
               </p>
-              <button data-open-picker-slot="${idx}" class="px-4 py-2 rounded-lg bg-primary-container/20 hover:bg-primary-container/30 text-primary border border-primary/40 font-headline font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer">
-                <span class="material-symbols-outlined text-[16px]">Manage_Search</span>
-                Escolher Pokémon na Pokédex
-              </button>
             </div>
 
             ${recHint ? `
@@ -519,7 +515,7 @@
 
           <!-- Center Identity -->
           <div class="flex items-center gap-space-md my-space-xs">
-            <div data-open-picker-slot="${idx}" class="w-20 h-20 rounded-xl bg-surface-container-lowest p-1.5 flex items-center justify-center relative shrink-0 border border-outline-variant/20 group" title="Clique para trocar de Pokémon">
+            <div class="w-20 h-20 rounded-xl bg-surface-container-lowest p-1.5 flex items-center justify-center relative shrink-0 border border-outline-variant/20 group" title="Clique para abrir/fechar o status deste Pokémon">
               <img src="${ENGINE.getSpriteUrl(eff.spriteId)}" alt="${eff.name}" class="w-16 h-16 object-contain drop-shadow-[0_4px_8px_rgba(56,189,248,0.25)] group-hover:scale-110 transition-transform" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${eff.dex}.png'" />
             </div>
 
@@ -568,13 +564,6 @@
                     ? 'bg-primary-container text-on-primary-container font-bold'
                     : 'bg-surface-container-lowest text-on-surface-variant hover:text-on-surface'
                 } font-label-sm text-[11px] cursor-pointer">🎒 Item</button>
-              ` : ''}
-              ${game.mechanics.length > 0 ? `
-                <button data-slot-index="${idx}" data-edit-tab="mechanics" class="px-2 py-1 rounded ${
-                  state.editorOpen && isSelected && state.activeEditorTab === 'mechanics'
-                    ? 'bg-primary-container text-on-primary-container font-bold'
-                    : 'bg-surface-container-lowest text-on-surface-variant hover:text-on-surface'
-                } font-label-sm text-[11px] cursor-pointer">🧬 Mecânica</button>
               ` : ''}
               <button data-slot-index="${idx}" data-edit-tab="stats" class="px-2 py-1 rounded ${
                 state.editorOpen && isSelected && state.activeEditorTab === 'stats'
@@ -1022,6 +1011,11 @@
     }
     // ABA 4: ATRIBUTOS BASE & MATRIZ DEFENSIVA INDIVIDUAL (STITCH 7-COL / 5-COL LAYOUT)
     else if (state.activeEditorTab === 'stats') {
+      const natureObj = ENGINE.getNatureInfo ? ENGINE.getNatureInfo(slot.nature) : { id: slot.nature, up: null, down: null };
+      const naturesList = ENGINE.NATURES || [];
+      const idealNature = slot.pokemon.bestNature || 'Adamant (+Atk, -SpA)';
+      const abilityDesc = ENGINE.getAbilityDescription ? ENGINE.getAbilityDescription(eff.ability) : '';
+
       const statNames = [
         { k: 'hp', label: 'HP', val: eff.stats.hp, color: '#30c88f' },
         { k: 'atk', label: 'Attack', val: eff.stats.atk, color: '#38bdf8' },
@@ -1031,39 +1025,77 @@
         { k: 'spe', label: 'Speed', val: eff.stats.spe, color: '#56e5a9' }
       ];
 
+      let adjustedTotal = 0;
+      const computedStats = statNames.map(s => {
+        let calcVal = s.val;
+        let modTag = '';
+        let valClass = 'text-on-surface';
+        if (natureObj.up === s.k) {
+          calcVal = Math.floor(s.val * 1.1);
+          modTag = `<span class="text-[10px] text-tertiary font-mono ml-1">(+10% ↑ • Base ${s.val})</span>`;
+          valClass = 'text-tertiary';
+        } else if (natureObj.down === s.k) {
+          calcVal = Math.floor(s.val * 0.9);
+          modTag = `<span class="text-[10px] text-error font-mono ml-1">(-10% ↓ • Base ${s.val})</span>`;
+          valClass = 'text-error';
+        }
+        adjustedTotal += calcVal;
+        return { ...s, calcVal, modTag, valClass };
+      });
+
       tabBodyHtml = `
         <div class="p-space-lg grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
           <!-- Left 7 Cols: Base Stats Bars & Ability/Nature -->
           <div class="lg:col-span-7 space-y-space-sm">
             <div class="flex items-center justify-between mb-2">
-              <h4 class="font-headline font-bold text-sm text-on-surface uppercase tracking-wider">Atributos Base (${eff.name})</h4>
-              <span class="font-mono text-xs text-primary font-bold">Total (BST): ${eff.bst}</span>
+              <h4 class="font-headline font-bold text-sm text-on-surface uppercase tracking-wider">Atributos (${eff.name})</h4>
+              <span class="font-mono text-xs text-primary font-bold">Total Base (BST): ${eff.bst} ${adjustedTotal !== eff.bst ? `• Com Natureza: ${adjustedTotal}` : ''}</span>
             </div>
             <div class="space-y-2.5 bg-surface-container-low p-space-md rounded-xl border border-outline-variant/15">
-              ${statNames.map(s => {
-                const pct = Math.min(100, Math.round((s.val / 180) * 100));
+              ${computedStats.map(s => {
+                const pct = Math.min(100, Math.round((s.calcVal / 180) * 100));
                 return `
                   <div class="grid grid-cols-12 items-center gap-2 text-xs">
                     <span class="col-span-2 font-mono text-on-surface-variant">${s.label}</span>
-                    <span class="col-span-1 font-mono font-bold text-on-surface text-right">${s.val}</span>
-                    <div class="col-span-9 h-2.5 bg-surface-container-lowest rounded-full overflow-hidden">
-                      <div class="h-full rounded-full" style="width:${pct}%; background:${s.color}"></div>
+                    <span class="col-span-3 font-mono font-bold ${s.valClass} text-right">${s.calcVal}${s.modTag}</span>
+                    <div class="col-span-7 h-2.5 bg-surface-container-lowest rounded-full overflow-hidden">
+                      <div class="h-full rounded-full transition-all" style="width:${pct}%; background:${s.color}"></div>
                     </div>
                   </div>
                 `;
               }).join('')}
             </div>
 
-            <div class="flex flex-wrap items-center justify-between gap-3 pt-2 text-xs">
-              ${game.hasAbilities ? `
-                <label class="flex items-center gap-2 text-on-surface-variant">
-                  <span>Habilidade Ativa:</span>
-                  <select id="editor-ability-select" class="bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-2.5 py-1.5 text-on-surface font-semibold">
-                    ${(slot.pokemon.abilities || ['Overgrow']).map(ab => `<option value="${ab}" ${slot.ability === ab ? 'selected' : ''}>${ab}</option>`).join('')}
-                  </select>
-                </label>
-              ` : ''}
-              <span class="text-on-surface-variant">Natureza Ideal: <strong class="text-secondary">${slot.nature}</strong></span>
+            <!-- Habilidade + Descrição da Habilidade -->
+            ${game.hasAbilities ? `
+              <div class="bg-surface-container-low p-space-md rounded-xl border border-outline-variant/15 space-y-2 text-xs">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <label for="editor-ability-select" class="flex items-center gap-2 text-on-surface-variant font-semibold">
+                    <span>✨ Habilidade Ativa:</span>
+                    <select id="editor-ability-select" class="bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-2.5 py-1.5 text-on-surface font-bold cursor-pointer">
+                      ${(slot.pokemon.abilities || ['Overgrow']).map(ab => `<option value="${ab}" ${slot.ability === ab ? 'selected' : ''}>${ab}</option>`).join('')}
+                    </select>
+                  </label>
+                  ${slot.mechanic === 'mega' || slot.mechanic === 'primal' ? `<span class="font-mono text-[11px] text-primary">Habilidade da Forma: <strong>${eff.ability}</strong></span>` : ''}
+                </div>
+                <p class="text-xs text-on-surface-variant leading-relaxed bg-surface-container-lowest/70 p-2.5 rounded-lg border border-outline-variant/15">
+                  <strong class="text-primary">${eff.ability}:</strong> ${abilityDesc}
+                </p>
+              </div>
+            ` : ''}
+
+            <!-- Natureza Ideal + Seletor de Naturezas para ver as contas -->
+            <div class="bg-surface-container-low p-space-md rounded-xl border border-outline-variant/15 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div>
+                <span class="text-on-surface-variant">Natureza Ideal:</span>
+                <strong class="text-secondary ml-1">${idealNature}</strong>
+              </div>
+              <label for="editor-nature-select" class="flex flex-wrap items-center gap-2 text-on-surface-variant">
+                <span>Simular Natureza:</span>
+                <select id="editor-nature-select" class="bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-2.5 py-1.5 text-on-surface font-semibold cursor-pointer">
+                  ${naturesList.map(n => `<option value="${n.id}" ${natureObj.name === n.name ? 'selected' : ''}>${n.label}</option>`).join('')}
+                </select>
+              </label>
             </div>
           </div>
 
@@ -1120,43 +1152,45 @@
               ${eff.types.map(t => renderTypeBadge(t, 'sm')).join('')}
             </div>
             <p class="text-xs text-on-surface-variant mt-0.5">
-              Natureza Recomendada: <strong class="text-on-surface">${slot.nature}</strong>
+              ${slot.pokemon.name}: <strong class="text-on-surface">${ENGINE.getPokemonCategory ? ENGINE.getPokemonCategory(slot.pokemon) : 'Pokémon'}</strong>
               ${eff.activeMechanicNote ? ` • <span class="text-primary font-semibold">🧬 ${eff.activeMechanicNote}</span>` : ''}
             </p>
           </div>
         </div>
 
-        <!-- 4 Editor Tabs -->
-        <div class="flex flex-wrap gap-1.5 bg-surface-container-lowest p-1.5 rounded-xl border border-outline-variant/25">
-          <button data-editor-tab="moves" class="px-3 py-2 rounded-lg font-headline font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
-            state.activeEditorTab === 'moves' ? 'bg-primary-container text-on-primary-container shadow' : 'text-on-surface-variant hover:text-on-surface'
-          }">
-            <span class="material-symbols-outlined text-[16px]">swords</span>
-            4 Ataques
-          </button>
-          ${game.hasItems ? `
-            <button data-editor-tab="item" class="px-3 py-2 rounded-lg font-headline font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
-              state.activeEditorTab === 'item' ? 'bg-primary-container text-on-primary-container shadow' : 'text-on-surface-variant hover:text-on-surface'
+        <!-- 4 Editor Tabs + Botão Fechar fora da seleção -->
+        <div class="flex items-center gap-2">
+          <div class="flex flex-wrap gap-1.5 bg-surface-container-lowest p-1.5 rounded-xl border border-outline-variant/25">
+            <button data-editor-tab="moves" class="px-3 py-2 rounded-lg font-headline font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+              state.activeEditorTab === 'moves' ? 'bg-primary-container text-on-primary-container shadow' : 'text-on-surface-variant hover:text-on-surface'
             }">
-              <span class="material-symbols-outlined text-[16px]">backpack</span>
-              Item Recomendado
+              <span class="material-symbols-outlined text-[16px]">swords</span>
+              4 Ataques
             </button>
-          ` : ''}
-          ${game.mechanics.length > 0 ? `
-            <button data-editor-tab="mechanics" class="px-3 py-2 rounded-lg font-headline font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
-              state.activeEditorTab === 'mechanics' ? 'bg-primary-container text-on-primary-container shadow' : 'text-on-surface-variant hover:text-on-surface'
+            ${game.hasItems ? `
+              <button data-editor-tab="item" class="px-3 py-2 rounded-lg font-headline font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                state.activeEditorTab === 'item' ? 'bg-primary-container text-on-primary-container shadow' : 'text-on-surface-variant hover:text-on-surface'
+              }">
+                <span class="material-symbols-outlined text-[16px]">backpack</span>
+                Item Recomendado
+              </button>
+            ` : ''}
+            ${game.mechanics.length > 0 ? `
+              <button data-editor-tab="mechanics" class="px-3 py-2 rounded-lg font-headline font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+                state.activeEditorTab === 'mechanics' ? 'bg-primary-container text-on-primary-container shadow' : 'text-on-surface-variant hover:text-on-surface'
+              }">
+                <span class="material-symbols-outlined text-[16px]">auto_awesome</span>
+                Mecânicas
+              </button>
+            ` : ''}
+            <button data-editor-tab="stats" class="px-3 py-2 rounded-lg font-headline font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
+              state.activeEditorTab === 'stats' ? 'bg-primary-container text-on-primary-container shadow' : 'text-on-surface-variant hover:text-on-surface'
             }">
-              <span class="material-symbols-outlined text-[16px]">auto_awesome</span>
-              Mecânicas
+              <span class="material-symbols-outlined text-[16px]">monitoring</span>
+              Atributos &amp; Defesas
             </button>
-          ` : ''}
-          <button data-editor-tab="stats" class="px-3 py-2 rounded-lg font-headline font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
-            state.activeEditorTab === 'stats' ? 'bg-primary-container text-on-primary-container shadow' : 'text-on-surface-variant hover:text-on-surface'
-          }">
-            <span class="material-symbols-outlined text-[16px]">monitoring</span>
-            Atributos &amp; Defesas
-          </button>
-          <button data-close-editor="true" class="px-2.5 py-2 rounded-lg bg-error-container/20 hover:bg-error-container/40 text-error font-headline font-bold text-xs flex items-center justify-center transition-all cursor-pointer" title="Fechar Painel">
+          </div>
+          <button data-close-editor="true" class="px-2.5 py-2 rounded-lg bg-error-container/20 hover:bg-error-container/40 text-error font-headline font-bold text-xs flex items-center justify-center transition-all cursor-pointer shrink-0" title="Fechar Painel">
             <span class="material-symbols-outlined text-[16px]">close</span>
           </button>
         </div>
@@ -1838,10 +1872,17 @@
         return;
       }
 
-      // Selecionar um dos 6 slots da equipe
+      // Clicar em um Pokémon já escolhido abre o status dele; clicar de novo esconde as informações!
       const slotCard = e.target.closest('[data-slot-index]');
       if (slotCard) {
-        state.activeSlotIndex = Number(slotCard.dataset.slotIndex);
+        const clickedIdx = Number(slotCard.dataset.slotIndex);
+        if (state.editorOpen && state.activeSlotIndex === clickedIdx) {
+          state.editorOpen = false;
+        } else {
+          state.activeSlotIndex = clickedIdx;
+          state.activeEditorTab = 'stats';
+          state.editorOpen = true;
+        }
         renderAll();
         return;
       }
@@ -2014,6 +2055,12 @@
         const slot = state.team[state.activeSlotIndex];
         if (slot) {
           slot.ability = e.target.value;
+          renderAll();
+        }
+      } else if (e.target.id === 'editor-nature-select') {
+        const slot = state.team[state.activeSlotIndex];
+        if (slot) {
+          slot.nature = e.target.value;
           renderAll();
         }
       } else if (e.target.id === 'rec-sort-mode') {
