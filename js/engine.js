@@ -555,6 +555,101 @@ window.POKE_ENGINE = (function () {
     451, 452, 453, 454, 456, 457, 458, 461, 462, 463, 465, 466, 467, 468, 469, 470, 471, 472, 473, 475, 476, 478
   ]);
 
+  // Exclusivos de versão: Pokémon que NÃO podem ser capturados naquela versão específica (exclusivos da versão oposta)
+  // Aplicado APENAS quando o switch está em "Pokédex" normal (useNationalDex === false).
+  const VERSION_EXCLUSIONS = {
+    // Geração I — Red / Blue / Yellow
+    'Red': { dex: new Set([27, 28, 37, 38, 52, 53, 69, 70, 71, 126, 127]) },
+    'Blue': { dex: new Set([23, 24, 43, 44, 45, 56, 57, 58, 59, 123, 125]) },
+    'Yellow': { dex: new Set([13, 14, 15, 23, 24, 26, 52, 53, 109, 110, 124, 125, 126]) },
+
+    // Geração II — Gold / Silver / Crystal
+    'Gold': { dex: new Set([37, 38, 52, 53, 165, 166, 225, 227, 231, 232]) },
+    'Silver': { dex: new Set([56, 57, 58, 59, 167, 168, 207, 216, 217, 226]) },
+    'Crystal': { dex: new Set([37, 38, 56, 57, 179, 180, 181, 203, 223, 224]) },
+
+    // Geração III — Ruby / Sapphire / Emerald
+    'Ruby': { dex: new Set([270, 271, 272, 302, 336, 337, 380, 382]) },
+    'Sapphire': { dex: new Set([273, 274, 275, 303, 335, 338, 381, 383]) },
+    'Emerald': { dex: new Set([283, 284, 307, 308, 315, 335, 337]) },
+
+    // Geração III — FireRed / LeafGreen
+    'FireRed': { dex: new Set([27, 28, 37, 38, 69, 70, 71, 79, 80, 120, 121, 126, 127, 183, 184, 199, 200, 215, 223, 224, 226, 240, 298]) },
+    'LeafGreen': { dex: new Set([23, 24, 43, 44, 45, 54, 55, 58, 59, 90, 91, 123, 125, 182, 194, 195, 198, 211, 212, 225, 227, 239]) },
+
+    // Geração IV — Diamond / Pearl / Platinum
+    'Diamond': { dex: new Set([79, 80, 127, 185, 199, 200, 228, 229, 234, 363, 364, 365, 371, 372, 373, 410, 411, 429, 431, 432, 438, 484]) },
+    'Pearl': { dex: new Set([86, 87, 122, 123, 198, 212, 246, 247, 248, 261, 262, 304, 305, 306, 352, 408, 409, 430, 434, 435, 439, 483]) },
+    'Platinum': { dex: new Set([198, 200, 328, 329, 330, 366, 367, 368, 429, 430, 431, 432, 434, 435]) },
+
+    // Geração IV — HeartGold / SoulSilver
+    'HeartGold': { dex: new Set([37, 38, 52, 53, 127, 165, 166, 216, 217, 225, 227, 303, 316, 317, 345, 346, 371, 372, 373, 381, 383]) },
+    'SoulSilver': { dex: new Set([27, 28, 56, 57, 58, 59, 123, 167, 168, 207, 226, 231, 232, 302, 343, 344, 347, 348, 380, 382, 458, 472]) },
+
+    // Geração V — Black / White & Black 2 / White 2
+    'Black': { dex: new Set([548, 549, 577, 578, 579, 627, 628, 642, 644]) },
+    'White': { dex: new Set([546, 547, 574, 575, 576, 629, 630, 641, 643]) },
+    'Black 2': { dex: new Set([122, 125, 127, 239, 300, 301, 322, 323, 378, 380, 427, 428, 439, 466, 548, 549, 577, 578, 579, 627, 628, 643]) },
+    'White 2': { dex: new Set([126, 185, 214, 240, 325, 326, 379, 381, 438, 443, 444, 445, 467, 546, 547, 574, 575, 576, 629, 630, 644]) },
+
+    // Geração VI — X / Y & Omega Ruby / Alpha Sapphire
+    'X': { dex: new Set([90, 91, 138, 139, 214, 246, 247, 248, 309, 310, 509, 510, 538, 682, 683, 690, 691, 717]) },
+    'Y': { dex: new Set([120, 121, 127, 140, 141, 228, 229, 261, 262, 304, 305, 306, 539, 684, 685, 692, 693, 716]) },
+    'Omega Ruby': { dex: new Set([270, 271, 272, 302, 336, 337, 380, 382]) },
+    'Alpha Sapphire': { dex: new Set([273, 274, 275, 303, 335, 338, 381, 383]) },
+
+    // Geração VII — Sun / Moon / Ultra Sun / Ultra Moon / Let's Go
+    'Sun': {
+      dex: new Set([27, 28, 410, 411, 548, 549, 566, 567, 629, 630, 765, 780, 792, 795, 797]),
+      ids: new Set(['sandshrew-alola', 'sandslash-alola'])
+    },
+    'Moon': {
+      dex: new Set([37, 38, 408, 409, 546, 547, 564, 565, 627, 628, 766, 776, 791, 794, 798]),
+      ids: new Set(['vulpix-alola', 'ninetales-alola'])
+    },
+    'Ultra Sun': {
+      dex: new Set([27, 28, 309, 310, 343, 344, 410, 411, 548, 549, 566, 567, 629, 630, 690, 691, 765, 780, 792, 795, 797, 805]),
+      ids: new Set(['sandshrew-alola', 'sandslash-alola'])
+    },
+    'Ultra Moon': {
+      dex: new Set([37, 38, 228, 229, 408, 409, 546, 547, 564, 565, 622, 623, 627, 628, 692, 693, 766, 776, 791, 794, 798, 806]),
+      ids: new Set(['vulpix-alola', 'ninetales-alola'])
+    },
+    "Let's Go Pikachu": {
+      dex: new Set([23, 24, 37, 38, 52, 53, 69, 70, 71, 109, 110, 127]),
+      ids: new Set(['vulpix-alola', 'ninetales-alola'])
+    },
+    "Let's Go Eevee": {
+      dex: new Set([27, 28, 43, 44, 45, 56, 57, 58, 59, 88, 89, 123]),
+      ids: new Set(['sandshrew-alola', 'sandslash-alola'])
+    },
+
+    // Geração VIII — Sword / Shield & Brilliant Diamond / Shining Pearl
+    'Sword': {
+      dex: new Set([77, 78, 222, 246, 247, 248, 270, 271, 272, 302, 337, 453, 454, 577, 578, 579, 629, 630, 682, 683, 704, 705, 706, 765, 780, 842, 864, 875, 889]),
+      ids: new Set(['ponyta-galar', 'rapidash-galar', 'corsola-galar'])
+    },
+    'Shield': {
+      dex: new Set([83, 273, 274, 275, 303, 338, 554, 555, 559, 560, 574, 575, 576, 627, 628, 633, 634, 635, 684, 685, 766, 776, 782, 783, 784, 841, 865, 874, 888]),
+      ids: new Set(['farfetchd-galar', 'darmanitan-galar'])
+    },
+    'Brilliant Diamond': { dex: new Set([79, 80, 127, 185, 199, 200, 228, 229, 234, 363, 364, 365, 371, 372, 373, 410, 411, 429, 431, 432, 438, 484]) },
+    'Shining Pearl': { dex: new Set([86, 87, 122, 123, 198, 212, 246, 247, 248, 261, 262, 304, 305, 306, 352, 408, 409, 430, 434, 435, 439, 483]) },
+
+    // Geração IX — Scarlet / Violet
+    'Scarlet': { dex: new Set([200, 316, 317, 371, 372, 373, 429, 692, 693, 766, 875, 885, 886, 887, 937, 990, 991, 992, 993, 994, 995, 1006, 1008, 1010, 1022, 1023]) },
+    'Violet': { dex: new Set([246, 247, 248, 425, 426, 434, 435, 633, 634, 635, 690, 691, 765, 874, 936, 984, 985, 986, 987, 988, 989, 1005, 1007, 1009, 1020, 1021]) }
+  };
+
+  function isExcludedByVersion(mon, game, selectedVersion) {
+    const versionKey = selectedVersion || (game && game.versions && game.versions[0]) || null;
+    if (!versionKey || !VERSION_EXCLUSIONS[versionKey]) return false;
+    const rule = VERSION_EXCLUSIONS[versionKey];
+    if (rule.ids && rule.ids.has(mon.id)) return true;
+    if (rule.dex && rule.dex.has(mon.dex)) return true;
+    return false;
+  }
+
   // Retorna informações dos 2 modos do Switch: "Pokédex (Regional do Jogo)" vs "National Dex (da Época do Jogo)"
   function getDexScopeInfo(game) {
     if (!game) {
@@ -575,8 +670,8 @@ window.POKE_ENGINE = (function () {
     };
   }
 
-  // Verifica se um Pokémon pertence à Pokédex Regional do jogo ou à National Dex da época em que o jogo foi lançado
-  function isPokemonAvailableInGame(mon, game, useNationalDex = false) {
+  // Verifica se um Pokémon pertence à Pokédex Regional (e versão específica) do jogo ou à National Dex da época em que o jogo foi lançado
+  function isPokemonAvailableInGame(mon, game, useNationalDex = false, selectedVersion = null) {
     if (!game) return true;
     const { eraNationalGen } = getDexScopeInfo(game);
 
@@ -590,12 +685,17 @@ window.POKE_ENGINE = (function () {
       return false;
     }
 
-    // 2. Se o Switch estiver em "National Dex", libera toda a National Dex existente na geração em que o jogo foi lançado!
+    // 2. Se o Switch estiver em "National Dex", libera toda a National Dex da época sem restringir por versão!
     if (useNationalDex) {
       return true;
     }
 
-    // 3. Se o Switch estiver em "Pokédex" (padrão), mostra a Pokédex Regional da campanha daquele jogo:
+    // 3. Se o Switch estiver em "Pokédex" (normal), filtra também pelos exclusivos da versão selecionada!
+    if (isExcludedByVersion(mon, game, selectedVersion)) {
+      return false;
+    }
+
+    // 4. Verifica se o Pokémon faz parte da Pokédex Regional da campanha daquele jogo:
     const isFeatured = (game.featuredMons || []).some(f => f.toLowerCase() === mon.id.toLowerCase());
     const isStarter = (game.starters || []).includes(mon.starterRef) || (game.starters || []).includes(mon.id);
 
@@ -669,8 +769,8 @@ window.POKE_ENGINE = (function () {
 
     const candidates = POKEMON.filter(mon => {
       if (!filterOptions.includeCurrentTeam && currentIds.has(mon.id)) return false;
-      // Filtra respeitando o jogo selecionado e o Switch entre "Pokédex (Regional)" vs "National Dex (da Época do Jogo)"
-      if (!isPokemonAvailableInGame(mon, game, Boolean(filterOptions.allowNationalDex))) {
+      // Filtra respeitando o jogo selecionado, a versão escolhida (no modo Pokédex) e o Switch "Pokédex" vs "National Dex"
+      if (!isPokemonAvailableInGame(mon, game, Boolean(filterOptions.allowNationalDex), filterOptions.selectedVersion)) {
         return false;
       }
       // Se não estiver pesquisando nem no modo Pokédex completa, prioriza formas finais nas recomendações

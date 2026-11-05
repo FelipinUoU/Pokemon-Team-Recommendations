@@ -412,7 +412,8 @@
     // Top 3 recomendações de sinergia para sugerir nos slots vazios (como no design do Stitch)
     const topRecsForEmpty = ENGINE.getRecommendedPokemonForTeam(state.team, game, {
       includePreEvos: false,
-      allowNationalDex: state.allowNationalDex
+      allowNationalDex: state.allowNationalDex,
+      selectedVersion: state.selectedVersion
     }).slice(0, 6);
 
     let emptyRecCursor = 0;
@@ -632,6 +633,7 @@
     }
 
     const scopeInfo = ENGINE.getDexScopeInfo ? ENGINE.getDexScopeInfo(game) : { eraNationalGen: game.generation || 9, natMaxNum: 1025 };
+    const activeVerLabel = state.selectedVersion || game.region;
     const pickerSwitchEl = document.getElementById('picker-dex-scope-switch');
     if (pickerSwitchEl) {
       pickerSwitchEl.innerHTML = `
@@ -640,7 +642,7 @@
             ? 'bg-primary-container text-on-primary-container font-bold shadow'
             : 'text-on-surface-variant hover:text-on-surface font-semibold'
         }">
-          📖 Pokédex (${game.region})
+          📖 Pokédex (${activeVerLabel})
         </button>
         <button type="button" data-picker-dex-scope="national" class="px-3 py-1.5 rounded-lg font-headline text-xs transition-all cursor-pointer ${
           state.pickerNatDex
@@ -657,6 +659,7 @@
       searchQuery: state.pickerSearch,
       includePreEvos: state.pickerPreEvos,
       allowNationalDex: state.pickerNatDex,
+      selectedVersion: state.selectedVersion,
       includeCurrentTeam: true
     });
 
@@ -670,7 +673,7 @@
 
     if (countBarEl) {
       countBarEl.innerHTML = `
-        <span>Encontrados <strong class="text-primary">${candidates.length} Pokémon</strong> na <strong>${state.pickerNatDex ? `National Dex da época de ${game.name} (Até Gen ${scopeInfo.eraNationalGen} • #${scopeInfo.natMaxNum})` : `Pokédex Regional de ${game.region} (${game.name})`}</strong></span>
+        <span>Encontrados <strong class="text-primary">${candidates.length} Pokémon</strong> na <strong>${state.pickerNatDex ? `National Dex da época de ${game.name} (Até Gen ${scopeInfo.eraNationalGen} • #${scopeInfo.natMaxNum})` : `Pokédex da versão ${activeVerLabel} (${game.region})`}</strong></span>
         <span>Clique em qualquer card para selecionar no <strong class="text-on-surface">Slot #${state.pickerTargetSlot + 1}</strong></span>
       `;
     }
@@ -1341,7 +1344,8 @@
       mechanicFilter: state.filterMechanic,
       searchQuery: state.searchQuery,
       includePreEvos: state.includePreEvos,
-      allowNationalDex: state.allowNationalDex
+      allowNationalDex: state.allowNationalDex,
+      selectedVersion: state.selectedVersion
     });
 
     if (state.sortMode === 'dex') {
@@ -1476,7 +1480,8 @@
 
       const recs = ENGINE.getRecommendedPokemonForTeam(state.team, game, {
         includePreEvos: false,
-        allowNationalDex: state.allowNationalDex
+        allowNationalDex: state.allowNationalDex,
+        selectedVersion: state.selectedVersion
       });
       if (recs.length > 0) {
         const best = recs[0];
