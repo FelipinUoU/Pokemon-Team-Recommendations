@@ -59,7 +59,20 @@ Você pode usar o projeto de duas formas:
 Basta abrir o link do site oficial já hospedado online:
 👉 **[https://felipinuou.github.io/Pokemon-Team-Recommendations/](https://felipinuou.github.io/Pokemon-Team-Recommendations/)**
 
-### 💻 2. Rodar Localmente no seu Computador
+### 📱 2. Versão Mobile Android (Aplicativo APK Oficial)
+Existe uma versão nativa para celulares Android disponível na branch [`mobile`](https://github.com/FelipinUoU/Pokemon-Team-Recommendations/tree/mobile)!
+
+- **📥 Como Baixar e Instalar**:
+  1. Baixe o instalador direto pelo link: **[Pokemon-Team-Recommendations-mobile.apk](https://github.com/FelipinUoU/Pokemon-Team-Recommendations/raw/mobile/Pokemon-Team-Recommendations-mobile.apk)**.
+  2. No seu aparelho Android, abra o arquivo `.apk` baixado.
+  3. Confirme a instalação (caso o sistema pergunte, permita a instalação de apps dessa fonte/gerenciador de arquivos).
+  4. Pronto! O app estará instalado com ícone próprio e navegação tática otimizada para toque.
+
+- **🛡️ 100% Seguro e Totalmente Offline**:
+  - **Zero risco de segurança**: o aplicativo é de código aberto, livre de anúncios, não pede permissões invasivas (como localização, contatos ou câmera) e não coleta absolutamente nenhum dado pessoal.
+  - **Funciona 100% sem internet**: todo o banco de dados (Gen 1–9, Unbound e Lazarus, sinergias, ataques e itens) e fontes estão embutidos dentro do próprio APK. Suas equipes ficam salvas exclusivamente na memória local do seu aparelho.
+
+### 💻 3. Rodar Localmente no seu Computador
 1. Baixe ou clone este repositório no seu computador.
 2. Abra o arquivo [`index.html`](./index.html) em qualquer navegador moderno (Chrome, Edge, Firefox, Brave, Opera).
 3. Pronto! Suas equipes criadas e salvas ficarão armazenadas localmente no seu computador.
