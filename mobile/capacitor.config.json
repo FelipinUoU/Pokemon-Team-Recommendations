@@ -1,0 +1,23 @@
+{
+  "appId": "io.github.felipinuou.pokemonteam",
+  "appName": "Pokémon Team Recommendations",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "backgroundColor": "#0d1322",
+  "android": {
+    "backgroundColor": "#0d1322",
+    "allowMixedContent": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "launchAutoHide": true,
+      "backgroundColor": "#0d1322",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#0d1322"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Metade inferior branca da Pokébola -->
+    <path
+        android:fillColor="#F1F5F9"
+        android:pathData="M24,54 A30,30 0 1,0 84,54 Z"
+        android:strokeWidth="3.5"
+        android:strokeColor="#080E1D" />
+    <!-- Metade superior vermelha da Pokébola -->
+    <path
+        android:fillColor="#EF4444"
+        android:pathData="M24,54 A30,30 0 1,1 84,54 Z"
+        android:strokeWidth="3.5"
+        android:strokeColor="#080E1D" />
+    <!-- Faixa central escura -->
+    <path
+        android:fillColor="#080E1D"
+        android:pathData="M23,51.5 H85 V56.5 H23 Z" />
+    <!-- Botão central externo -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,44 A10,10 0 1,1 53.99,44 Z"
+        android:strokeWidth="3.5"
+        android:strokeColor="#080E1D" />
+    <!-- Botão central interno ciano tático -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M54,49.5 A4.5,4.5 0 1,1 53.99,49.5 Z" />
+</vector>

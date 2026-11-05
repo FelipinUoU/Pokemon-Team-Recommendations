@@ -1,0 +1,210 @@
+/* ==========================================================================
+   POKÉMON TEAM RECOMMENDATIONS — CAMADA MOBILE (APK ANDROID)
+   Layout baseado no design mobile gerado pelo Google Stitch:
+   top app bar + 4 abas (Equipe, Editor, Sinergia, Salvas) + bottom sheet.
+   ========================================================================== */
+
+:root {
+  --m-safe-top: max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px));
+  --m-safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px));
+  --m-topbar-h: 56px;
+  --m-nav-h: 64px;
+}
+
+html, body {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+body.m-app {
+  min-height: 100vh;
+  user-select: none;
+  -webkit-user-select: none;
+}
+body.m-app input,
+body.m-app textarea {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* ---------- Barras fixas respeitando a área segura (notch / gestos) ---------- */
+#m-topbar { padding-top: var(--m-safe-top); }
+#m-bottom-nav { padding-bottom: var(--m-safe-bottom); }
+
+#m-main {
+  padding-top: calc(var(--m-topbar-h) + var(--m-safe-top) + 12px);
+  padding-bottom: calc(var(--m-nav-h) + var(--m-safe-bottom) + 20px);
+}
+
+#toast-container {
+  bottom: calc(var(--m-nav-h) + var(--m-safe-bottom) + 12px);
+}
+#toast-container .toast-msg {
+  max-width: 100%;
+  width: 100%;
+}
+
+/* ---------- Abas (views) ---------- */
+.m-view { display: none; }
+.m-view.active {
+  display: block;
+  animation: mViewIn 0.18s ease-out;
+}
+@keyframes mViewIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Bottom navigation ---------- */
+.m-nav-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: #bdc8d1;
+  font-family: 'JetBrains Mono', monospace;
+  transition: color 0.15s ease;
+}
+.m-nav-btn .material-symbols-outlined {
+  font-size: 24px;
+  padding: 2px 18px;
+  border-radius: 999px;
+  transition: background-color 0.15s ease;
+}
+.m-nav-label {
+  font-size: 11px;
+  font-weight: 600;
+}
+.m-nav-btn.active { color: #8ed5ff; }
+.m-nav-btn.active .material-symbols-outlined {
+  background: rgba(56, 189, 248, 0.16);
+}
+.m-nav-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+}
+#m-btn-back:not(.hidden) { display: flex; }
+
+/* ---------- Scroll horizontal (pílulas, chips, abas) ---------- */
+.m-hscroll {
+  overflow-x: auto;
+  flex-wrap: nowrap !important;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.m-hscroll::-webkit-scrollbar { display: none; }
+.m-hscroll > * { flex-shrink: 0; }
+
+/* ---------- Sem efeitos de hover "presos" no toque ---------- */
+.slot-card:hover { transform: none; }
+.slot-card:active { transform: scale(0.985); }
+button:active, label:active { filter: brightness(1.15); }
+
+/* ---------- Editor do Slot: cabeçalho e abas adaptados ao celular ---------- */
+#slot-detail-editor > div:first-child {
+  padding: 14px !important;
+}
+#slot-detail-editor > div:first-child > div:last-child {
+  width: 100%;
+}
+#slot-detail-editor > div:first-child > div:last-child > div:first-child {
+  flex: 1;
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+#slot-detail-editor > div:first-child > div:last-child > div:first-child::-webkit-scrollbar { display: none; }
+#slot-detail-editor [data-editor-tab] {
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+/* No celular o editor fica numa aba própria: o botão "fechar" não é necessário */
+#slot-detail-editor [data-close-editor] { display: none !important; }
+#slot-detail-editor > div:not(:first-child) {
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+}
+
+/* Barras de EVs/IVs com alvo de toque maior */
+.ev-iv-slider { height: 8px; }
+.ev-iv-slider::-webkit-slider-thumb { width: 22px; height: 22px; }
+
+/* Faixa de seleção rápida de Pokémon no Editor */
+.m-strip-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px 6px 6px;
+  border-radius: 12px;
+  background: #191f2f;
+  border: 1px solid rgba(62, 72, 80, 0.6);
+  color: #bdc8d1;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+}
+.m-strip-chip img { width: 30px; height: 30px; object-fit: contain; }
+.m-strip-chip.active {
+  background: rgba(56, 189, 248, 0.14);
+  border-color: #38bdf8;
+  color: #dde2f7;
+  box-shadow: 0 0 0 1px #38bdf8;
+}
+
+/* ---------- Matriz elemental compacta (3 colunas) ---------- */
+#elemental-matrix-grid > div { padding: 8px !important; }
+#elemental-matrix-grid .type-badge { font-size: 0.58rem; padding: 1px 5px; }
+#elemental-matrix-grid > div > div:last-child { font-size: 10px; }
+
+/* ---------- Equipes Salvas: painel vira página normal ---------- */
+#saved-teams-sidebar,
+#saved-teams-sidebar.collapsed {
+  position: static !important;
+  transform: none !important;
+  width: auto !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+/* ---------- Pokédex como bottom sheet em tela cheia ---------- */
+.m-sheet-backdrop.open {
+  align-items: flex-end;
+  padding: 0;
+}
+.m-sheet {
+  height: calc(100% - var(--m-safe-top) - 12px);
+  border-radius: 22px 22px 0 0;
+  padding-bottom: var(--m-safe-bottom);
+  animation: mSheetUp 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes mSheetUp {
+  from { transform: translateY(40px); opacity: 0.6; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+.m-sheet-handle {
+  width: 44px;
+  height: 5px;
+  border-radius: 999px;
+  background: #3e4850;
+  margin: 10px auto 10px;
+  flex-shrink: 0;
+}
+#picker-pokemon-grid > div { padding: 12px !important; }
+#picker-count-bar > span:last-child { display: none; }
+
+/* Modais de confirmação respeitando a área segura */
+.modal-backdrop.open:not(.m-sheet-backdrop) {
+  padding-top: calc(var(--m-safe-top) + 16px);
+  padding-bottom: calc(var(--m-safe-bottom) + 16px);
+}

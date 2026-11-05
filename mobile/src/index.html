@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0d1322" />
+  <title>Pokémon Team Recommendations</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="css/fonts.css" />
+  <link rel="stylesheet" href="css/tailwind.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/mobile.css" />
+</head>
+<body class="bg-surface text-on-surface font-body antialiased overflow-x-hidden m-app" data-active-view="equipe">
+
+  <!-- =====================================================================
+       TOP APP BAR (MOBILE)
+       ===================================================================== -->
+  <header id="m-topbar" class="fixed top-0 left-0 right-0 z-40 bg-surface-container-low/95 backdrop-blur-md border-b border-outline-variant/25">
+    <div class="h-14 px-4 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <button id="m-btn-back" class="hidden w-9 h-9 -ml-1 rounded-lg items-center justify-center text-primary active:bg-surface-container-high" aria-label="Voltar">
+          <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <div id="m-brand-emblem" class="w-8 h-8 rounded-full bg-gradient-to-br from-red-500 to-red-700 p-0.5 shadow-lg shadow-red-500/20 flex items-center justify-center relative overflow-hidden shrink-0">
+          <div class="w-full h-1/2 bg-white/95 absolute bottom-0 left-0"></div>
+          <div class="w-full h-1 bg-surface-container-lowest absolute top-1/2 -translate-y-1/2 z-10"></div>
+          <div class="w-3 h-3 rounded-full bg-white border-2 border-surface-container-lowest z-20"></div>
+        </div>
+        <div class="min-w-0">
+          <h1 id="m-title" class="font-headline font-extrabold text-[15px] tracking-tight text-on-surface leading-tight truncate">
+            Pokémon Team <span class="text-primary">Recommendations</span>
+          </h1>
+          <p id="m-subtitle" class="font-mono text-[10px] text-on-surface-variant leading-tight truncate">Planejador de Equipes • Gen 1–9</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5 shrink-0">
+        <button id="btn-export-showdown" class="w-9 h-9 rounded-lg bg-surface-container-high border border-outline-variant/30 flex items-center justify-center text-on-surface-variant active:bg-surface-container-highest" aria-label="Exportar Showdown" title="Exportar Showdown">
+          <span class="material-symbols-outlined text-[20px]">ios_share</span>
+        </button>
+        <button id="btn-clear-team" class="w-9 h-9 rounded-lg bg-error-container/25 border border-error/30 flex items-center justify-center text-error active:bg-error-container/40" aria-label="Limpar Equipe" title="Limpar Equipe">
+          <span class="material-symbols-outlined text-[20px]">delete_sweep</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="m-main" class="px-3">
+
+    <!-- =================================================================
+         VIEW 1: EQUIPE
+         ================================================================= -->
+    <section class="m-view space-y-4" data-view="equipe">
+
+      <!-- Jogo / Versão / Mecânicas -->
+      <section class="bg-surface-container rounded-xl p-4 border border-outline-variant/15 shadow-lg space-y-3">
+        <div>
+          <label for="game-select" class="flex items-center gap-1.5 font-label-sm text-label-sm text-primary uppercase mb-2">
+            <span class="material-symbols-outlined text-[16px]">sports_esports</span>
+            Jogo / Geração
+          </label>
+          <div class="relative">
+            <select id="game-select" class="w-full appearance-none bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-3.5 py-3 text-body-md font-semibold text-on-surface focus:outline-none focus:border-primary pr-10"></select>
+            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">unfold_more</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">
+            <span class="material-symbols-outlined text-[16px]">tune</span>
+            Versão / Modo
+          </label>
+          <div id="version-pills" class="m-hscroll flex gap-1.5 bg-surface-container-lowest p-1.5 rounded-lg border border-outline-variant/25"></div>
+        </div>
+
+        <div>
+          <label class="flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">
+            <span class="material-symbols-outlined text-[16px]">bolt</span>
+            Mecânicas de Combate
+          </label>
+          <div id="game-mechanics-badges" class="flex flex-wrap items-center gap-1.5"></div>
+        </div>
+
+        <div id="game-region-badge" class="pt-2 border-t border-outline-variant/15 flex flex-wrap items-center gap-2 text-xs text-on-surface-variant"></div>
+      </section>
+
+      <!-- Sua Equipe -->
+      <section>
+        <div class="flex items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-1.5 h-6 rounded-full bg-primary-container"></span>
+            <h2 class="font-headline text-lg font-bold text-on-surface">Sua Equipe</h2>
+          </div>
+          <span id="team-filled-counter" class="px-2.5 py-1 rounded-md bg-surface-container-high font-mono text-xs text-primary border border-primary/30">0 / 6</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 mb-3">
+          <button id="btn-auto-complete-team" class="btn-attention-glow flex items-center justify-center gap-1.5 px-3 py-3 rounded-lg bg-gradient-to-br from-primary to-primary-container text-on-primary-container font-headline font-bold text-sm shadow-lg shadow-primary-container/25">
+            <span class="material-symbols-outlined text-[18px] icon-sparkle">auto_awesome</span>
+            <span>Auto-Completar</span>
+          </button>
+          <button id="btn-load-champion-preset" class="btn-champion-glow col-auto flex items-center justify-center gap-1.5 px-3 py-3 rounded-lg bg-secondary-container/15 border border-secondary/45 text-secondary font-headline font-bold text-sm">
+            <span class="material-symbols-outlined text-[18px]">emoji_events</span>
+            <span>Sugestão Campeã</span>
+          </button>
+        </div>
+
+        <div id="team-slots-grid" class="grid grid-cols-1 gap-3"></div>
+      </section>
+
+      <!-- Mini Diagnóstico de Sinergia -->
+      <section class="bg-surface-container rounded-xl p-4 border border-outline-variant/15">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-headline font-bold text-sm text-on-surface flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[20px]">insights</span>
+            Diagnóstico da Equipe
+          </h3>
+          <button data-nav-to="sinergia" class="font-mono text-[11px] text-primary flex items-center gap-0.5">
+            Ver Matriz <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+          </button>
+        </div>
+        <div id="m-mini-synergy" class="flex items-center gap-3"></div>
+      </section>
+    </section>
+
+    <!-- =================================================================
+         VIEW 2: EDITOR DO SLOT
+         ================================================================= -->
+    <section class="m-view space-y-3" data-view="editor">
+      <div id="m-editor-slot-strip" class="m-hscroll flex gap-2 pb-1"></div>
+
+      <div id="m-editor-empty" class="bg-surface-container rounded-xl p-6 border border-dashed border-outline-variant/40 text-center">
+        <span class="material-symbols-outlined text-primary text-5xl">edit_note</span>
+        <h3 class="font-headline font-bold text-base text-on-surface mt-2">Nenhum Pokémon selecionado</h3>
+        <p class="text-xs text-on-surface-variant mt-1.5 leading-relaxed">Escolha um Pokémon acima ou adicione na aba <strong class="text-on-surface">Equipe</strong> para editar ataques, item, status, EVs e IVs.</p>
+        <button data-nav-to="equipe" class="mt-4 px-4 py-2.5 rounded-lg bg-primary-container text-on-primary-container font-headline font-bold text-sm">Ir para a Equipe</button>
+      </div>
+
+      <section id="slot-detail-editor" class="hidden bg-surface-container rounded-xl border border-outline-variant/20 shadow-xl overflow-hidden"></section>
+    </section>
+
+    <!-- =================================================================
+         VIEW 3: SINERGIA & COBERTURA
+         ================================================================= -->
+    <section class="m-view space-y-4" data-view="sinergia">
+      <div id="synergy-score-badge" class="flex items-center gap-4 bg-surface-container p-4 rounded-xl border border-outline-variant/15"></div>
+
+      <div id="synergy-alerts-box" class="grid grid-cols-1 gap-3"></div>
+
+      <section class="bg-surface-container rounded-xl p-3 border border-outline-variant/15">
+        <h3 class="font-headline font-bold text-sm text-on-surface flex items-center gap-2 mb-2">
+          <span class="material-symbols-outlined text-primary text-[20px]">grid_view</span>
+          Matriz Elemental de Tipos
+        </h3>
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-mono text-on-surface-variant mb-3">
+          <span>⚔️ Super Efetivo</span>
+          <span class="text-error">🔴 Fracos</span>
+          <span class="text-tertiary">🟢 Resist./Imunes</span>
+        </div>
+        <div id="elemental-matrix-grid" class="grid grid-cols-3 gap-2"></div>
+      </section>
+    </section>
+
+    <!-- =================================================================
+         VIEW 4: EQUIPES SALVAS
+         ================================================================= -->
+    <section class="m-view" data-view="salvas">
+      <aside id="saved-teams-sidebar" class="flex flex-col">
+        <div class="flex items-center justify-between pb-3 mb-3 border-b border-outline-variant/20">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[22px]">folder_special</span>
+            <div>
+              <h2 class="font-headline font-bold text-title-sm text-on-surface leading-tight">Equipes Salvas</h2>
+              <p class="text-[11px] text-on-surface-variant">Salvas no seu celular</p>
+            </div>
+          </div>
+          <span id="saved-teams-count" class="px-2.5 py-0.5 rounded-full bg-surface-container-highest font-mono text-label-sm text-primary">0</span>
+        </div>
+
+        <div class="bg-surface-container rounded-xl p-4 mb-4 border border-outline-variant/15">
+          <label for="save-team-name-input" class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-1.5">Nome da Equipe</label>
+          <input type="text" id="save-team-name-input" maxlength="45" placeholder="Ex: Meu Time Unbound, Kanto Red..."
+                 class="w-full px-3 py-2.5 rounded-lg bg-surface-container-lowest border border-outline-variant/40 text-on-surface text-body-md focus:outline-none focus:border-primary mb-2.5" />
+          <button id="btn-save-current-team" class="w-full py-3 px-3 rounded-lg bg-tertiary-container text-on-tertiary-fixed font-headline font-bold text-sm flex items-center justify-center gap-1.5 shadow-md shadow-tertiary-container/15">
+            <span class="material-symbols-outlined text-[18px]">save</span>
+            Salvar Equipe
+          </button>
+          <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-outline-variant/20">
+            <button id="btn-export-json-pc" class="py-2.5 px-2 rounded-lg bg-surface-container-high text-on-surface-variant border border-outline-variant/30 font-label-sm text-xs flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[16px] text-primary">share</span>
+              Backup (.json)
+            </button>
+            <label for="input-import-json-pc" class="py-2.5 px-2 rounded-lg bg-surface-container-high text-on-surface-variant border border-outline-variant/30 font-label-sm text-xs flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[16px] text-tertiary">upload_file</span>
+              Abrir (.json)
+            </label>
+            <input type="file" id="input-import-json-pc" accept=".json,application/json" class="hidden" />
+          </div>
+          <p class="text-[10px] text-on-surface-variant/80 mt-2 leading-tight flex items-center gap-1">
+            <span class="material-symbols-outlined text-[13px] text-tertiary">lock</span>
+            100% salvo no seu aparelho (offline).
+          </p>
+        </div>
+
+        <div id="saved-teams-list" class="space-y-2.5"></div>
+      </aside>
+    </section>
+  </main>
+
+  <!-- =====================================================================
+       BOTTOM NAVIGATION BAR
+       ===================================================================== -->
+  <nav id="m-bottom-nav" class="fixed bottom-0 left-0 right-0 z-40 bg-surface-container-low/95 backdrop-blur-md border-t border-outline-variant/25">
+    <div class="grid grid-cols-4 h-16">
+      <button data-nav="equipe" class="m-nav-btn" aria-label="Equipe">
+        <span class="material-symbols-outlined">shield</span>
+        <span class="m-nav-label">Equipe</span>
+      </button>
+      <button data-nav="editor" class="m-nav-btn" aria-label="Editor">
+        <span class="material-symbols-outlined">edit_square</span>
+        <span class="m-nav-label">Editor</span>
+      </button>
+      <button data-nav="sinergia" class="m-nav-btn" aria-label="Sinergia">
+        <span class="material-symbols-outlined">monitoring</span>
+        <span class="m-nav-label">Sinergia</span>
+      </button>
+      <button data-nav="salvas" class="m-nav-btn" aria-label="Salvas">
+        <span class="material-symbols-outlined">bookmark</span>
+        <span class="m-nav-label">Salvas</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- =====================================================================
+       MODAL / BOTTOM SHEET: SELETOR DA POKÉDEX
+       ===================================================================== -->
+  <div id="pokedex-picker-modal" class="modal-backdrop m-sheet-backdrop fixed inset-0 z-50 bg-surface-container-lowest/85 backdrop-blur-sm">
+    <div class="m-sheet bg-surface-container border-t border-outline-variant/40 w-full flex flex-col shadow-2xl overflow-hidden">
+      <div class="m-sheet-handle"></div>
+      <div class="px-4 pb-3 flex items-center justify-between gap-3 border-b border-outline-variant/20">
+        <button id="btn-close-picker-modal" class="w-9 h-9 rounded-lg bg-surface-container-high text-on-surface-variant flex items-center justify-center shrink-0" aria-label="Fechar">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+        <h3 id="picker-modal-title" class="flex-1 font-headline font-bold text-sm text-primary leading-tight">Escolher Pokémon</h3>
+      </div>
+
+      <div class="p-3 space-y-2.5 border-b border-outline-variant/15">
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary text-[20px]">search</span>
+          <input type="search" id="picker-search-input" placeholder="Nome ou nº da Pokédex (ex: Gyarados, 130)"
+                 class="w-full pl-10 pr-3 py-3 rounded-xl bg-surface-container-lowest border-2 border-primary/40 focus:border-primary text-body-md text-on-surface focus:outline-none" />
+        </div>
+
+        <div id="picker-dex-scope-switch" class="m-segmented grid grid-cols-2 p-1 rounded-xl bg-surface-container-lowest border border-primary/40">
+          <button type="button" data-picker-dex-scope="pokedex" class="px-3 py-2 rounded-lg font-headline font-bold text-xs bg-primary-container text-on-primary-container">📖 Pokédex</button>
+          <button type="button" data-picker-dex-scope="national" class="px-3 py-2 rounded-lg font-headline font-semibold text-xs text-on-surface-variant">🌐 National Dex</button>
+        </div>
+
+        <div class="m-hscroll flex items-center gap-2">
+          <select id="picker-sort-mode" class="shrink-0 bg-surface-container-lowest border border-primary/50 rounded-full px-3 py-2 text-xs font-semibold text-primary focus:outline-none">
+            <option value="dex">📖 Ordem da Pokédex</option>
+            <option value="synergy">⚡ Melhor Sinergia</option>
+            <option value="alpha">🔤 A–Z</option>
+          </select>
+          <select id="picker-type-filter" class="shrink-0 bg-surface-container-lowest border border-outline-variant/40 rounded-full px-3 py-2 text-xs font-semibold text-on-surface focus:outline-none">
+            <option value="all">Todos os Tipos</option>
+          </select>
+          <label class="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/40 text-xs text-on-surface-variant">
+            <input type="checkbox" id="picker-pre-evos" checked class="accent-primary rounded" />
+            <span>Pré-Evoluções</span>
+          </label>
+        </div>
+      </div>
+
+      <div id="picker-count-bar" class="px-4 py-2 bg-surface-container-lowest/60 border-b border-outline-variant/15 flex flex-col gap-0.5 text-[11px] text-on-surface-variant font-mono"></div>
+
+      <div id="picker-pokemon-grid" class="p-3 overflow-y-auto grid grid-cols-1 gap-2.5 flex-1 custom-scroll"></div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL: EXPORTAR SHOWDOWN
+       ===================================================================== -->
+  <div id="export-modal" class="modal-backdrop fixed inset-0 z-50 bg-surface-container-lowest/85 backdrop-blur-sm p-4">
+    <div class="bg-surface-container border border-outline-variant/40 rounded-2xl w-full p-4 shadow-2xl space-y-3">
+      <div class="flex items-center justify-between">
+        <h3 class="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">description</span>
+          Exportar (Showdown)
+        </h3>
+        <button id="btn-close-modal" class="w-9 h-9 rounded-lg bg-surface-container-high text-on-surface-variant flex items-center justify-center">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+      <p class="text-xs text-on-surface-variant">Copie o texto para importar sua equipe no Pokémon Showdown:</p>
+      <textarea id="export-textarea" readonly class="w-full h-64 bg-surface-container-lowest border border-outline-variant/40 rounded-xl p-3 font-mono text-xs text-on-surface focus:outline-none"></textarea>
+      <div class="grid grid-cols-2 gap-2">
+        <button id="m-btn-share-showdown" class="px-3 py-3 rounded-lg bg-surface-container-high text-on-surface border border-outline-variant/30 font-headline font-bold text-xs flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">share</span> Compartilhar
+        </button>
+        <button id="btn-copy-showdown" class="px-3 py-3 rounded-lg bg-primary-container text-on-primary-container font-headline font-bold text-xs">📋 Copiar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL: LIMPAR TUDO
+       ===================================================================== -->
+  <div id="clear-confirm-modal" class="modal-backdrop fixed inset-0 z-50 bg-surface-container-lowest/85 backdrop-blur-sm p-4">
+    <div class="bg-surface-container border border-error/40 rounded-2xl w-full p-4 shadow-2xl space-y-3">
+      <div class="flex items-center justify-between">
+        <h3 class="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+          <span class="material-symbols-outlined text-error">warning</span>
+          Deseja apagar tudo?
+        </h3>
+        <button id="btn-cancel-clear-x" class="w-9 h-9 rounded-lg bg-surface-container-high text-on-surface-variant flex items-center justify-center">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+      <p class="text-xs text-on-surface-variant leading-relaxed">Todos os Pokémon, ataques, itens e mecânicas da equipe atual serão removidos dos 6 slots.</p>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <button id="btn-cancel-clear-team" class="px-4 py-3 rounded-lg bg-surface-container-high text-on-surface border border-outline-variant/30 font-headline font-semibold text-sm">Cancelar</button>
+        <button id="btn-confirm-clear-team" class="flex items-center justify-center gap-1.5 px-4 py-3 rounded-lg bg-error-container/30 text-error border border-error/40 font-headline font-bold text-sm">
+          <span class="material-symbols-outlined text-[16px]">delete_forever</span>
+          <span>Apagar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL: SUGESTÃO CAMPEÃ
+       ===================================================================== -->
+  <div id="champion-confirm-modal" class="modal-backdrop fixed inset-0 z-50 bg-surface-container-lowest/85 backdrop-blur-sm p-4">
+    <div class="bg-surface-container border border-secondary/40 rounded-2xl w-full p-4 shadow-2xl space-y-3">
+      <div class="flex items-center justify-between">
+        <h3 class="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+          <span class="material-symbols-outlined text-secondary">emoji_events</span>
+          Substituir Pokémon?
+        </h3>
+        <button id="btn-cancel-champion-x" class="w-9 h-9 rounded-lg bg-surface-container-high text-on-surface-variant flex items-center justify-center">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+      <p class="text-xs text-on-surface-variant leading-relaxed">
+        Você já possui Pokémon na equipe. Deseja substituí-los pelos melhores Pokémon recomendados de <strong id="champion-confirm-game-name" class="text-on-surface">deste jogo</strong>?
+      </p>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <button id="btn-cancel-champion-preset" class="px-4 py-3 rounded-lg bg-surface-container-high text-on-surface border border-outline-variant/30 font-headline font-semibold text-sm">Cancelar</button>
+        <button id="btn-confirm-champion-preset" class="flex items-center justify-center gap-1.5 px-4 py-3 rounded-lg bg-secondary-container/25 text-secondary border border-secondary/50 font-headline font-bold text-sm">
+          <span class="material-symbols-outlined text-[16px]">emoji_events</span>
+          <span>Substituir</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" class="fixed left-3 right-3 z-[60] flex flex-col items-center gap-2 pointer-events-none"></div>
+
+  <!-- CAPACITOR (bundles IIFE locais) -->
+  <script src="vendor/capacitor.js"></script>
+  <script src="vendor/app.js"></script>
+  <script src="vendor/filesystem.js"></script>
+  <script src="vendor/share.js"></script>
+  <script src="vendor/status-bar.js"></script>
+  <script src="vendor/splash-screen.js"></script>
+
+  <!-- APLICAÇÃO (mesmos arquivos da versão web) -->
+  <script src="js/data-types-games.js"></script>
+  <script src="js/data-pokemon.js"></script>
+  <script src="js/data-pokedex-full.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/mobile.js"></script>
+</body>
+</html>
