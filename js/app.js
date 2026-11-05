@@ -7,7 +7,7 @@
   const { TYPES, GAMES, MECHANICS, ITEMS, MOVES, POKEMON, PRESET_TEAMS } = window.POKE_DATA;
   const ENGINE = window.POKE_ENGINE;
 
-  const STORAGE_KEY_ACTIVE = 'poketeam_pro_state_v2';
+  const STORAGE_KEY_ACTIVE = 'poketeam_pro_state_v3';
   const STORAGE_KEY_SAVED_LIST = 'poketeam_pro_saved_teams_v2';
 
   // Estado global da aplicação
@@ -32,7 +32,8 @@
     pickerType: 'all',
     pickerPreEvos: true,
     pickerNatDex: false,
-    // Editor detalhado
+    // Editor detalhado (abre/fecha ao clicar em Stats/Ataques/Item/Mecânica)
+    editorOpen: false,
     activeEditorTab: 'moves',
     activeMoveSlotIndex: 0,
     // Equipes Salvas no Menu Lateral
@@ -553,7 +554,7 @@
           <!-- Quick Slot Footer Actions -->
           <div class="flex items-center justify-between pt-space-xs gap-1">
             <button data-slot-index="${idx}" data-edit-tab="moves" class="px-2.5 py-1 rounded ${
-              isSelected && state.activeEditorTab === 'moves'
+              state.editorOpen && isSelected && state.activeEditorTab === 'moves'
                 ? 'bg-primary-container text-on-primary-container font-bold'
                 : 'bg-surface-container-lowest text-on-surface-variant hover:text-on-surface'
             } font-label-sm text-[11px] flex items-center gap-1 cursor-pointer">
@@ -562,23 +563,23 @@
             <div class="flex items-center gap-1">
               ${game.hasItems ? `
                 <button data-slot-index="${idx}" data-edit-tab="item" class="px-2 py-1 rounded ${
-                  isSelected && state.activeEditorTab === 'item'
+                  state.editorOpen && isSelected && state.activeEditorTab === 'item'
                     ? 'bg-primary-container text-on-primary-container font-bold'
                     : 'bg-surface-container-lowest text-on-surface-variant hover:text-on-surface'
                 } font-label-sm text-[11px] cursor-pointer">🎒 Item</button>
               ` : ''}
               ${game.mechanics.length > 0 ? `
                 <button data-slot-index="${idx}" data-edit-tab="mechanics" class="px-2 py-1 rounded ${
-                  isSelected && state.activeEditorTab === 'mechanics'
+                  state.editorOpen && isSelected && state.activeEditorTab === 'mechanics'
                     ? 'bg-primary-container text-on-primary-container font-bold'
                     : 'bg-surface-container-lowest text-on-surface-variant hover:text-on-surface'
                 } font-label-sm text-[11px] cursor-pointer">🧬 Mecânica</button>
               ` : ''}
               <button data-slot-index="${idx}" data-edit-tab="stats" class="px-2 py-1 rounded ${
-                isSelected && state.activeEditorTab === 'stats'
+                state.editorOpen && isSelected && state.activeEditorTab === 'stats'
                   ? 'bg-primary-container text-on-primary-container font-bold'
                   : 'bg-surface-container-lowest text-on-surface-variant hover:text-on-surface'
-              } font-label-sm text-[11px] cursor-pointer" title="Atributos e Defesas">📊 Stats</button>
+              } font-label-sm text-[11px] cursor-pointer" title="Abrir/Fechar Atributos e Defesas">📊 Stats</button>
             </div>
           </div>
         </article>
@@ -719,28 +720,13 @@
     const game = getCurrentGame();
     const slot = state.team[state.activeSlotIndex];
 
-    if (!slot || !slot.pokemon) {
-      container.innerHTML = `
-        <div class="p-space-lg flex flex-col sm:flex-row items-center justify-between gap-4 bg-surface-container-low">
-          <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-primary">
-              <span class="material-symbols-outlined text-2xl">touch_app</span>
-            </div>
-            <div>
-              <h3 class="font-headline font-bold text-base text-on-surface">Slot #${state.activeSlotIndex + 1} está vazio</h3>
-              <p class="text-xs text-on-surface-variant">
-                Clique no botão ao lado para abrir a <strong>Pokédex Completa de ${game.name}</strong> e escolher o Pokémon deste slot, ou selecione uma recomendação abaixo.
-              </p>
-            </div>
-          </div>
-          <button data-open-picker-slot="${state.activeSlotIndex}" class="px-4 py-2.5 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary-container font-headline font-bold text-xs flex items-center gap-2 shadow-lg cursor-pointer shrink-0">
-            <span class="material-symbols-outlined text-[18px]">search</span>
-            Abrir Pokédex do Jogo (Slot #${state.activeSlotIndex + 1})
-          </button>
-        </div>
-      `;
+    if (!state.editorOpen || !slot || !slot.pokemon) {
+      container.classList.add('hidden');
+      container.innerHTML = '';
       return;
     }
+
+    container.classList.remove('hidden');
 
     const eff = ENGINE.getEffectivePokemonState(slot, game);
     const moveRecs = ENGINE.getRecommendedMovesForPokemon(slot.pokemon, game, teamAnalysis, slot);
@@ -1149,6 +1135,9 @@
           }">
             <span class="material-symbols-outlined text-[16px]">monitoring</span>
             Atributos &amp; Defesas
+          </button>
+          <button data-close-editor="true" class="px-2.5 py-2 rounded-lg bg-error-container/20 hover:bg-error-container/40 text-error font-headline font-bold text-xs flex items-center justify-center transition-all cursor-pointer" title="Fechar Painel">
+            <span class="material-symbols-outlined text-[16px]">close</span>
           </button>
         </div>
       </div>
@@ -1755,13 +1744,32 @@
         return;
       }
 
-      // Atalho de aba de edição dentro do card do slot
+      // Fechar Painel de Status / Edição do Pokémon
+      if (e.target.closest('[data-close-editor]')) {
+        state.editorOpen = false;
+        renderAll();
+        return;
+      }
+
+      // Atalho de aba de edição dentro do card do slot (ex: 📊 Stats, ⚔️ 4 Ataques, 🎒 Item, 🧬 Mecânica)
+      // Se já estiver aberto no mesmo slot e mesma aba, clicar novamente fecha/esconde o painel!
       const editTabTrigger = e.target.closest('[data-edit-tab]');
       if (editTabTrigger) {
         e.stopPropagation();
-        state.activeSlotIndex = Number(editTabTrigger.dataset.slotIndex);
-        state.activeEditorTab = editTabTrigger.dataset.editTab;
-        if (editTabTrigger.dataset.moveIdx !== undefined) {
+        const clickedSlot = Number(editTabTrigger.dataset.slotIndex);
+        const clickedTab = editTabTrigger.dataset.editTab;
+        const hasSpecificMoveIdx = editTabTrigger.dataset.moveIdx !== undefined;
+
+        if (state.editorOpen && state.activeSlotIndex === clickedSlot && state.activeEditorTab === clickedTab && !hasSpecificMoveIdx) {
+          state.editorOpen = false;
+          renderAll();
+          return;
+        }
+
+        state.activeSlotIndex = clickedSlot;
+        state.activeEditorTab = clickedTab;
+        state.editorOpen = true;
+        if (hasSpecificMoveIdx) {
           state.activeMoveSlotIndex = Number(editTabTrigger.dataset.moveIdx);
         }
         renderAll();
@@ -1786,10 +1794,16 @@
         return;
       }
 
-      // Trocar de aba no Editor Detalhado
+      // Trocar de aba no Editor Detalhado (clicar na mesma aba já aberta também fecha o painel)
       const editorTabBtn = e.target.closest('[data-editor-tab]');
       if (editorTabBtn) {
-        state.activeEditorTab = editorTabBtn.dataset.editorTab;
+        const clickedTab = editorTabBtn.dataset.editorTab;
+        if (state.editorOpen && state.activeEditorTab === clickedTab) {
+          state.editorOpen = false;
+        } else {
+          state.activeEditorTab = clickedTab;
+          state.editorOpen = true;
+        }
         renderAll();
         return;
       }
@@ -2029,17 +2043,13 @@
     }
   }
 
-  // Inicialização ao carregar o DOM
+  // Inicialização ao carregar o DOM (sempre inicia sem Pokémon padrão para o usuário escolher)
   document.addEventListener('DOMContentLoaded', () => {
     bindEvents();
-    const hadSavedState = loadFromStorage();
-    if (!hadSavedState) {
-      // Inicia com 3 Pokémon icônicos preenchidos e 3 vagas abertas (igual ao preview do Stitch!)
-      loadChampionPresetForCurrentGame();
-      state.team[3] = null;
-      state.team[4] = null;
-      state.team[5] = null;
-    }
+    try {
+      localStorage.removeItem('poketeam_pro_state_v2');
+    } catch (e) {}
+    loadFromStorage();
     renderAll();
   });
 })();
