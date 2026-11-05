@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokémon Team Recommendations (Gen 1–9 + Unbound & Lazarus)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- BARRA SUPERIOR -->
+  <header class="top-navbar">
+    <div class="navbar-inner">
+      <div class="brand-logo">
+        <button class="sidebar-toggle-btn" id="btn-toggle-sidebar" title="Mostrar/Ocultar Menu Lateral de Equipes Salvas">
+          ☰ Minhas Equipes
+        </button>
+        <div class="pokeball-logo"></div>
+        <div class="brand-title">
+          <h1>Pokémon Team Recommendations</h1>
+          <p>Geração I até Geração IX + Pokémon Unbound & Pokémon Lazarus</p>
+        </div>
+      </div>
+
+      <div class="navbar-actions">
+        <button class="btn-primary" id="btn-auto-complete-team" title="Preenche APENAS os slots vazios mantendo os Pokémon que você já escolheu">
+          ✨ Auto-Completar Vagas Vazias
+        </button>
+        <button class="btn-gold" id="btn-load-champion-preset" title="Carrega um modelo de equipe campeã para o jogo selecionado">
+          🏆 Sugestão Campeã do Jogo
+        </button>
+        <button class="btn-secondary" id="btn-export-showdown">
+          📋 Exportar Showdown
+        </button>
+        <button class="btn-danger" id="btn-clear-team">
+          🗑️ Limpar Equipe
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- LAYOUT COM MENU LATERAL DE EQUIPES SALVAS + CONTEÚDO PRINCIPAL -->
+  <div class="workspace-shell">
+
+    <!-- MENU LATERAL: EQUIPES SALVAS -->
+    <aside class="saved-teams-sidebar" id="saved-teams-sidebar">
+      <div class="sidebar-header">
+        <div>
+          <h2>💾 Equipes Salvas</h2>
+          <p>Salve e alterne entre suas equipes favoritas</p>
+        </div>
+        <span class="saved-count-badge" id="saved-teams-count">0</span>
+      </div>
+
+      <!-- Formulário para dar nome e salvar a equipe atual -->
+      <div class="save-team-box">
+        <label for="save-team-name-input">Nome da Equipe para Salvar (Salvo no seu PC):</label>
+        <div class="save-input-group">
+          <input
+            type="text"
+            id="save-team-name-input"
+            class="save-team-input"
+            placeholder="Ex: Meu Time Unbound, Kanto Red..."
+            maxlength="45"
+          />
+          <button class="btn-save-team" id="btn-save-current-team">
+            💾 Salvar Equipe Localmente
+          </button>
+        </div>
+        <div class="local-file-actions">
+          <button class="btn-file-pc" id="btn-export-json-pc" title="Baixar arquivo .json com todas as suas equipes salvas direto para o seu computador">
+            ⬇️ Baixar Backup no PC (.json)
+          </button>
+          <label class="btn-file-pc" for="input-import-json-pc" title="Carregar arquivo .json de equipes salvo no seu computador">
+            ⬆️ Carregar do PC (.json)
+          </label>
+          <input type="file" id="input-import-json-pc" accept=".json" style="display:none;" />
+        </div>
+        <small class="local-storage-note">🔒 100% salvo localmente no seu computador (Navegador + Arquivo local).</small>
+      </div>
+
+      <!-- Lista de Equipes Salvas -->
+      <div class="saved-teams-list" id="saved-teams-list"></div>
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="app-container">
+
+      <!-- 1. SELETOR DE JOGO, VERSÃO, MECÂNICAS E INICIAIS -->
+      <section class="game-selector-panel">
+        <div class="game-selector-top">
+          <div class="control-group">
+            <label for="game-select">🎮 1. Escolha o Jogo / Geração (Gen 1 a Gen 9 + Fan Games)</label>
+            <select id="game-select" class="game-dropdown"></select>
+          </div>
+
+          <div class="control-group">
+            <label>💿 2. Escolha a Versão / Modo</label>
+            <div id="version-pills" class="version-pills-wrap"></div>
+          </div>
+
+          <div class="control-group">
+            <label>🧬 3. Mecânicas de Batalha Disponíveis no Jogo</label>
+            <div id="game-mechanics-badges" class="mechanics-badges-wrap"></div>
+          </div>
+        </div>
+
+        <!-- Barra de Iniciais Rápidos daquele Jogo -->
+        <div class="starters-bar-wrap">
+          <span class="starters-label">🌟 Iniciais deste Jogo:</span>
+          <div id="game-starters-bar" class="starters-list"></div>
+        </div>
+
+        <div class="game-meta-bar">
+          <div id="game-region-badge" class="region-chips"></div>
+          <p id="game-notes-text" class="game-notes"></p>
+        </div>
+      </section>
+
+      <!-- 2. OS 6 POKÉMON DA EQUIPE -->
+      <section>
+        <div class="section-heading">
+          <div>
+            <h2>🛡️ Sua Equipe de 6 Pokémon</h2>
+            <p>Clique em <strong>"🔍 Escolher / Trocar Pokémon"</strong> em qualquer slot para abrir a <strong>Pokédex Completa do Jogo</strong>, ou configure seus <strong>4 Ataques</strong>, <strong>Item</strong> e <strong>Mecânica</strong>.</p>
+          </div>
+        </div>
+
+        <div id="team-slots-grid" class="team-slots-grid"></div>
+      </section>
+
+      <!-- 3. EDITOR DETALHADO DO POKÉMON SELECIONADO (4 ATAQUES, ITEM E MECÂNICAS) -->
+      <section id="slot-detail-editor"></section>
+
+      <!-- 4. MATRIZ DE DEFESA ELEMENTAL & COBERTURA DE FRAQUEZAS -->
+      <section class="synergy-panel">
+        <div class="synergy-header">
+          <div>
+            <h2>📊 Matriz de Defesa Elemental & Cobertura de Fraquezas</h2>
+            <p>Analisa como seus 6 Pokémon defendem cada elemento (incluindo Habilidades como <em>Levitate, Thick Fat, Flash Fire</em> e mudanças de tipo de <em>Mega Evoluções / Terastal</em>) e quais tipos seus 4 ataques cobrem.</p>
+          </div>
+          <div id="synergy-score-badge"></div>
+        </div>
+
+        <div id="synergy-alerts-box" class="synergy-alerts-box"></div>
+
+        <div id="elemental-matrix-grid" class="elemental-matrix-grid"></div>
+      </section>
+
+      <!-- 5. RECOMENDADOR INTELIGENTE & POKÉDEX DO JOGO -->
+      <section class="recommendations-panel">
+        <div class="section-heading">
+          <div>
+            <h2>💡 Recomendações de Sinergia & Pokédex Disponível no Jogo</h2>
+            <p>Pesquise por <strong>Nome</strong> ou <strong>Nº na Pokédex (#001 a #1025)</strong> ou veja as melhores combinações para cobrir as fraquezas atuais da sua equipe.</p>
+          </div>
+        </div>
+
+        <div class="rec-filters-bar">
+          <input
+            type="text"
+            id="rec-search-input"
+            class="search-input"
+            placeholder="🔍 Pesquisar por Nome ou Nº da Pokédex (ex: 006, #25, 445, Garchomp, Pikachu, Lucario)..."
+          />
+
+          <select id="rec-sort-mode" class="filter-select">
+            <option value="synergy">💡 Ordenar por Melhor Sinergia c/ Equipe</option>
+            <option value="dex">📖 Ordenar por Nº da Pokédex (#001 → #1025)</option>
+            <option value="alpha">🔤 Ordem Alfabética (A → Z)</option>
+          </select>
+
+          <select id="rec-type-filter" class="filter-select">
+            <option value="all">Todos os Tipos</option>
+          </select>
+
+          <select id="rec-mechanic-filter" class="filter-select">
+            <option value="all">Todas as Formas</option>
+            <option value="mega">🧬 Apenas com Mega Evolução</option>
+          </select>
+
+          <label class="nat-dex-toggle">
+            <input type="checkbox" id="toggle-pre-evos" checked />
+            <span>Incluir Pré-Evoluções</span>
+          </label>
+
+          <label class="nat-dex-toggle">
+            <input type="checkbox" id="toggle-national-dex" />
+            <span>Liberar National Dex (Todas as Gens)</span>
+          </label>
+        </div>
+
+        <div id="recommended-pokemon-grid" class="recommended-pokemon-grid"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL SELETOR DE POKÉMON (POKÉDEX COMPLETA DO JOGO AO CLICAR NUM SLOT) -->
+  <div id="pokedex-picker-modal" class="modal-backdrop">
+    <div class="modal-box modal-pokedex-picker">
+      <div class="picker-modal-header">
+        <div>
+          <h3 id="picker-modal-title">🔍 Escolher Pokémon para o Slot #1</h3>
+          <p id="picker-modal-subtitle">Todos os Pokémon disponíveis neste jogo — pesquise por nome ou número da Pokédex</p>
+        </div>
+        <button class="btn-close-x" id="btn-close-picker-modal">✕</button>
+      </div>
+
+      <div class="picker-filters-row">
+        <input
+          type="text"
+          id="picker-search-input"
+          class="search-input"
+          placeholder="🔍 Digite o Nome ou Número da Pokédex (ex: 1, 006, 25, 150, 445, Charizard, Garchomp)..."
+        />
+
+        <select id="picker-sort-mode" class="filter-select">
+          <option value="dex">📖 Nº da Pokédex (#001...)</option>
+          <option value="synergy">💡 Melhor Sinergia c/ Equipe</option>
+          <option value="alpha">🔤 Ordem Alfabética (A–Z)</option>
+        </select>
+
+        <select id="picker-type-filter" class="filter-select">
+          <option value="all">Todos os Tipos</option>
+        </select>
+
+        <label class="nat-dex-toggle">
+          <input type="checkbox" id="picker-pre-evos" checked />
+          <span>Todas as Evoluções</span>
+        </label>
+
+        <label class="nat-dex-toggle">
+          <input type="checkbox" id="picker-nat-dex" />
+          <span>National Dex</span>
+        </label>
+      </div>
+
+      <div class="picker-count-bar" id="picker-count-bar"></div>
+
+      <div id="picker-pokemon-grid" class="picker-pokemon-grid"></div>
+    </div>
+  </div>
+
+  <!-- MODAL DE EXPORTAÇÃO POKÉMON SHOWDOWN -->
+  <div id="export-modal" class="modal-backdrop">
+    <div class="modal-box">
+      <h3>📋 Exportar Equipe (Formato Pokémon Showdown)</h3>
+      <p style="font-size: 0.82rem; color: var(--text-secondary);">
+        Copie o texto abaixo para importar sua equipe diretamente no Pokémon Showdown ou salvar suas notas de campanha:
+      </p>
+      <textarea id="export-textarea" readonly></textarea>
+      <div class="modal-actions">
+        <button class="btn-secondary" id="btn-close-modal">Fechar</button>
+        <button class="btn-primary" id="btn-copy-showdown">📋 Copiar Formato Showdown</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTAINER DE AVISOS / TOASTS -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- SCRIPTS DA APLICAÇÃO -->
+  <script src="js/data-types-games.js"></script>
+  <script src="js/data-pokemon.js"></script>
+  <script src="js/data-pokedex-full.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
