@@ -2062,13 +2062,47 @@
     }
 
     const btnClearTeam = document.getElementById('btn-clear-team');
+    const clearConfirmModal = document.getElementById('clear-confirm-modal');
+    const btnConfirmClear = document.getElementById('btn-confirm-clear-team');
+    const btnCancelClear = document.getElementById('btn-cancel-clear-team');
+    const btnCancelClearX = document.getElementById('btn-cancel-clear-x');
+
     if (btnClearTeam) {
       btnClearTeam.addEventListener('click', () => {
+        if (clearConfirmModal) {
+          clearConfirmModal.classList.add('open');
+        } else if (window.confirm('Deseja apagar tudo?')) {
+          state.team = [null, null, null, null, null, null];
+          state.activeSavedTeamId = null;
+          state.activeSlotIndex = 0;
+          state.editorOpenSlotIndex = null;
+          renderAll();
+          showToast('🗑️ Equipe limpa! Clique em qualquer slot para montar sua equipe.');
+        }
+      });
+    }
+
+    if (btnConfirmClear && clearConfirmModal) {
+      btnConfirmClear.addEventListener('click', () => {
         state.team = [null, null, null, null, null, null];
         state.activeSavedTeamId = null;
         state.activeSlotIndex = 0;
+        state.editorOpenSlotIndex = null;
+        clearConfirmModal.classList.remove('open');
         renderAll();
         showToast('🗑️ Equipe limpa! Clique em qualquer slot para montar sua equipe.');
+      });
+    }
+
+    if (btnCancelClear && clearConfirmModal) {
+      btnCancelClear.addEventListener('click', () => clearConfirmModal.classList.remove('open'));
+    }
+    if (btnCancelClearX && clearConfirmModal) {
+      btnCancelClearX.addEventListener('click', () => clearConfirmModal.classList.remove('open'));
+    }
+    if (clearConfirmModal) {
+      clearConfirmModal.addEventListener('click', e => {
+        if (e.target === clearConfirmModal) clearConfirmModal.classList.remove('open');
       });
     }
 
