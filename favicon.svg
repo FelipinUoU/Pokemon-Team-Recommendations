@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="topRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff3b3b"/>
+      <stop offset="100%" stop-color="#c81e1e"/>
+    </linearGradient>
+    <linearGradient id="bottomWhite" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+  </defs>
+  <!-- Outer Circle / Base -->
+  <circle cx="32" cy="32" r="30" fill="url(#bottomWhite)" stroke="#0f172a" stroke-width="4"/>
+  <!-- Top Red Half -->
+  <path d="M 2 32 A 30 30 0 0 1 62 32 Z" fill="url(#topRed)" stroke="#0f172a" stroke-width="4" stroke-linejoin="round"/>
+  <!-- Top Gloss Highlight -->
+  <path d="M 14 16 A 20 18 0 0 1 36 10" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+  <!-- Center Black Band -->
+  <line x1="2" y1="32" x2="62" y2="32" stroke="#0f172a" stroke-width="5"/>
+  <!-- Center Button Outer -->
+  <circle cx="32" cy="32" r="10" fill="#ffffff" stroke="#0f172a" stroke-width="4"/>
+  <!-- Center Button Inner -->
+  <circle cx="32" cy="32" r="4.5" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+</svg>
