@@ -106,16 +106,6 @@
 
     <!-- Right Global Action Bar -->
     <div class="flex items-center gap-space-sm">
-      <button id="btn-auto-complete-team" class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-br from-primary to-primary-container text-on-primary-container font-headline font-bold text-xs shadow-lg shadow-primary-container/20 hover:brightness-110 transition-all cursor-pointer" title="Preenche APENAS os slots vazios mantendo os Pokémon que você já escolheu">
-        <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
-        <span>Auto-Completar</span>
-      </button>
-
-      <button id="btn-load-champion-preset" class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-secondary-container/20 border border-secondary/40 text-secondary hover:bg-secondary-container/30 font-headline font-bold text-xs transition-all cursor-pointer" title="Carrega uma equipe campeã recomendada para o jogo atual">
-        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
-        <span class="hidden lg:inline">Sugestão Campeã</span>
-      </button>
-
       <button id="btn-export-showdown" class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-outline-variant/30 font-headline font-semibold text-xs transition-all cursor-pointer">
         <span class="material-symbols-outlined text-[18px] text-on-surface-variant">content_copy</span>
         <span class="hidden md:inline">Exportar Showdown</span>
@@ -242,11 +232,16 @@
             <h2 class="font-headline text-headline-md text-on-surface">Sua Equipe Pokémon (6 Slots)</h2>
             <span id="team-filled-counter" class="px-2.5 py-0.5 rounded-full bg-surface-container-high font-mono text-xs text-primary border border-outline-variant/20">0 / 6 Preenchidos</span>
           </div>
-          <div class="flex items-center gap-3 text-xs text-on-surface-variant">
-            <span class="flex items-center gap-1">
-              <span class="w-2 h-2 rounded-full bg-primary-container"></span>
-              Clique em qualquer slot para abrir a <strong>Pokédex Completa do Jogo</strong>
-            </span>
+          <div class="flex flex-wrap items-center gap-2.5">
+            <button id="btn-auto-complete-team" class="btn-attention-glow flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-br from-primary to-primary-container text-on-primary-container font-headline font-bold text-xs shadow-lg shadow-primary-container/25 hover:brightness-110 transition-all cursor-pointer" title="Preenche APENAS os slots vazios mantendo os Pokémon que você já escolheu">
+              <span class="material-symbols-outlined text-[18px] icon-sparkle">auto_awesome</span>
+              <span>Auto-Completar</span>
+            </button>
+
+            <button id="btn-load-champion-preset" class="btn-champion-glow flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-secondary-container/20 border border-secondary/45 text-secondary hover:bg-secondary-container/35 font-headline font-bold text-xs transition-all cursor-pointer" title="Carrega uma equipe campeã com os melhores Pokémon para o jogo atual">
+              <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+              <span>Sugestão Campeã</span>
+            </button>
           </div>
         </div>
 
@@ -408,6 +403,35 @@
         <button id="btn-confirm-clear-team" class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-error-container/30 hover:bg-error-container/50 text-error border border-error/40 font-headline font-bold text-xs transition-all cursor-pointer">
           <span class="material-symbols-outlined text-[16px]">delete_forever</span>
           <span>Sim, apagar tudo</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       7. MODAL DE CONFIRMAÇÃO — SUGESTÃO CAMPEÃ (SUBSTITUIR POKÉMON SELECIONADOS)
+       ===================================================================== -->
+  <div id="champion-confirm-modal" class="modal-backdrop fixed inset-0 z-50 bg-surface-container-lowest/85 backdrop-blur-md p-4">
+    <div class="bg-surface-container border border-secondary/40 rounded-2xl max-w-md w-full p-space-lg shadow-2xl space-y-space-md">
+      <div class="flex items-center justify-between">
+        <h3 class="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+          <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+          Substituir Pokémon selecionados?
+        </h3>
+        <button id="btn-cancel-champion-x" class="w-8 h-8 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface flex items-center justify-center cursor-pointer">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+      <p class="text-xs text-on-surface-variant leading-relaxed">
+        Você já possui Pokémon na equipe atual. Deseja substituir os Pokémon selecionados pelos melhores Pokémon recomendados de <strong id="champion-confirm-game-name" class="text-on-surface">deste jogo</strong>?
+      </p>
+      <div class="flex justify-end gap-2 pt-1">
+        <button id="btn-cancel-champion-preset" class="px-4 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-outline-variant/30 font-headline font-semibold text-xs transition-all cursor-pointer">
+          Cancelar
+        </button>
+        <button id="btn-confirm-champion-preset" class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-secondary-container/25 hover:bg-secondary-container/40 text-secondary border border-secondary/50 font-headline font-bold text-xs transition-all cursor-pointer">
+          <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+          <span>Sim, substituir pelos melhores</span>
         </button>
       </div>
     </div>

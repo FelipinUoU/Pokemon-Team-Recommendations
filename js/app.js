@@ -409,6 +409,16 @@
       counterEl.textContent = `${filledCount} / 6 Preenchidos`;
     }
 
+    // O botão "Auto-Completar" só deve aparecer se houver 1 ou mais espaços vazios
+    const btnAutoCompleteEl = document.getElementById('btn-auto-complete-team');
+    if (btnAutoCompleteEl) {
+      if (filledCount >= 6) {
+        btnAutoCompleteEl.classList.add('hidden');
+      } else {
+        btnAutoCompleteEl.classList.remove('hidden');
+      }
+    }
+
     // Top 3 recomendações de sinergia para sugerir nos slots vazios (como no design do Stitch)
     const topRecsForEmpty = ENGINE.getRecommendedPokemonForTeam(state.team, game, {
       includePreEvos: false,
@@ -2108,8 +2118,45 @@
     }
 
     const btnLoadPreset = document.getElementById('btn-load-champion-preset');
+    const championConfirmModal = document.getElementById('champion-confirm-modal');
+    const championConfirmGameName = document.getElementById('champion-confirm-game-name');
+    const btnConfirmChampion = document.getElementById('btn-confirm-champion-preset');
+    const btnCancelChampion = document.getElementById('btn-cancel-champion-preset');
+    const btnCancelChampionX = document.getElementById('btn-cancel-champion-x');
+
     if (btnLoadPreset) {
-      btnLoadPreset.addEventListener('click', () => loadChampionPresetForCurrentGame());
+      btnLoadPreset.addEventListener('click', () => {
+        const hasAnyPokemon = state.team.some(s => s && s.pokemon);
+        if (hasAnyPokemon) {
+          const g = getCurrentGame();
+          if (championConfirmGameName) championConfirmGameName.textContent = g.name;
+          if (championConfirmModal) {
+            championConfirmModal.classList.add('open');
+          } else if (window.confirm(`Deseja substituir os Pokémon selecionados pelos melhores Pokémon de ${g.name}?`)) {
+            loadChampionPresetForCurrentGame();
+          }
+        } else {
+          loadChampionPresetForCurrentGame();
+        }
+      });
+    }
+
+    if (btnConfirmChampion && championConfirmModal) {
+      btnConfirmChampion.addEventListener('click', () => {
+        championConfirmModal.classList.remove('open');
+        loadChampionPresetForCurrentGame();
+      });
+    }
+    if (btnCancelChampion && championConfirmModal) {
+      btnCancelChampion.addEventListener('click', () => championConfirmModal.classList.remove('open'));
+    }
+    if (btnCancelChampionX && championConfirmModal) {
+      btnCancelChampionX.addEventListener('click', () => championConfirmModal.classList.remove('open'));
+    }
+    if (championConfirmModal) {
+      championConfirmModal.addEventListener('click', e => {
+        if (e.target === championConfirmModal) championConfirmModal.classList.remove('open');
+      });
     }
 
     const btnClearTeam = document.getElementById('btn-clear-team');
