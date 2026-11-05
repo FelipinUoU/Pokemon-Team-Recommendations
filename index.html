@@ -1,269 +1,452 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html class="dark" lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pokémon Team Recommendations (Gen 1–9 + Unbound & Lazarus)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Pokémon Team Recommendations — Construtor & Sinergia (Gen 1–9 + Unbound & Lazarus)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#8ed5ff",
+            "on-primary": "#00354a",
+            "primary-container": "#38bdf8",
+            "on-primary-container": "#004966",
+            "secondary": "#ffb95f",
+            "on-secondary": "#472a00",
+            "secondary-container": "#ee9800",
+            "on-secondary-container": "#543200",
+            "tertiary": "#56e5a9",
+            "on-tertiary": "#003824",
+            "tertiary-container": "#30c88f",
+            "on-tertiary-fixed": "#002113",
+            "error": "#ffb4ab",
+            "error-container": "#93000a",
+            "on-error-container": "#ffdad6",
+            "background": "#0d1322",
+            "on-background": "#dde2f7",
+            "surface": "#0d1322",
+            "surface-dim": "#0d1322",
+            "surface-bright": "#333949",
+            "surface-container-lowest": "#080e1d",
+            "surface-container-low": "#151b2b",
+            "surface-container": "#191f2f",
+            "surface-container-high": "#242a3a",
+            "surface-container-highest": "#2f3445",
+            "on-surface": "#dde2f7",
+            "on-surface-variant": "#bdc8d1",
+            "outline": "#87929a",
+            "outline-variant": "#3e4850"
+          },
+          fontFamily: {
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Inter", "sans-serif"],
+            "mono": ["JetBrains Mono", "monospace"],
+            "label-sm": ["JetBrains Mono", "monospace"]
+          },
+          spacing: {
+            "space-xs": "0.375rem",
+            "space-sm": "0.625rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2rem"
+          },
+          fontSize: {
+            "display-lg": ["2rem", { lineHeight: "1.15", letterSpacing: "-0.02em", fontWeight: "800" }],
+            "headline-md": ["1.25rem", { lineHeight: "1.25", letterSpacing: "-0.015em", fontWeight: "700" }],
+            "title-sm": ["0.9375rem", { lineHeight: "1.35", fontWeight: "600" }],
+            "body-md": ["0.875rem", { lineHeight: "1.5", fontWeight: "400" }],
+            "label-sm": ["0.75rem", { lineHeight: "1.2", letterSpacing: "0.03em", fontWeight: "600" }]
+          }
+        }
+      }
+    };
+  </script>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body class="bg-surface text-on-surface font-body antialiased selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
 
-  <!-- BARRA SUPERIOR -->
-  <header class="top-navbar">
-    <div class="navbar-inner">
-      <div class="brand-logo">
-        <button class="sidebar-toggle-btn" id="btn-toggle-sidebar" title="Mostrar/Ocultar Menu Lateral de Equipes Salvas">
-          ☰ Minhas Equipes
-        </button>
-        <div class="pokeball-logo"></div>
-        <div class="brand-title">
-          <h1>Pokémon Team Recommendations</h1>
-          <p>Geração I até Geração IX + Pokémon Unbound & Pokémon Lazarus</p>
+  <!-- =====================================================================
+       1. TOP FIXED HEADER BAR (STITCH TACTICAL COMMAND DECK)
+       ===================================================================== -->
+  <header class="fixed top-0 left-0 right-0 z-50 h-16 bg-surface-container-low/90 backdrop-blur-md border-b border-outline-variant/25 px-space-lg flex items-center justify-between gap-4">
+    <!-- Left Brand & Drawer Toggle -->
+    <div class="flex items-center gap-space-md">
+      <button id="btn-toggle-sidebar" class="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface transition-all border border-outline-variant/30 cursor-pointer" title="Mostrar/Ocultar Menu Lateral de Equipes Salvas">
+        <span class="material-symbols-outlined text-primary text-[20px]">menu_open</span>
+        <span class="font-label-sm text-label-sm hidden sm:inline">Minhas Equipes</span>
+      </button>
+
+      <div class="flex items-center gap-3">
+        <!-- Tactical Pokéball Emblem -->
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-red-500 to-red-700 p-0.5 shadow-lg shadow-red-500/20 flex items-center justify-center relative overflow-hidden shrink-0">
+          <div class="w-full h-1/2 bg-white/95 absolute bottom-0 left-0"></div>
+          <div class="w-full h-1 bg-surface-container-lowest absolute top-1/2 -translate-y-1/2 z-10"></div>
+          <div class="w-3.5 h-3.5 rounded-full bg-white border-2 border-surface-container-lowest z-20 shadow-inner"></div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-headline font-extrabold text-base md:text-lg tracking-tight text-on-surface leading-none">
+              Pokémon Team <span class="text-primary">Recommendations</span>
+            </h1>
+            <span class="hidden xl:inline-block px-2 py-0.5 text-[10px] font-mono uppercase tracking-widest bg-primary-container/20 text-primary rounded-full border border-primary/30">Sinergia & Meta Builder</span>
+          </div>
+          <p class="text-xs text-on-surface-variant hidden md:block mt-0.5">
+            Geração I até Geração IX + Pokémon Unbound &amp; Pokémon Lazarus
+          </p>
         </div>
       </div>
+    </div>
 
-      <div class="navbar-actions">
-        <button class="btn-primary" id="btn-auto-complete-team" title="Preenche APENAS os slots vazios mantendo os Pokémon que você já escolheu">
-          ✨ Auto-Completar Vagas Vazias
-        </button>
-        <button class="btn-gold" id="btn-load-champion-preset" title="Carrega um modelo de equipe campeã para o jogo selecionado">
-          🏆 Sugestão Campeã do Jogo
-        </button>
-        <button class="btn-secondary" id="btn-export-showdown">
-          📋 Exportar Showdown
-        </button>
-        <button class="btn-danger" id="btn-clear-team">
-          🗑️ Limpar Equipe
-        </button>
-      </div>
+    <!-- Right Global Action Bar -->
+    <div class="flex items-center gap-space-sm">
+      <button id="btn-auto-complete-team" class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-br from-primary to-primary-container text-on-primary-container font-headline font-bold text-xs shadow-lg shadow-primary-container/20 hover:brightness-110 transition-all cursor-pointer" title="Preenche APENAS os slots vazios mantendo os Pokémon que você já escolheu">
+        <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+        <span>Auto-Completar</span>
+        <span class="hidden xl:inline opacity-80 font-normal">(Vagas Vazias)</span>
+      </button>
+
+      <button id="btn-load-champion-preset" class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-secondary-container/20 border border-secondary/40 text-secondary hover:bg-secondary-container/30 font-headline font-bold text-xs transition-all cursor-pointer" title="Carrega uma equipe campeã recomendada para o jogo atual">
+        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+        <span class="hidden lg:inline">Sugestão Campeã</span>
+      </button>
+
+      <button id="btn-export-showdown" class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-outline-variant/30 font-headline font-semibold text-xs transition-all cursor-pointer">
+        <span class="material-symbols-outlined text-[18px] text-on-surface-variant">content_copy</span>
+        <span class="hidden md:inline">Exportar Showdown</span>
+      </button>
+
+      <button id="btn-clear-team" class="flex items-center gap-1 px-2.5 py-2 rounded-lg bg-error-container/25 hover:bg-error-container/40 text-error border border-error/30 font-headline font-semibold text-xs transition-all cursor-pointer" title="Limpar Equipe Atual">
+        <span class="material-symbols-outlined text-[18px]">delete_sweep</span>
+        <span class="hidden xl:inline">Limpar</span>
+      </button>
     </div>
   </header>
 
-  <!-- LAYOUT COM MENU LATERAL DE EQUIPES SALVAS + CONTEÚDO PRINCIPAL -->
-  <div class="workspace-shell">
-
-    <!-- MENU LATERAL: EQUIPES SALVAS -->
-    <aside class="saved-teams-sidebar" id="saved-teams-sidebar">
-      <div class="sidebar-header">
-        <div>
-          <h2>💾 Equipes Salvas</h2>
-          <p>Salve e alterne entre suas equipes favoritas</p>
+  <!-- =====================================================================
+       2. LEFT COLLAPSIBLE SIDEBAR (EQUIPES SALVAS LOCALMENTE NO PC)
+       ===================================================================== -->
+  <aside id="saved-teams-sidebar" class="fixed top-16 left-0 bottom-0 z-40 w-80 bg-surface-container-low border-r border-outline-variant/20 flex flex-col justify-between transition-transform duration-300 overflow-hidden">
+    <div class="p-space-md flex flex-col h-full overflow-hidden">
+      <!-- Drawer Header -->
+      <div class="flex items-center justify-between pb-space-sm mb-space-sm border-b border-outline-variant/20">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[20px]">folder_special</span>
+          <div>
+            <h2 class="font-headline font-bold text-title-sm text-on-surface leading-tight">Equipes Salvas</h2>
+            <p class="text-[11px] text-on-surface-variant">Salvas localmente no seu PC</p>
+          </div>
         </div>
-        <span class="saved-count-badge" id="saved-teams-count">0</span>
+        <span id="saved-teams-count" class="px-2.5 py-0.5 rounded-full bg-surface-container-highest font-mono text-label-sm text-primary">0</span>
       </div>
 
-      <!-- Formulário para dar nome e salvar a equipe atual -->
-      <div class="save-team-box">
-        <label for="save-team-name-input">Nome da Equipe para Salvar (Salvo no seu PC):</label>
-        <div class="save-input-group">
-          <input
-            type="text"
-            id="save-team-name-input"
-            class="save-team-input"
-            placeholder="Ex: Meu Time Unbound, Kanto Red..."
-            maxlength="45"
-          />
-          <button class="btn-save-team" id="btn-save-current-team">
-            💾 Salvar Equipe Localmente
-          </button>
-        </div>
-        <div class="local-file-actions">
-          <button class="btn-file-pc" id="btn-export-json-pc" title="Baixar arquivo .json com todas as suas equipes salvas direto para o seu computador">
-            ⬇️ Baixar Backup no PC (.json)
-          </button>
-          <label class="btn-file-pc" for="input-import-json-pc" title="Carregar arquivo .json de equipes salvo no seu computador">
-            ⬆️ Carregar do PC (.json)
-          </label>
-          <input type="file" id="input-import-json-pc" accept=".json" style="display:none;" />
-        </div>
-        <small class="local-storage-note">🔒 100% salvo localmente no seu computador (Navegador + Arquivo local).</small>
-      </div>
-
-      <!-- Lista de Equipes Salvas -->
-      <div class="saved-teams-list" id="saved-teams-list"></div>
-    </aside>
-
-    <!-- CONTEÚDO PRINCIPAL -->
-    <main class="app-container">
-
-      <!-- 1. SELETOR DE JOGO, VERSÃO, MECÂNICAS E INICIAIS -->
-      <section class="game-selector-panel">
-        <div class="game-selector-top">
-          <div class="control-group">
-            <label for="game-select">🎮 1. Escolha o Jogo / Geração (Gen 1 a Gen 9 + Fan Games)</label>
-            <select id="game-select" class="game-dropdown"></select>
-          </div>
-
-          <div class="control-group">
-            <label>💿 2. Escolha a Versão / Modo</label>
-            <div id="version-pills" class="version-pills-wrap"></div>
-          </div>
-
-          <div class="control-group">
-            <label>🧬 3. Mecânicas de Batalha Disponíveis no Jogo</label>
-            <div id="game-mechanics-badges" class="mechanics-badges-wrap"></div>
-          </div>
-        </div>
-
-        <!-- Barra de Iniciais Rápidos daquele Jogo -->
-        <div class="starters-bar-wrap">
-          <span class="starters-label">🌟 Iniciais deste Jogo:</span>
-          <div id="game-starters-bar" class="starters-list"></div>
-        </div>
-
-        <div class="game-meta-bar">
-          <div id="game-region-badge" class="region-chips"></div>
-          <p id="game-notes-text" class="game-notes"></p>
-        </div>
-      </section>
-
-      <!-- 2. OS 6 POKÉMON DA EQUIPE -->
-      <section>
-        <div class="section-heading">
-          <div>
-            <h2>🛡️ Sua Equipe de 6 Pokémon</h2>
-            <p>Clique em <strong>"🔍 Escolher / Trocar Pokémon"</strong> em qualquer slot para abrir a <strong>Pokédex Completa do Jogo</strong>, ou configure seus <strong>4 Ataques</strong>, <strong>Item</strong> e <strong>Mecânica</strong>.</p>
-          </div>
-        </div>
-
-        <div id="team-slots-grid" class="team-slots-grid"></div>
-      </section>
-
-      <!-- 3. EDITOR DETALHADO DO POKÉMON SELECIONADO (4 ATAQUES, ITEM E MECÂNICAS) -->
-      <section id="slot-detail-editor"></section>
-
-      <!-- 4. MATRIZ DE DEFESA ELEMENTAL & COBERTURA DE FRAQUEZAS -->
-      <section class="synergy-panel">
-        <div class="synergy-header">
-          <div>
-            <h2>📊 Matriz de Defesa Elemental & Cobertura de Fraquezas</h2>
-            <p>Analisa como seus 6 Pokémon defendem cada elemento (incluindo Habilidades como <em>Levitate, Thick Fat, Flash Fire</em> e mudanças de tipo de <em>Mega Evoluções / Terastal</em>) e quais tipos seus 4 ataques cobrem.</p>
-          </div>
-          <div id="synergy-score-badge"></div>
-        </div>
-
-        <div id="synergy-alerts-box" class="synergy-alerts-box"></div>
-
-        <div id="elemental-matrix-grid" class="elemental-matrix-grid"></div>
-      </section>
-
-      <!-- 5. RECOMENDADOR INTELIGENTE & POKÉDEX DO JOGO -->
-      <section class="recommendations-panel">
-        <div class="section-heading">
-          <div>
-            <h2>💡 Recomendações de Sinergia & Pokédex Disponível no Jogo</h2>
-            <p>Pesquise por <strong>Nome</strong> ou <strong>Nº na Pokédex (#001 a #1025)</strong> ou veja as melhores combinações para cobrir as fraquezas atuais da sua equipe.</p>
-          </div>
-        </div>
-
-        <div class="rec-filters-bar">
-          <input
-            type="text"
-            id="rec-search-input"
-            class="search-input"
-            placeholder="🔍 Pesquisar por Nome ou Nº da Pokédex (ex: 006, #25, 445, Garchomp, Pikachu, Lucario)..."
-          />
-
-          <select id="rec-sort-mode" class="filter-select">
-            <option value="synergy">💡 Ordenar por Melhor Sinergia c/ Equipe</option>
-            <option value="dex">📖 Ordenar por Nº da Pokédex (#001 → #1025)</option>
-            <option value="alpha">🔤 Ordem Alfabética (A → Z)</option>
-          </select>
-
-          <select id="rec-type-filter" class="filter-select">
-            <option value="all">Todos os Tipos</option>
-          </select>
-
-          <select id="rec-mechanic-filter" class="filter-select">
-            <option value="all">Todas as Formas</option>
-            <option value="mega">🧬 Apenas com Mega Evolução</option>
-          </select>
-
-          <label class="nat-dex-toggle">
-            <input type="checkbox" id="toggle-pre-evos" checked />
-            <span>Incluir Pré-Evoluções</span>
-          </label>
-
-          <label class="nat-dex-toggle">
-            <input type="checkbox" id="toggle-national-dex" />
-            <span>Liberar National Dex (Todas as Gens)</span>
-          </label>
-        </div>
-
-        <div id="recommended-pokemon-grid" class="recommended-pokemon-grid"></div>
-      </section>
-
-    </main>
-  </div>
-
-  <!-- MODAL SELETOR DE POKÉMON (POKÉDEX COMPLETA DO JOGO AO CLICAR NUM SLOT) -->
-  <div id="pokedex-picker-modal" class="modal-backdrop">
-    <div class="modal-box modal-pokedex-picker">
-      <div class="picker-modal-header">
-        <div>
-          <h3 id="picker-modal-title">🔍 Escolher Pokémon para o Slot #1</h3>
-          <p id="picker-modal-subtitle">Todos os Pokémon disponíveis neste jogo — pesquise por nome ou número da Pokédex</p>
-        </div>
-        <button class="btn-close-x" id="btn-close-picker-modal">✕</button>
-      </div>
-
-      <div class="picker-filters-row">
+      <!-- Save Current Team Form + Local PC Backup (.json) -->
+      <div class="bg-surface-container rounded-xl p-space-md mb-space-md border border-outline-variant/15 shrink-0">
+        <label for="save-team-name-input" class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-1.5">
+          Nome da Equipe para Salvar
+        </label>
         <input
           type="text"
-          id="picker-search-input"
-          class="search-input"
-          placeholder="🔍 Digite o Nome ou Número da Pokédex (ex: 1, 006, 25, 150, 445, Charizard, Garchomp)..."
+          id="save-team-name-input"
+          maxlength="45"
+          placeholder="Ex: Meu Time Unbound, Kanto Red..."
+          class="w-full px-3 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant/40 text-on-surface text-body-md focus:outline-none focus:border-primary mb-2.5"
         />
+        <button id="btn-save-current-team" class="w-full py-2 px-3 rounded-lg bg-tertiary-container text-on-tertiary-fixed font-headline font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-tertiary-container/15 hover:brightness-110 transition-all cursor-pointer">
+          <span class="material-symbols-outlined text-[18px]">save</span>
+          Salvar Equipe Localmente
+        </button>
 
-        <select id="picker-sort-mode" class="filter-select">
-          <option value="dex">📖 Nº da Pokédex (#001...)</option>
-          <option value="synergy">💡 Melhor Sinergia c/ Equipe</option>
+        <!-- Local PC JSON Export / Import -->
+        <div class="grid grid-cols-2 gap-1.5 mt-2.5 pt-2.5 border-t border-outline-variant/20">
+          <button id="btn-export-json-pc" class="py-1.5 px-2 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface border border-outline-variant/30 font-label-sm text-[11px] flex items-center justify-center gap-1 transition-all cursor-pointer" title="Baixar arquivo .json com todas as suas equipes direto para o seu PC">
+            <span class="material-symbols-outlined text-[14px] text-primary">download</span>
+            Backup (.json)
+          </button>
+          <label for="input-import-json-pc" class="py-1.5 px-2 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface border border-outline-variant/30 font-label-sm text-[11px] flex items-center justify-center gap-1 transition-all cursor-pointer" title="Carregar arquivo .json de equipes salvo no seu PC">
+            <span class="material-symbols-outlined text-[14px] text-tertiary">upload_file</span>
+            Abrir (.json)
+          </label>
+          <input type="file" id="input-import-json-pc" accept=".json" class="hidden" />
+        </div>
+        <p class="text-[10px] text-on-surface-variant/80 mt-2 leading-tight flex items-center gap-1">
+          <span class="material-symbols-outlined text-[13px] text-tertiary">lock</span>
+          100% salvo no seu computador (Navegador + Arquivo JSON).
+        </p>
+      </div>
+
+      <!-- Saved Teams Scrollable List -->
+      <div id="saved-teams-list" class="flex-1 overflow-y-auto space-y-space-sm pr-1 custom-scroll"></div>
+    </div>
+  </aside>
+
+  <!-- =====================================================================
+       3. MAIN WORKSPACE CANVAS
+       ===================================================================== -->
+  <main id="main-workspace" class="pt-16 lg:pl-80 min-h-screen transition-all duration-300">
+    <div class="max-w-[1600px] mx-auto p-space-md md:p-space-lg space-y-space-lg">
+
+      <!-- =================================================================
+           SECTION 1: GAME, VERSION, MECHANICS & STARTERS HUD
+           ================================================================= -->
+      <section class="bg-surface-container rounded-xl p-space-lg border border-outline-variant/15 shadow-lg">
+        <!-- Top Row: 3 Columns -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg pb-space-md border-b border-outline-variant/15">
+          <!-- Column 1: Game Selector (5 cols) -->
+          <div class="lg:col-span-5">
+            <label for="game-select" class="flex items-center gap-1.5 font-label-sm text-label-sm text-primary uppercase mb-2">
+              <span class="material-symbols-outlined text-[16px]">sports_esports</span>
+              1. Escolha o Jogo / Geração (Gen 1–9 &amp; Fan Games)
+            </label>
+            <div class="relative">
+              <select id="game-select" class="w-full appearance-none bg-surface-container-lowest border border-outline-variant/40 hover:border-primary/60 rounded-lg px-3.5 py-2.5 text-body-md font-semibold text-on-surface focus:outline-none focus:border-primary transition-colors pr-10 cursor-pointer"></select>
+              <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+            </div>
+          </div>
+
+          <!-- Column 2: Version / Difficulty Selector (3 cols) -->
+          <div class="lg:col-span-3">
+            <label class="flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">
+              <span class="material-symbols-outlined text-[16px]">tune</span>
+              2. Versão / Modo de Jogo
+            </label>
+            <div id="version-pills" class="flex flex-wrap gap-1.5 bg-surface-container-lowest p-1.5 rounded-lg border border-outline-variant/25"></div>
+          </div>
+
+          <!-- Column 3: Active Combat Mechanics (4 cols) -->
+          <div class="lg:col-span-4">
+            <label class="flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">
+              <span class="material-symbols-outlined text-[16px]">bolt</span>
+              3. Mecânicas de Combate do Jogo
+            </label>
+            <div id="game-mechanics-badges" class="flex flex-wrap items-center gap-1.5"></div>
+          </div>
+        </div>
+
+        <!-- Bottom Row: Metadata Chips -->
+        <div id="game-region-badge" class="pt-space-sm flex flex-wrap items-center justify-between gap-2 text-xs text-on-surface-variant"></div>
+      </section>
+
+      <!-- =================================================================
+           SECTION 2: THE 6 POKÉMON TEAM BUILDER GRID (3x2)
+           ================================================================= -->
+      <section>
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-space-md">
+          <div class="flex items-center gap-2.5">
+            <span class="w-2 h-6 rounded-full bg-primary-container"></span>
+            <h2 class="font-headline text-headline-md text-on-surface">Sua Equipe Pokémon (6 Slots)</h2>
+            <span id="team-filled-counter" class="px-2.5 py-0.5 rounded-full bg-surface-container-high font-mono text-xs text-primary border border-outline-variant/20">0 / 6 Preenchidos</span>
+          </div>
+          <div class="flex items-center gap-3 text-xs text-on-surface-variant">
+            <span class="flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-primary-container"></span>
+              Clique em qualquer slot para abrir a <strong>Pokédex Completa do Jogo</strong>
+            </span>
+          </div>
+        </div>
+
+        <div id="team-slots-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-space-md"></div>
+      </section>
+
+      <!-- =================================================================
+           SECTION 3: ACTIVE SLOT DEEP EDITOR PANEL (4 TABS)
+           ================================================================= -->
+      <section id="slot-detail-editor" class="bg-surface-container rounded-xl border border-outline-variant/20 shadow-xl overflow-hidden"></section>
+
+      <!-- =================================================================
+           SECTION 4: TEAM SYNERGY & 18-TYPE ELEMENTAL MATRIX DASHBOARD
+           ================================================================= -->
+      <section class="bg-surface-container rounded-xl p-space-lg border border-outline-variant/20 shadow-lg space-y-space-lg">
+        <!-- Top Row: Score Ring + Tactical Alerts -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center pb-space-md border-b border-outline-variant/15">
+          <!-- Synergy Circular Gauge (4 cols) -->
+          <div id="synergy-score-badge" class="lg:col-span-4 flex items-center gap-space-md bg-surface-container-low p-space-md rounded-xl border border-outline-variant/15"></div>
+
+          <!-- Tactical Alerts (8 cols) -->
+          <div id="synergy-alerts-box" class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-space-md"></div>
+        </div>
+
+        <!-- 18-Type Elemental Matrix Grid -->
+        <div>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-space-sm">
+            <h3 class="font-headline font-bold text-sm text-on-surface uppercase tracking-wider flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[18px]">grid_view</span>
+              Matriz de Cobertura Elemental Completa (Defesa &amp; Ataque da Equipe)
+            </h3>
+            <div class="flex flex-wrap items-center gap-4 text-xs font-mono text-on-surface-variant">
+              <span>⚔️ = Pokémons c/ golpe Super Efetivo (2x)</span>
+              <span class="text-error">🔴 = Fracos ao tipo</span>
+              <span class="text-tertiary">🟢 = Resistentes / Imunes</span>
+            </div>
+          </div>
+
+          <div id="elemental-matrix-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-9 gap-2"></div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           SECTION 5: POKÉDEX COMPLETA DO JOGO & RECOMENDAÇÕES DE SINERGIA
+           ================================================================= -->
+      <section class="bg-surface-container rounded-xl p-space-lg border border-outline-variant/20 shadow-lg space-y-space-md">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md pb-space-sm border-b border-outline-variant/15">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[22px]">catching_pokemon</span>
+              <h2 class="font-headline text-headline-md text-on-surface">
+                Pokédex do Jogo &amp; Recomendações de Sinergia
+              </h2>
+            </div>
+            <p class="text-xs text-on-surface-variant mt-0.5">
+              Pesquise qualquer Pokémon disponível no jogo por <strong>Nome</strong> ou <strong>Nº da Pokédex (#001 a #1025)</strong> ou veja os melhores parceiros para cobrir suas fraquezas.
+            </p>
+          </div>
+
+          <!-- Filter & Search Controls -->
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="relative min-w-[240px] flex-1 sm:flex-initial">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary text-[18px]">search</span>
+              <input
+                type="text"
+                id="rec-search-input"
+                placeholder="Nome ou Nº (#006, 25, Garchomp...)"
+                class="w-full pl-9 pr-3 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant/40 text-xs text-on-surface focus:outline-none focus:border-primary"
+              />
+            </div>
+
+            <select id="rec-sort-mode" class="bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-2.5 py-2 text-xs font-semibold text-on-surface focus:outline-none focus:border-primary cursor-pointer">
+              <option value="synergy">💡 Ordenar: Melhor Sinergia (%)</option>
+              <option value="dex">📖 Ordenar: Nº da Pokédex (#001 → #1025)</option>
+              <option value="alpha">🔤 Ordenar: Ordem Alfabética (A–Z)</option>
+            </select>
+
+            <select id="rec-type-filter" class="bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-2.5 py-2 text-xs text-on-surface focus:outline-none focus:border-primary cursor-pointer">
+              <option value="all">Todos os Tipos</option>
+            </select>
+
+            <select id="rec-mechanic-filter" class="bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-2.5 py-2 text-xs text-on-surface focus:outline-none focus:border-primary cursor-pointer">
+              <option value="all">Todas as Formas</option>
+              <option value="mega">🧬 Com Mega Evolução</option>
+            </select>
+
+            <label class="flex items-center gap-1.5 px-2.5 py-2 rounded-lg bg-surface-container-low border border-outline-variant/20 text-xs text-on-surface-variant cursor-pointer">
+              <input type="checkbox" id="toggle-pre-evos" checked class="accent-primary rounded" />
+              <span>Incluir Pré-Evoluções</span>
+            </label>
+
+            <label class="flex items-center gap-1.5 px-2.5 py-2 rounded-lg bg-surface-container-low border border-outline-variant/20 text-xs text-on-surface-variant cursor-pointer">
+              <input type="checkbox" id="toggle-national-dex" class="accent-primary rounded" />
+              <span>🌐 National Dex</span>
+            </label>
+          </div>
+        </div>
+
+        <div id="recommended-pokemon-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-space-md"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- =====================================================================
+       4. MODAL SELETOR DA POKÉDEX COMPLETA DO JOGO (AO CLICAR NUM SLOT)
+       ===================================================================== -->
+  <div id="pokedex-picker-modal" class="modal-backdrop fixed inset-0 z-50 bg-surface-container-lowest/85 backdrop-blur-md p-4 md:p-6">
+    <div class="bg-surface-container border border-outline-variant/40 rounded-2xl max-w-5xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- Modal Header -->
+      <div class="p-space-md md:p-space-lg bg-surface-container-low border-b border-outline-variant/20 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-primary text-[26px]">catching_pokemon</span>
+          <div>
+            <h3 id="picker-modal-title" class="font-headline font-bold text-base md:text-lg text-on-surface">
+              Escolher Pokémon para o Slot #1
+            </h3>
+            <p id="picker-modal-subtitle" class="text-xs text-on-surface-variant">
+              Todos os Pokémon disponíveis neste jogo — Pesquise pelo Nome ou Número da Pokédex (#001 a #1025)
+            </p>
+          </div>
+        </div>
+        <button id="btn-close-picker-modal" class="w-9 h-9 rounded-lg bg-surface-container-high hover:bg-error-container/40 text-on-surface-variant hover:text-error flex items-center justify-center transition-colors cursor-pointer">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <!-- Search & Filter Bar -->
+      <div class="p-space-md bg-surface-container border-b border-outline-variant/15 flex flex-wrap items-center gap-2.5">
+        <div class="relative flex-1 min-w-[240px]">
+          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-primary text-[20px]">search</span>
+          <input
+            type="text"
+            id="picker-search-input"
+            placeholder="Digite o NOME (ex: Charizard, Garchomp, Pikachu) ou Nº DA POKÉDEX (ex: 006, 25, 445)..."
+            class="w-full pl-11 pr-4 py-2.5 rounded-xl bg-surface-container-lowest border-2 border-primary/40 focus:border-primary text-body-md text-on-surface focus:outline-none"
+          />
+        </div>
+
+        <select id="picker-sort-mode" class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-3 py-2.5 text-xs font-semibold text-on-surface focus:outline-none focus:border-primary cursor-pointer">
+          <option value="dex">📖 Ordem da Pokédex (#001 → #1025)</option>
+          <option value="synergy">💡 Melhor Sinergia com a Equipe (%)</option>
           <option value="alpha">🔤 Ordem Alfabética (A–Z)</option>
         </select>
 
-        <select id="picker-type-filter" class="filter-select">
+        <select id="picker-type-filter" class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-3 py-2.5 text-xs font-semibold text-on-surface focus:outline-none focus:border-primary cursor-pointer">
           <option value="all">Todos os Tipos</option>
         </select>
 
-        <label class="nat-dex-toggle">
-          <input type="checkbox" id="picker-pre-evos" checked />
-          <span>Todas as Evoluções</span>
+        <label class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-surface-container-low border border-outline-variant/20 text-xs text-on-surface-variant cursor-pointer">
+          <input type="checkbox" id="picker-pre-evos" checked class="accent-primary rounded" />
+          <span>Incluir Pré-Evoluções</span>
         </label>
 
-        <label class="nat-dex-toggle">
-          <input type="checkbox" id="picker-nat-dex" />
-          <span>National Dex</span>
+        <label class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-surface-container-low border border-outline-variant/20 text-xs text-on-surface-variant cursor-pointer" title="Liberar todos os 1025 Pokémon de todas as gerações">
+          <input type="checkbox" id="picker-nat-dex" class="accent-primary rounded" />
+          <span>🌐 National Dex</span>
         </label>
       </div>
 
-      <div class="picker-count-bar" id="picker-count-bar"></div>
+      <!-- Counter Bar -->
+      <div id="picker-count-bar" class="px-space-lg py-2 bg-surface-container-lowest/60 border-b border-outline-variant/15 flex items-center justify-between text-xs text-on-surface-variant font-mono"></div>
 
-      <div id="picker-pokemon-grid" class="picker-pokemon-grid"></div>
+      <!-- Scrollable Pokémon Grid -->
+      <div id="picker-pokemon-grid" class="p-space-md md:p-space-lg overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-space-md flex-1 custom-scroll"></div>
     </div>
   </div>
 
-  <!-- MODAL DE EXPORTAÇÃO POKÉMON SHOWDOWN -->
-  <div id="export-modal" class="modal-backdrop">
-    <div class="modal-box">
-      <h3>📋 Exportar Equipe (Formato Pokémon Showdown)</h3>
-      <p style="font-size: 0.82rem; color: var(--text-secondary);">
-        Copie o texto abaixo para importar sua equipe diretamente no Pokémon Showdown ou salvar suas notas de campanha:
+  <!-- =====================================================================
+       5. MODAL EXPORTAR POKÉMON SHOWDOWN
+       ===================================================================== -->
+  <div id="export-modal" class="modal-backdrop fixed inset-0 z-50 bg-surface-container-lowest/85 backdrop-blur-md p-4">
+    <div class="bg-surface-container border border-outline-variant/40 rounded-2xl max-w-lg w-full p-space-lg shadow-2xl space-y-space-md">
+      <div class="flex items-center justify-between">
+        <h3 class="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">Description</span>
+          Exportar Equipe (Formato Pokémon Showdown)
+        </h3>
+        <button id="btn-close-modal" class="w-8 h-8 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface flex items-center justify-center cursor-pointer">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+      <p class="text-xs text-on-surface-variant">
+        Copie o texto abaixo para importar sua equipe no Pokémon Showdown ou salvar em bloco de notas:
       </p>
-      <textarea id="export-textarea" readonly></textarea>
-      <div class="modal-actions">
-        <button class="btn-secondary" id="btn-close-modal">Fechar</button>
-        <button class="btn-primary" id="btn-copy-showdown">📋 Copiar Formato Showdown</button>
+      <textarea id="export-textarea" readonly class="w-full h-64 bg-surface-container-lowest border border-outline-variant/40 rounded-xl p-3 font-mono text-xs text-on-surface focus:outline-none"></textarea>
+      <div class="flex justify-end gap-2">
+        <button id="btn-copy-showdown" class="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-headline font-bold text-xs hover:brightness-110 transition-all cursor-pointer">
+          📋 Copiar Formato Showdown
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- CONTAINER DE AVISOS / TOASTS -->
-  <div id="toast-container" class="toast-container"></div>
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-  <!-- SCRIPTS DA APLICAÇÃO -->
+  <!-- SCRIPTS -->
   <script src="js/data-types-games.js"></script>
   <script src="js/data-pokemon.js"></script>
   <script src="js/data-pokedex-full.js"></script>

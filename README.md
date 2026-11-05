@@ -45,9 +45,17 @@ O **Pokémon Team Recommendations** foi pensado exatamente para resolver esse pr
 O projeto foi construído utilizando tecnologias web puras (sem necessidade de servidores externos ou bancos de dados na nuvem), garantindo que rode instantaneamente em qualquer computador:
 
 - **HTML5** — Estrutura semântica da aplicação, modais da Pokédex e painel lateral de equipes.
-- **CSS3** — Estilização responsiva em Dark Mode, variáveis CSS, animações e cores temáticas para os 18 tipos elementais.
+- **CSS3 / Tailwind CSS** — Estilização responsiva em Dark Mode (*Tactical Esports Deck* via Google Stitch), variáveis CSS, animações e cores temáticas para os 18 tipos elementais.
 - **JavaScript (ES6+ / Vanilla JS)** — Motor matemático de efetividade elemental, algoritmo de recomendação de sinergia de equipe, recomendação de movesets/itens, persistência local (`localStorage` + exportação/importação de arquivos `.json` no computador) e integração opcional com a *PokéAPI*.
-- **Ambiente de Desenvolvimento**: Construído utilizando o **Google Antigravity**.
+- **Ambiente de Desenvolvimento**: Construído utilizando o **Google Antigravity** e design integrado com **Google Stitch**.
+
+---
+
+## 🚀 Como Executar no seu Computador
+
+1. Faça o download ou clone a pasta do projeto no seu PC.
+2. Dê um duplo clique no arquivo [`index.html`](./index.html) para abri-lo em qualquer navegador moderno (Chrome, Edge, Firefox, Brave, Opera).
+3. Pronto! Suas equipes criadas e salvas ficarão armazenadas localmente no seu computador.
 
 ---
 
