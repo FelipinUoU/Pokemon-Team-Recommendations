@@ -650,6 +650,81 @@ window.POKE_ENGINE = (function () {
     return false;
   }
 
+  // Versão "par" de cada jogo (ex.: FireRed ↔ LeafGreen). Versões sem par (Yellow, Crystal, Emerald, Platinum) não recebem selo.
+  const VERSION_COUNTERPART = {
+    'Red': 'Blue', 'Blue': 'Red',
+    'Gold': 'Silver', 'Silver': 'Gold',
+    'Ruby': 'Sapphire', 'Sapphire': 'Ruby',
+    'FireRed': 'LeafGreen', 'LeafGreen': 'FireRed',
+    'Diamond': 'Pearl', 'Pearl': 'Diamond',
+    'HeartGold': 'SoulSilver', 'SoulSilver': 'HeartGold',
+    'Black': 'White', 'White': 'Black',
+    'Black 2': 'White 2', 'White 2': 'Black 2',
+    'X': 'Y', 'Y': 'X',
+    'Omega Ruby': 'Alpha Sapphire', 'Alpha Sapphire': 'Omega Ruby',
+    'Sun': 'Moon', 'Moon': 'Sun',
+    'Ultra Sun': 'Ultra Moon', 'Ultra Moon': 'Ultra Sun',
+    "Let's Go Pikachu": "Let's Go Eevee", "Let's Go Eevee": "Let's Go Pikachu",
+    'Sword': 'Shield', 'Shield': 'Sword',
+    'Brilliant Diamond': 'Shining Pearl', 'Shining Pearl': 'Brilliant Diamond',
+    'Scarlet': 'Violet', 'Violet': 'Scarlet'
+  };
+
+  // Cor oficial de cada versão (usada no selo de exclusivo)
+  const VERSION_COLORS = {
+    'Red': '#e53935', 'Blue': '#1e88e5',
+    'Gold': '#d4a017', 'Silver': '#b0bec5',
+    'Ruby': '#c2185b', 'Sapphire': '#1565c0',
+    'FireRed': '#ff5722', 'LeafGreen': '#43a047',
+    'Diamond': '#64b5f6', 'Pearl': '#f48fb1',
+    'HeartGold': '#ffb300', 'SoulSilver': '#cfd8dc',
+    'Black': '#2b2b2b', 'White': '#f5f5f5',
+    'Black 2': '#37474f', 'White 2': '#eceff1',
+    'X': '#1e5fbf', 'Y': '#d32f2f',
+    'Omega Ruby': '#b71c1c', 'Alpha Sapphire': '#0d47a1',
+    'Sun': '#ff9800', 'Moon': '#7e57c2',
+    'Ultra Sun': '#ff6f00', 'Ultra Moon': '#5e35b1',
+    "Let's Go Pikachu": '#fbc02d', "Let's Go Eevee": '#a1887f',
+    'Sword': '#00a3e0', 'Shield': '#e4006f',
+    'Brilliant Diamond': '#3f7fd9', 'Shining Pearl': '#e58fb3',
+    'Scarlet': '#f34134', 'Violet': '#8334b7'
+  };
+
+  function isRuleExcluding(versionKey, mon) {
+    const rule = VERSION_EXCLUSIONS[versionKey];
+    if (!rule) return false;
+    if (rule.ids && rule.ids.has(mon.id)) return true;
+    if (rule.dex && rule.dex.has(mon.dex)) return true;
+    return false;
+  }
+
+  // Retorna o selo de exclusivo de versão de um Pokémon (ou null se estiver disponível em ambas as versões)
+  // { version, color, textColor, isTrade } — isTrade = true quando o exclusivo é da versão oposta (obtido por troca)
+  function getVersionExclusiveInfo(mon, game, selectedVersion) {
+    if (!mon || !game) return null;
+    const current = selectedVersion || (game.versions && game.versions[0]);
+    const counterpart = VERSION_COUNTERPART[current];
+    if (!current || !counterpart || !(game.versions || []).includes(counterpart)) return null;
+
+    const excludedInCurrent = isRuleExcluding(current, mon);
+    const excludedInCounterpart = isRuleExcluding(counterpart, mon);
+    if (excludedInCurrent === excludedInCounterpart) return null; // Disponível em ambos (ou em nenhum)
+
+    const exclusiveVersion = excludedInCurrent ? counterpart : current;
+    const color = VERSION_COLORS[exclusiveVersion] || '#8ed5ff';
+    const hex = color.replace('#', '');
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return {
+      version: exclusiveVersion,
+      color,
+      textColor: luminance > 0.6 ? '#111827' : '#ffffff',
+      isTrade: excludedInCurrent
+    };
+  }
+
   // Retorna informações dos 2 modos do Switch: "Pokédex (Regional do Jogo)" vs "National Dex (da Época do Jogo)"
   function getDexScopeInfo(game) {
     if (!game) {
@@ -1345,6 +1420,7 @@ window.POKE_ENGINE = (function () {
     getRecommendedItemsForPokemon,
     getRecommendedPokemonForTeam,
     getDexScopeInfo,
+    getVersionExclusiveInfo,
     isPokemonAvailableInGame,
     createOptimizedSlot,
     fetchPokemonFromPokeAPI,

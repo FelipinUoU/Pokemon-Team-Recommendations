@@ -168,6 +168,17 @@
     </span>`;
   }
 
+  // Selo de Pokémon exclusivo de versão (com a cor da versão). Não exibe nada se o Pokémon estiver em ambas as versões.
+  function renderVersionExclusiveBadge(mon) {
+    if (!ENGINE.getVersionExclusiveInfo || !mon) return '';
+    const info = ENGINE.getVersionExclusiveInfo(mon, getCurrentGame(), state.selectedVersion);
+    if (!info) return '';
+    const title = info.isTrade
+      ? `Exclusivo de ${info.version} — disponível na sua versão apenas por troca`
+      : `Exclusivo da versão ${info.version}`;
+    return `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded font-mono text-[10px] font-bold leading-none shrink-0 align-middle border border-white/20 shadow-sm" style="background:${info.color}; color:${info.textColor};" title="${title}">${info.isTrade ? '🔄 ' : ''}${info.version}</span>`;
+  }
+
   // ==========================================================================
   // 0. RENDERIZAÇÃO DO MENU LATERAL DE EQUIPES SALVAS (STITCH DRAWER)
   // ==========================================================================
@@ -537,8 +548,9 @@
             </div>
 
             <div class="flex-1 min-w-0">
-              <div class="flex items-baseline justify-between gap-1">
+              <div class="flex items-center gap-1.5 min-w-0">
                 <h3 class="font-headline font-extrabold text-base text-on-surface truncate">${eff.name}</h3>
+                ${renderVersionExclusiveBadge(slot.pokemon)}
               </div>
 
               <div class="flex flex-wrap gap-1 my-1.5">
@@ -713,7 +725,10 @@
               <img src="${ENGINE.getSpriteUrl(eff.spriteId)}" alt="${pokemon.name}" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform" loading="lazy" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.dex}.png'" />
             </div>
             <div class="min-w-0">
-              <h4 class="font-headline font-bold text-sm text-on-surface truncate group-hover:text-primary">${pokemon.name}</h4>
+              <div class="flex items-center gap-1.5 min-w-0">
+                <h4 class="font-headline font-bold text-sm text-on-surface truncate group-hover:text-primary">${pokemon.name}</h4>
+                ${renderVersionExclusiveBadge(pokemon)}
+              </div>
               <div class="flex flex-wrap gap-1 mt-1">
                 ${eff.types.map(t => renderTypeBadge(t, 'xs')).join('')}
                 <span class="font-mono text-[10px] text-on-surface-variant self-center ml-1">${eff.bst} BST</span>
@@ -1260,6 +1275,7 @@
             </div>
             <div class="flex flex-wrap items-center gap-2 mt-1">
               <h2 class="font-headline text-headline-md text-on-surface">${eff.name}</h2>
+              ${renderVersionExclusiveBadge(slot.pokemon)}
               ${eff.types.map(t => renderTypeBadge(t, 'sm')).join('')}
             </div>
             <p class="text-xs text-on-surface-variant mt-0.5">
@@ -1548,8 +1564,9 @@
               <img src="${ENGINE.getSpriteUrl(eff.spriteId)}" alt="${eff.name}" class="w-14 h-14 object-contain" loading="lazy" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.dex}.png'" />
             </div>
             <div class="min-w-0 flex-1">
-              <h4 class="font-headline font-bold text-base text-on-surface truncate">
-                ${pokemon.name} ${canBeTeamMega ? `<small class="text-xs text-primary font-normal">(${pokemon.mega.name})</small>` : ''}
+              <h4 class="font-headline font-bold text-base text-on-surface truncate flex items-center gap-1.5">
+                <span class="truncate">${pokemon.name} ${canBeTeamMega ? `<small class="text-xs text-primary font-normal">(${pokemon.mega.name})</small>` : ''}</span>
+                ${renderVersionExclusiveBadge(pokemon)}
               </h4>
               <div class="flex flex-wrap items-center gap-1 my-1">
                 ${eff.types.map(t => renderTypeBadge(t, 'xs')).join('')}
