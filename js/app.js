@@ -1821,8 +1821,21 @@
         const pickerTypeSelect = document.getElementById('picker-type-filter');
         if (pickerTypeSelect) pickerTypeSelect.innerHTML = '<option value="all">Todos os Tipos</option>';
 
-        state.team.forEach(slot => {
+        let removedCount = 0;
+        const removedNames = [];
+
+        state.team.forEach((slot, idx) => {
           if (!slot || !slot.pokemon) return;
+
+          // Se o Pokémon não existe/não está disponível na geração/jogo selecionado, retira da seleção
+          const isAvailable = ENGINE.isPokemonAvailableInGame(slot.pokemon, g, false, state.selectedVersion);
+          if (!isAvailable) {
+            removedNames.push(slot.pokemon.name);
+            state.team[idx] = null;
+            removedCount++;
+            return;
+          }
+
           if (slot.mechanic && !g.mechanics.includes(slot.mechanic)) {
             slot.mechanic = null;
           }
@@ -1833,6 +1846,10 @@
             if (recs.length > 0) slot.item = recs[0].id;
           }
         });
+
+        if (removedCount > 0) {
+          showToast(`⚠️ ${removedCount} Pokémon incompatível(is) com ${g.name} foi(ram) retirado(s) da equipe: ${removedNames.join(', ')}.`);
+        }
         renderAll();
       });
     }
