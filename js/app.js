@@ -434,9 +434,51 @@
     gridEl.innerHTML = state.team.map((slot, idx) => {
       const isSelected = idx === state.activeSlotIndex;
 
-      // CARD DE SLOT VAZIO (COM SUGESTÃO DE ALTA SINERGIA INLINE DO STITCH)
+      // CARD DE SLOT VAZIO (COM SELEÇÃO EXPANDIDA DE SUGESTÕES DE ALTA SINERGIA)
       if (!slot || !slot.pokemon) {
-        const recHint = topRecsForEmpty[emptyRecCursor++] || topRecsForEmpty[0];
+        // Exibe a lista das melhores recomendações para este slot
+        const suggestionsForSlot = topRecsForEmpty.slice(0, 5);
+
+        let suggestionsHtml = '';
+        if (suggestionsForSlot.length === 0) {
+          suggestionsHtml = `
+            <div class="bg-surface-container rounded-lg p-2.5 border border-outline-variant/20 text-center" onclick="event.stopPropagation()">
+              <p class="text-xs text-on-surface-variant italic">Nenhum Pokémon recomendado</p>
+            </div>
+          `;
+        } else {
+          suggestionsHtml = `
+            <div class="bg-surface-container/90 rounded-xl p-2 border border-tertiary/25 space-y-1.5" onclick="event.stopPropagation()">
+              <div class="flex items-center justify-between px-1">
+                <span class="text-[10px] font-mono uppercase text-tertiary font-bold flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+                  Recomendados p/ Equipe
+                </span>
+                <span class="text-[10px] font-mono text-on-surface-variant">${suggestionsForSlot.length} opções</span>
+              </div>
+              <div class="space-y-1 max-h-36 overflow-y-auto pr-0.5 custom-scroll">
+                ${suggestionsForSlot.map(rec => `
+                  <div class="bg-surface-container-lowest/80 hover:bg-surface-container-high rounded-lg p-1.5 flex items-center justify-between gap-1.5 border border-outline-variant/15 transition-all">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                      <img src="${ENGINE.getSpriteUrl(rec.state.spriteId)}" alt="${rec.pokemon.name}" class="w-8 h-8 object-contain shrink-0" loading="lazy" />
+                      <div class="min-w-0">
+                        <div class="flex items-center gap-1">
+                          <span class="text-xs font-semibold text-on-surface truncate">${rec.pokemon.name}</span>
+                          ${renderVersionExclusiveBadge(rec.pokemon)}
+                        </div>
+                        <span class="text-[10px] font-mono text-tertiary">${rec.synergyPercent}% sinergia</span>
+                      </div>
+                    </div>
+                    <button type="button" data-quick-fill-slot="${idx}" data-quick-mon="${rec.pokemon.id}" class="px-2 py-1 rounded bg-tertiary-container/25 hover:bg-tertiary-container text-tertiary hover:text-on-tertiary-fixed border border-tertiary/40 font-headline font-bold text-[11px] shrink-0 transition-all cursor-pointer" title="Adicionar ${rec.pokemon.name} a este slot">
+                      + Usar
+                    </button>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+
         return `
           <article class="slot-card bg-surface-container-low/75 rounded-xl p-space-md flex flex-col justify-between border-2 border-dashed ${
             isSelected ? 'border-primary active-slot-glow' : 'border-outline-variant/30 hover:border-primary/50'
@@ -445,33 +487,20 @@
               <span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-bold tracking-wider">
                 SLOT #${idx + 1} — VAGA ABERTA
               </span>
-              <span class="text-[11px] font-mono text-primary">Clique para Escolher</span>
+              <span class="text-[11px] font-mono text-primary">Clique para Abrir Pokédex</span>
             </div>
 
-            <div class="my-4 flex flex-col items-center justify-center text-center py-2">
-              <div class="w-14 h-14 rounded-full bg-surface-container-high border border-outline-variant/30 flex items-center justify-center mb-2.5 group-hover:scale-105 transition-transform">
-                <span class="material-symbols-outlined text-primary text-3xl">add_circle</span>
+            <div class="my-2 flex flex-col items-center justify-center text-center py-1">
+              <div class="w-11 h-11 rounded-full bg-surface-container-high border border-outline-variant/30 flex items-center justify-center mb-1.5 group-hover:scale-105 transition-transform">
+                <span class="material-symbols-outlined text-primary text-2xl">add_circle</span>
               </div>
-              <h3 class="font-headline font-bold text-sm text-on-surface mb-1">Escolher Pokémon para o Slot #${idx + 1}</h3>
-              <p class="text-xs text-on-surface-variant max-w-[260px]">
-                Abra a Pokédex de <strong>${game.name}</strong> e pesquise por Nome ou Nº (#001–#1025)
+              <h3 class="font-headline font-bold text-xs text-on-surface mb-0.5">Escolher Pokémon para o Slot #${idx + 1}</h3>
+              <p class="text-[11px] text-on-surface-variant max-w-[260px]">
+                Abra a Pokédex de <strong>${game.name}</strong> ou use uma recomendação abaixo
               </p>
             </div>
 
-            ${recHint ? `
-              <div class="bg-surface-container rounded-lg p-2.5 border border-tertiary/25 flex items-center justify-between gap-2" onclick="event.stopPropagation()">
-                <div class="flex items-center gap-2 min-w-0">
-                  <img src="${ENGINE.getSpriteUrl(recHint.state.spriteId)}" alt="${recHint.pokemon.name}" class="w-9 h-9 object-contain shrink-0" loading="lazy" />
-                  <div class="min-w-0">
-                    <span class="text-[10px] font-mono uppercase text-tertiary block font-bold">💡 Sugestão (${recHint.synergyPercent}% Sinergia)</span>
-                    <p class="text-xs font-semibold text-on-surface truncate">${formatDexNum(recHint.pokemon.dex)} ${recHint.pokemon.name}</p>
-                  </div>
-                </div>
-                <button data-quick-fill-slot="${idx}" data-quick-mon="${recHint.pokemon.id}" class="px-2.5 py-1 rounded bg-tertiary-container/20 hover:bg-tertiary-container/35 text-tertiary border border-tertiary/30 font-mono text-[11px] font-bold shrink-0 cursor-pointer">
-                  + Usar
-                </button>
-              </div>
-            ` : ''}
+            ${suggestionsHtml}
           </article>
         `;
       }
@@ -2210,6 +2239,18 @@
         if (searchInput) searchInput.value = '';
         renderAll();
         return;
+      }
+
+      // Se um Pokémon estiver em destaque/painel de status aberto, fecha o destaque caso clique em outro lugar
+      if (state.editorOpen) {
+        const clickedInsideEditor = e.target.closest('#slot-detail-editor');
+        const clickedInsideSlot = e.target.closest('[data-slot-index]');
+        const clickedModal = e.target.closest('.modal-backdrop');
+        const clickedSidebar = e.target.closest('#saved-teams-sidebar') || e.target.closest('#btn-toggle-sidebar');
+        if (!clickedInsideEditor && !clickedInsideSlot && !clickedModal && !clickedSidebar) {
+          state.editorOpen = false;
+          renderAll();
+        }
       }
     });
 
