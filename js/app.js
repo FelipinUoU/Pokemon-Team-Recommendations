@@ -446,13 +446,13 @@
         if (isSuggestionsOpen) {
           if (suggestionsForSlot.length === 0) {
             suggestionsHtml = `
-              <div class="bg-surface-container rounded-lg p-2.5 border border-outline-variant/20 text-center mt-2" onclick="event.stopPropagation()">
+              <div class="bg-surface-container rounded-lg p-2.5 border border-outline-variant/20 text-center mt-2">
                 <p class="text-xs text-on-surface-variant italic">Nenhum Pokémon recomendado.</p>
               </div>
             `;
           } else {
             suggestionsHtml = `
-              <div class="bg-surface-container/90 rounded-xl p-2 border border-tertiary/25 space-y-1.5 mt-2" onclick="event.stopPropagation()">
+              <div class="bg-surface-container/90 rounded-xl p-2 border border-tertiary/25 space-y-1.5 mt-2">
                 <div class="flex items-center justify-between px-1">
                   <span class="text-[10px] font-mono uppercase text-tertiary font-bold flex items-center gap-1">
                     <span class="material-symbols-outlined text-[14px]">auto_awesome</span>
@@ -505,7 +505,7 @@
               </p>
             </div>
 
-            <div class="pt-1 border-t border-outline-variant/15 flex flex-col" onclick="event.stopPropagation()">
+            <div class="pt-1 border-t border-outline-variant/15 flex flex-col">
               <button type="button" data-toggle-slot-suggestions="${idx}" class="w-full py-1.5 px-2.5 rounded-lg font-headline font-bold text-xs flex items-center justify-center gap-1.5 border transition-all cursor-pointer ${
                 isSuggestionsOpen
                   ? 'bg-tertiary-container/20 text-tertiary border-tertiary/40'
@@ -1990,7 +1990,7 @@
 
       // Abrir Modal Seletor da Pokédex do Jogo ao clicar em "Escolher / Trocar Pokémon" ou num slot vazio
       const openPickerTrigger = e.target.closest('[data-open-picker-slot]');
-      if (openPickerTrigger && !e.target.closest('[data-remove-slot]') && !e.target.closest('[data-edit-tab]') && !e.target.closest('[data-quick-fill-slot]')) {
+      if (openPickerTrigger && !e.target.closest('[data-remove-slot]') && !e.target.closest('[data-edit-tab]') && !e.target.closest('[data-quick-fill-slot]') && !e.target.closest('[data-toggle-slot-suggestions]')) {
         e.stopPropagation();
         const slotIdx = Number(openPickerTrigger.dataset.openPickerSlot);
         openPokedexPickerModal(slotIdx);
