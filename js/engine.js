@@ -855,6 +855,9 @@ window.POKE_ENGINE = (function () {
       if (filterOptions.typeFilter && filterOptions.typeFilter !== 'all') {
         if (!mon.types.includes(filterOptions.typeFilter)) return false;
       }
+      if (filterOptions.secondaryTypeFilter && filterOptions.secondaryTypeFilter !== 'all') {
+        if (!mon.types.includes(filterOptions.secondaryTypeFilter)) return false;
+      }
       if (filterOptions.mechanicFilter === 'mega') {
         if (!mon.mega) return false;
       }
