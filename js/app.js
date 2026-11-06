@@ -344,7 +344,6 @@
     const gameSelectEl = document.getElementById('game-select');
     const versionContainer = document.getElementById('version-pills');
     const mechanicsContainer = document.getElementById('game-mechanics-badges');
-    const regionBadgeEl = document.getElementById('game-region-badge');
 
     if (gameSelectEl && gameSelectEl.options.length === 0) {
       const groups = {};
@@ -396,20 +395,6 @@
           `;
         }).join('');
       }
-    }
-
-    if (regionBadgeEl) {
-      const chartLabel = game.typeChartMode === 'gen1'
-        ? '15 Tipos (Regras Gen 1)'
-        : (game.typeChartMode === 'gen2-5' ? '17 Tipos (Gen 2–5)' : '18 Tipos (Tabela Moderna c/ Fada)');
-      regionBadgeEl.innerHTML = `
-        <div class="flex flex-wrap items-center gap-4">
-          <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary text-[16px]">public</span> Região: <strong class="text-on-surface">${game.region}</strong></span>
-          <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-tertiary text-[16px]">verified</span> Tabela: <strong class="text-on-surface">${chartLabel}</strong></span>
-          <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-secondary text-[16px]">inventory_2</span> Itens Segurados: <strong class="text-on-surface">${game.hasItems ? 'Ativos' : 'Indisponíveis (Gen 1)'}</strong></span>
-        </div>
-        <span class="font-mono text-[11px] text-primary">Pokédex Regional + Recomendador Dinâmico Ativo</span>
-      `;
     }
   }
 
