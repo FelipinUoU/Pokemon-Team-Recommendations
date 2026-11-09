@@ -988,12 +988,20 @@ window.POKE_ENGINE = (function () {
     if (regionalDexCache[game.id]) return regionalDexCache[game.id];
 
     const map = new Map();
+    const dexToRegionalNum = new Map();
     let counter = 1;
+
+    function getOrAssignDexNum(dexNum) {
+      if (!dexToRegionalNum.has(dexNum)) {
+        dexToRegionalNum.set(dexNum, counter++);
+      }
+      return dexToRegionalNum.get(dexNum);
+    }
 
     function assignByDex(dexNum) {
       POKEMON.forEach(m => {
         if (m.dex === dexNum && !map.has(m.id) && isPokemonAvailableInGame(m, game, false)) {
-          map.set(m.id, counter++);
+          map.set(m.id, getOrAssignDexNum(m.dex));
         }
       });
     }
@@ -1041,14 +1049,14 @@ window.POKE_ENGINE = (function () {
       const targetGen = game.id === 'gen9-lza' ? 6 : game.generation;
       POKEMON.forEach(m => {
         if (!map.has(m.id) && m.gen === targetGen && isPokemonAvailableInGame(m, game, false) && !getDlcBadgeInfo(m, game)) {
-          map.set(m.id, counter++);
+          map.set(m.id, getOrAssignDexNum(m.dex));
         }
       });
 
       // 3º: Demais Pokémon da Pokédex Regional base (não-DLC)
       POKEMON.forEach(m => {
         if (!map.has(m.id) && isPokemonAvailableInGame(m, game, false) && !getDlcBadgeInfo(m, game)) {
-          map.set(m.id, counter++);
+          map.set(m.id, getOrAssignDexNum(m.dex));
         }
       });
     }
@@ -1056,7 +1064,7 @@ window.POKE_ENGINE = (function () {
     // Por fim, atribui numeração sequencial a qualquer Pokémon restante da Pokédex / DLC do jogo
     POKEMON.forEach(m => {
       if (!map.has(m.id) && isPokemonAvailableInGame(m, game, false)) {
-        map.set(m.id, counter++);
+        map.set(m.id, getOrAssignDexNum(m.dex));
       }
     });
 
@@ -1070,6 +1078,82 @@ window.POKE_ENGINE = (function () {
     const map = buildRegionalDexMapForGame(game);
     if (map.has(mon.id)) return map.get(mon.id);
     return mon.dex;
+  }
+
+  // Retorna todas as variantes/formas regionais de um Pokémon disponíveis na geração do jogo selecionado
+  function getPokemonVariants(mon, game) {
+    if (!mon) return [];
+    const { eraNationalGen } = getDexScopeInfo(game);
+    const variants = POKEMON.filter(p => {
+      if (p.dex !== mon.dex) return false;
+      if (p.gen > eraNationalGen) return false;
+      if (p.id.endsWith('-hisui') && game && !['gen8-pla', 'gen9-sv', 'gen9-lza', 'fangame-unbound', 'fangame-lazarus'].includes(game.id)) {
+        return false;
+      }
+      return true;
+    });
+
+    variants.sort((a, b) => {
+      const aIsVariant = Boolean(a.variantLabel) || a.id.endsWith('-alola') || a.id.endsWith('-galar') || a.id.endsWith('-hisui') || a.id.includes('-paldea');
+      const bIsVariant = Boolean(b.variantLabel) || b.id.endsWith('-alola') || b.id.endsWith('-galar') || b.id.endsWith('-hisui') || b.id.includes('-paldea');
+      if (aIsVariant !== bIsVariant) return aIsVariant ? 1 : -1;
+      if (a.gen !== b.gen) return a.gen - b.gen;
+      return a.id.localeCompare(b.id);
+    });
+    return variants;
+  }
+
+  // Rótulo curto para o dropdown de variante no card do slot (ex: "Kanto", "Alola", "Hisui", "Wash (Água)")
+  function getVariantShortLabel(v, allVariants = []) {
+    if (!v) return '';
+    if (v.variantLabel) return v.variantLabel;
+    if (v.id.endsWith('-alola')) return 'Alola';
+    if (v.id.endsWith('-galar')) return 'Galar';
+    if (v.id.endsWith('-hisui')) return 'Hisui';
+    if (v.id.includes('-paldea')) return 'Paldea';
+
+    const baseSpecialLabels = {
+      'rotom': 'Normal (Elétrico)',
+      'urshifu': 'Fluido (Water)',
+      'lycanroc': 'Diurno (Midday)',
+      'toxtricity': 'Amped',
+      'ogerpon': 'Turquesa (Grass)',
+      'oricorio': 'Baile (Fogo)',
+      'wormadam': 'Planta',
+      'giratina': 'Alterada',
+      'shaymin': 'Forma Terra',
+      'tornadus': 'Incarnate',
+      'thundurus': 'Incarnate',
+      'landorus': 'Incarnate',
+      'enamorus': 'Incarnate',
+      'hoopa': 'Confined',
+      'palafin': 'Forma Zero',
+      'ursaluna': 'Hisui (Base)',
+      'deoxys': 'Normal',
+      'kyurem': 'Base',
+      'necrozma': 'Base',
+      'calyrex': 'Base'
+    };
+    if (baseSpecialLabels[v.id]) return baseSpecialLabels[v.id];
+
+    const hasRegionalSibling = allVariants.some(o =>
+      o.id.endsWith('-alola') || o.id.endsWith('-galar') || o.id.endsWith('-hisui') || o.id.includes('-paldea')
+    );
+    if (hasRegionalSibling) {
+      const originByGen = {
+        1: 'Kanto (Base)',
+        2: 'Johto (Base)',
+        3: 'Hoenn (Base)',
+        4: 'Sinnoh (Base)',
+        5: 'Unova (Base)',
+        6: 'Kalos (Base)',
+        7: 'Alola (Base)',
+        8: 'Galar (Base)',
+        9: 'Paldea (Base)'
+      };
+      return originByGen[v.gen] || 'Forma Base';
+    }
+    return 'Forma Base';
   }
 
   // ==========================================================================
@@ -1681,6 +1765,8 @@ window.POKE_ENGINE = (function () {
     getVersionExclusiveInfo,
     getDlcBadgeInfo,
     getRegionalDexNumber,
+    getPokemonVariants,
+    getVariantShortLabel,
     canPokemonMegaInGame,
     canPokemonMegaAltInGame,
     isPokemonAvailableInGame,

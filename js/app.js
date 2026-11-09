@@ -537,6 +537,7 @@
       const eff = ENGINE.getEffectivePokemonState(slot, game);
       const itemObj = slot.item ? ITEMS[slot.item] : null;
       const mechObj = slot.mechanic ? MECHANICS[slot.mechanic] : null;
+      const variants = ENGINE.getPokemonVariants ? ENGINE.getPokemonVariants(slot.pokemon, game) : [];
 
       const movesHtml = [0, 1, 2, 3].map(mIdx => {
         const mId = slot.moves[mIdx];
@@ -566,6 +567,18 @@
                 SLOT #${idx + 1}
               </span>
               <span class="font-mono text-xs text-on-surface-variant font-bold">${formatDexNum(eff.dex)}</span>
+              ${variants.length > 1 ? `
+                <div class="relative inline-flex items-center" data-variant-dropdown-wrap>
+                  <select data-slot-variant-select="${idx}" class="appearance-none pl-2 pr-5 py-0.5 rounded font-label-sm text-[11px] font-bold bg-tertiary-container/20 hover:bg-tertiary-container/35 text-tertiary border border-tertiary/55 focus:outline-none focus:border-tertiary cursor-pointer transition-colors" title="Escolher variante / forma regional de ${slot.pokemon.name}">
+                    ${variants.map(v => `
+                      <option value="${v.id}" class="bg-surface-container text-on-surface font-sans" ${v.id === slot.pokemon.id ? 'selected' : ''}>
+                        🔄 ${ENGINE.getVariantShortLabel ? ENGINE.getVariantShortLabel(v, variants) : v.name}
+                      </option>
+                    `).join('')}
+                  </select>
+                  <span class="material-symbols-outlined text-[13px] text-tertiary pointer-events-none absolute right-1">expand_more</span>
+                </div>
+              ` : ''}
               ${mechObj ? `
                 <span class="px-2 py-0.5 rounded font-label-sm text-[11px] font-bold flex items-center gap-1 border" style="background:${mechObj.badgeColor}20; color:${mechObj.badgeColor}; border-color:${mechObj.badgeColor}55">
                   ${mechObj.icon} ${slot.mechanic === 'tera' ? `Tera ${TYPES[slot.teraType]?.name || ''}` : mechObj.shortName}
@@ -2206,6 +2219,12 @@
         return;
       }
 
+      // Evita que clicar no dropdown de variante dispare o clique do card
+      if (e.target.closest('[data-variant-dropdown-wrap]') || e.target.closest('[data-slot-variant-select]')) {
+        e.stopPropagation();
+        return;
+      }
+
       // Clicar em um Pokémon já escolhido abre o status dele e coloca em destaque; clicar de novo esconde as informações e tira o destaque!
       const slotCard = e.target.closest('[data-slot-index]');
       if (slotCard) {
@@ -2435,6 +2454,20 @@
 
     // Eventos de Change em Selects e Checkboxes
     document.body.addEventListener('change', e => {
+      if (e.target.matches('[data-slot-variant-select]')) {
+        const slotIdx = Number(e.target.dataset.slotVariantSelect);
+        const newMonId = e.target.value;
+        const newMon = findPokemonById(newMonId);
+        const game = getCurrentGame();
+        if (newMon && state.team[slotIdx]) {
+          state.team[slotIdx] = ENGINE.createOptimizedSlot(newMon, game, state.team);
+          state.activeSlotIndex = slotIdx;
+          renderAll();
+          showToast(`🔄 Variante alterada para ${newMon.name} no Slot #${slotIdx + 1}!`);
+        }
+        return;
+      }
+
       if (e.target.id === 'select-tera-type') {
         const slot = state.team[state.activeSlotIndex];
         if (slot) {
