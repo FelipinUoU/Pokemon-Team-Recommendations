@@ -37,6 +37,12 @@ O **Pokémon Team Recommendations** foi pensado exatamente para resolver esse pr
 - 💾 **Menu Lateral de Equipes Salvas (100% Local no seu PC)**:
   - Dê o nome que quiser para suas equipes e salve no menu lateral.
   - Os dados ficam salvos localmente no navegador da sua própria máquina (`localStorage`) **e** você também pode clicar em **⬇️ Baixar Backup no PC (`.json`)** e **⬆️ Carregar do PC (`.json`)** para guardar os arquivos das suas equipes diretamente em qualquer pasta do seu computador.
+- 🧭 **GPS Pokémon (`gps.html`) — Mapa Interativo de Rotas & Encontros**:
+  - Nova página integrada ao ecossistema do site (acessível pelo seletor **PTR | GPS Pokémon** no topo da tela).
+  - **Mapa Interativo da Região**: visualize o mapa tático da região do jogo (atualmente com suporte completo a **Pokémon Red & Blue — Região de Kanto**), com navegação livre segurando o botão do scroll do mouse (pan) e controle de zoom.
+  - **Inspeção de Rotas, Cavernas e Zonas Especiais**: clique em qualquer rota ou área do mapa (*Rota 1, Viridian Forest, Mt. Moon, Rock Tunnel, Safari Zone, Power Plant, Seafoam Islands, Victory Road, Cerulean Cave*, etc.) para ver todos os Pokémon que aparecem naquele local.
+  - **Taxas de Aparição (%) e Filtros de Captura**: consulte a porcentagem exata de encontrar cada Pokémon, faixa de nível (`Lv.`), método de encontro (*🌿 Grama Alta, ⛰️ Caverna, 🎣 Pesca, 🌊 Surf, 🎁 Estático / Troca*) e alterne entre as versões (*Red*, *Blue* ou *Comparar Ambas*).
+  - **Tags Dinâmicas por Mecânica de Jogo**: exibe automaticamente tags de **Horário do Dia** (para jogos a partir de Johto/Gen 2) e de **Estações do Ano** (exclusivo para Unova — *Black & White 1 e 2* nos Pokémon cuja taxa de aparição muda conforme a estação).
 
 ---
 

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>GPS Pokémon // POKÉTEAM PRO - Radar Tático Kanto</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="alternate icon" href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" />
+  <!-- Google Fonts & Material Symbols -->
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS v3 Plugin Injection -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Verbatim Tailwind Config Theme from Stitch -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "tertiary": "#56e5a9",
+            "primary-container": "#38bdf8",
+            "secondary-fixed-dim": "#ffb95f",
+            "on-secondary-fixed": "#2a1700",
+            "primary": "#8ed5ff",
+            "surface-tint": "#7bd0ff",
+            "surface": "#0d1322",
+            "background": "#0d1322",
+            "outline-variant": "#3e484f",
+            "on-background": "#dde2f7",
+            "on-tertiary-fixed": "#002113",
+            "on-error-container": "#ffdad6",
+            "on-tertiary-fixed-variant": "#005236",
+            "on-primary-fixed-variant": "#004c69",
+            "secondary-fixed": "#ffddb8",
+            "surface-container-highest": "#2f3445",
+            "on-primary-container": "#004965",
+            "inverse-primary": "#00668a",
+            "primary-fixed": "#c4e7ff",
+            "error": "#ffb4ab",
+            "tertiary-fixed-dim": "#4edea3",
+            "on-error": "#690005",
+            "surface-container": "#191f2f",
+            "primary-fixed-dim": "#7bd0ff",
+            "on-secondary": "#472a00",
+            "tertiary-fixed": "#6ffbbe",
+            "secondary": "#ffb95f",
+            "tertiary-container": "#30c88f",
+            "surface-variant": "#2f3445",
+            "surface-container-low": "#151b2b",
+            "on-tertiary": "#003824",
+            "inverse-surface": "#dde2f7",
+            "outline": "#87929a",
+            "surface-dim": "#0d1322",
+            "surface-container-high": "#242a3a",
+            "on-primary": "#00354a",
+            "on-surface-variant": "#bdc8d1",
+            "surface-container-lowest": "#080e1d",
+            "on-secondary-container": "#5b3800",
+            "error-container": "#93000a",
+            "on-tertiary-container": "#004e34",
+            "surface-bright": "#333949",
+            "inverse-on-surface": "#2a3040",
+            "secondary-container": "#ee9800",
+            "on-surface": "#dde2f7",
+            "on-secondary-fixed-variant": "#653e00",
+            "on-primary-fixed": "#001e2c"
+          },
+          spacing: {
+            "space-xs": "0.25rem",
+            "gutter-mobile": "0.5rem",
+            "space-xl": "2rem",
+            "space-md": "0.75rem",
+            "space-lg": "1.25rem",
+            "margin-mobile": "0.75rem",
+            "space-sm": "0.5rem",
+            "margin": "1.5rem",
+            "gutter": "1rem"
+          },
+          fontFamily: {
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Inter", "sans-serif"],
+            "mono": ["JetBrains Mono", "monospace"],
+            "label-md": ["JetBrains Mono", "monospace"],
+            "headline-xl": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-sm": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "label-lg": ["JetBrains Mono", "monospace"],
+            "body-lg": ["Inter", "sans-serif"],
+            "label-sm": ["JetBrains Mono", "monospace"],
+            "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-xl-mobile": ["Plus Jakarta Sans", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"]
+          },
+          fontSize: {
+            "label-md": ["11px", { lineHeight: "16px", fontWeight: "500" }],
+            "headline-xl": ["32px", { lineHeight: "40px", fontWeight: "800" }],
+            "headline-sm": ["15px", { lineHeight: "22px", fontWeight: "600" }],
+            "headline-md": ["18px", { lineHeight: "26px", fontWeight: "700" }],
+            "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+            "label-lg": ["13px", { lineHeight: "18px", fontWeight: "600" }],
+            "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "label-sm": ["10px", { lineHeight: "14px", fontWeight: "600" }],
+            "headline-lg": ["24px", { lineHeight: "32px", fontWeight: "700" }],
+            "headline-xl-mobile": ["24px", { lineHeight: "32px", fontWeight: "800" }],
+            "body-sm": ["12px", { lineHeight: "18px", fontWeight: "400" }]
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .hud-grid {
+      background-size: 28px 28px;
+      background-image:
+        linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+    }
+    .tactical-glow-primary {
+      box-shadow: 0 0 16px -2px rgba(56, 189, 248, 0.35);
+    }
+    @keyframes radarSweep {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .animate-radar {
+      animation: radarSweep 7s linear infinite;
+    }
+    @keyframes pulseTarget {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.18); opacity: 0.35; }
+    }
+    .animate-target-pulse {
+      animation: pulseTarget 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+
+  <!-- ========================================================================= -->
+  <!-- 1. CABEÇALHO SUPERIOR FIXO (NAVBAR TÁTICA + SELETOR DE PÁGINA)            -->
+  <!-- ========================================================================= -->
+  <header class="bg-surface-container-lowest/95 backdrop-blur-md text-primary top-0 z-50 shadow-md border-b border-outline-variant/40 sticky flex justify-between items-center w-full px-margin py-space-sm h-16">
+    <!-- Brand / Logo HUD Section -->
+    <div class="flex items-center space-x-space-md">
+      <div class="relative flex items-center justify-center w-9 h-9 rounded-xl bg-surface-container-high border border-outline-variant/40 shrink-0">
+        <span class="material-symbols-outlined text-primary text-[22px]">radar</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="font-headline font-extrabold text-base md:text-lg tracking-tight text-on-surface leading-none">
+          GPS <span class="text-primary">Pokémon</span>
+        </span>
+        <p class="text-xs text-on-surface-variant hidden md:block mt-0.5">
+          O guia interativo de rotas e localização de Pokémon!
+        </p>
+      </div>
+    </div>
+
+    <!-- Right Action Cluster + Seletor de Página -->
+    <div class="flex items-center space-x-space-md">
+      <!-- Seletor de Página (Desktop: Abas / Mobile: Dropdown com setinha) -->
+      <nav aria-label="Seletor de página" class="relative font-headline font-semibold text-xs">
+        <!-- Desktop Selector -->
+        <div class="hidden sm:flex items-center p-1 rounded-lg bg-surface-container-high border border-primary/35">
+          <a href="index.html" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-primary hover:bg-surface-container-highest transition-all cursor-pointer" title="Voltar para o Construtor de Equipes">
+            <svg class="w-[18px] h-[18px] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" />
+              <circle cx="12" cy="12" r="3" />
+              <line x1="3" y1="12" x2="9" y2="12" />
+              <line x1="15" y1="12" x2="21" y2="12" />
+            </svg>
+            <span>PTR</span>
+          </a>
+          <a href="gps.html" aria-current="page" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-primary text-on-primary shadow-sm transition-all cursor-pointer" title="Página atual: GPS Pokémon">
+            <span class="material-symbols-outlined text-[18px]">explore</span>
+            <span>GPS Pokémon</span>
+          </a>
+        </div>
+
+        <!-- Mobile Dropdown (Apenas setinha para baixo) -->
+        <details class="group sm:hidden relative">
+          <summary class="list-none [&::-webkit-details-marker]:hidden flex items-center justify-center px-2.5 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-primary border border-primary/35 transition-all cursor-pointer select-none" title="Selecionar página">
+            <span class="material-symbols-outlined text-[18px] transition-transform duration-200 group-open:rotate-180">expand_more</span>
+          </summary>
+          <div class="absolute right-0 mt-1.5 w-44 p-1 rounded-xl bg-surface-container-high border border-primary/35 shadow-2xl z-50 flex flex-col gap-1">
+            <a href="index.html" class="flex items-center gap-2 px-3 py-2 rounded-lg text-primary hover:bg-surface-container-highest transition-all">
+              <svg class="w-[18px] h-[18px] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="12" cy="12" r="3" />
+                <line x1="3" y1="12" x2="9" y2="12" />
+                <line x1="15" y1="12" x2="21" y2="12" />
+              </svg>
+              <span>PTR</span>
+            </a>
+            <a href="gps.html" aria-current="page" class="flex items-center justify-between px-3 py-2 rounded-lg bg-primary text-on-primary shadow-sm transition-all">
+              <span class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">explore</span>
+                <span>GPS Pokémon</span>
+              </span>
+              <span class="material-symbols-outlined text-[16px]">check</span>
+            </a>
+          </div>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 2. BARRA DE CONTROLE TÁTICO & SELEÇÃO DO GAME                             -->
+  <!-- ========================================================================= -->
+  <section class="w-full bg-surface-container-low border-b border-outline-variant px-margin py-space-sm">
+    <div class="max-w-[1920px] mx-auto flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-sm">
+      <!-- Esquerda: Seleção de Game -->
+      <div class="relative md:w-[270px] shrink-0">
+        <label for="gps-game-select" class="sr-only">Selecionar Jogo</label>
+        <div class="flex items-center bg-surface-container border border-outline-variant rounded-lg px-space-sm py-1.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+          <span class="material-symbols-outlined text-primary text-base mr-1.5">videogame_asset</span>
+          <select id="gps-game-select" class="w-full bg-transparent border-0 text-on-surface font-label-md text-label-md focus:outline-none focus:ring-0 cursor-pointer py-0">
+            <option class="bg-surface-container-highest text-on-surface" selected value="rb">Pokémon Red &amp; Blue (Gen 1 - Kanto)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Meio: Busca de Rota ou Pokémon -->
+      <div class="relative flex-1 min-w-0">
+        <div class="flex items-center bg-surface-container border border-outline-variant rounded-lg px-space-md py-1.5 focus-within:border-primary-container focus-within:shadow-[0_0_12px_rgba(56,189,248,0.25)] transition-all">
+          <span class="material-symbols-outlined text-primary text-lg mr-2">radar</span>
+          <input
+            id="gps-search-input"
+            class="w-full bg-transparent border-0 text-on-surface placeholder:text-outline font-body-md text-body-md focus:ring-0 p-0"
+            placeholder="Buscar Rota (ex: Viridian Forest, Rota 2, Safari) ou Pokémon (ex: Pikachu, Tauros, Abra)..."
+            type="text"
+          />
+          <div class="hidden sm:flex items-center space-x-1 pl-2 border-l border-outline-variant">
+            <kbd class="px-1.5 py-0.5 rounded bg-surface-container-highest text-outline text-label-sm font-label-sm border border-outline-variant">Ctrl</kbd>
+            <kbd class="px-1.5 py-0.5 rounded bg-surface-container-highest text-outline text-label-sm font-label-sm border border-outline-variant">K</kbd>
+          </div>
+        </div>
+      </div>
+
+      <!-- Direita: Seleção dos Métodos de Captura -->
+      <div class="relative md:w-[230px] shrink-0">
+        <label for="gps-method-select" class="sr-only">Método de Captura</label>
+        <div class="flex items-center bg-surface-container border border-outline-variant rounded-lg px-space-sm py-1.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+          <span class="material-symbols-outlined text-primary text-base mr-1.5">filter_alt</span>
+          <select id="gps-method-select" class="w-full bg-transparent border-0 text-on-surface font-label-md text-label-md focus:outline-none focus:ring-0 cursor-pointer py-0">
+            <option class="bg-surface-container-highest text-on-surface" selected value="all">Todos os Métodos</option>
+            <option class="bg-surface-container-highest text-on-surface" value="grass">🌿 Grama Alta</option>
+            <option class="bg-surface-container-highest text-on-surface" value="cave">⛰️ Caverna</option>
+            <option class="bg-surface-container-highest text-on-surface" value="fish">🎣 Pesca</option>
+            <option class="bg-surface-container-highest text-on-surface" value="surf">🌊 Surf</option>
+            <option class="bg-surface-container-highest text-on-surface" value="static">🎁 Estático / Troca</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra Rápida de Seleção de Rotas (Scroll Horizontal p/ facilitar navegação) -->
+    <div class="max-w-[1920px] mx-auto mt-2 pt-2 border-t border-outline-variant/40 flex items-center gap-1.5 overflow-x-auto custom-scroll pb-1">
+      <span class="font-label-sm text-label-sm text-outline uppercase shrink-0 mr-1 flex items-center gap-1">
+        <span class="material-symbols-outlined text-xs text-primary">pin_drop</span>
+        Rotas:
+      </span>
+      <div id="quick-route-pills" class="flex items-center gap-1.5"></div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 3. MAIN WORKSPACE: 2-COLUMN LAYOUT (KANTO RADAR MAP + ENCOUNTER PANEL)    -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 flex flex-col xl:flex-row w-full max-w-[1920px] mx-auto p-space-sm gap-space-sm">
+
+    <!-- ===================================================================== -->
+    <!-- COLUNA ESQUERDA: MAPA RADAR TÁTICO DE KANTO (~62% viewport width)     -->
+    <!-- ===================================================================== -->
+    <section class="flex-1 xl:w-[62%] bg-surface-container-lowest rounded-xl border border-outline-variant relative flex flex-col overflow-hidden shadow-2xl">
+      <!-- Mapa Header / Telemetry Bar -->
+      <div class="px-space-md py-space-sm bg-surface-container-low/90 backdrop-blur border-b border-outline-variant flex flex-wrap items-center justify-between gap-2 z-20">
+        <div class="flex items-center space-x-space-sm">
+          <span class="inline-flex items-center justify-center p-1 rounded bg-primary/10 text-primary">
+            <span class="material-symbols-outlined text-base">explore</span>
+          </span>
+          <div>
+            <h2 id="map-region-title" class="font-headline-sm text-headline-sm text-on-surface tracking-tight flex items-center gap-2">
+              Região de Kanto
+            </h2>
+            <p class="font-label-sm text-label-sm text-on-surface-variant">Selecione qualquer rota, caverna ou zona especial no mapa abaixo para inspecionar os Pokémon e taxas de aparição</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SVG INTERACTIVE HOLOGRAPHIC MAP CANVAS -->
+      <div class="relative flex-1 w-full min-h-[540px] hud-grid bg-[#070b16] overflow-hidden flex items-center justify-center select-none">
+        <!-- Radar Scanning Wave Effect -->
+        <div class="absolute inset-0 pointer-events-none flex items-center justify-center opacity-20">
+          <div class="w-[680px] h-[680px] rounded-full border border-primary/40 relative animate-radar">
+            <div class="absolute top-1/2 left-1/2 w-1/2 h-1 bg-gradient-to-r from-primary to-transparent origin-left"></div>
+          </div>
+          <div class="absolute w-[440px] h-[440px] rounded-full border border-primary/20"></div>
+          <div class="absolute w-[200px] h-[200px] rounded-full border border-primary/30"></div>
+        </div>
+
+        <!-- Tactical SVG Topology & Nodes -->
+        <svg id="kanto-radar-svg" class="w-full h-full max-h-[640px] p-2 sm:p-4 relative z-10 transition-transform duration-200" fill="none" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter height="140%" id="glow-cyan" width="140%" x="-20%" y="-20%">
+              <feGaussianBlur result="blur" stdDeviation="3"></feGaussianBlur>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"></feComposite>
+            </filter>
+            <filter height="140%" id="glow-emerald" width="140%" x="-20%" y="-20%">
+              <feGaussianBlur result="blur" stdDeviation="4"></feGaussianBlur>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"></feComposite>
+            </filter>
+          </defs>
+
+          <!-- CARTOGRAPHIC COORDINATE AXIS -->
+          <g opacity="0.35" stroke="#3e484f" stroke-dasharray="2 4">
+            <line x1="40" x2="860" y1="60" y2="60"></line>
+            <line x1="40" x2="860" y1="200" y2="200"></line>
+            <line x1="40" x2="860" y1="350" y2="350"></line>
+            <line x1="40" x2="860" y1="520" y2="520"></line>
+            <line x1="120" x2="120" y1="30" y2="575"></line>
+            <line x1="340" x2="340" y1="30" y2="575"></line>
+            <line x1="540" x2="540" y1="30" y2="575"></line>
+            <line x1="740" x2="740" y1="30" y2="575"></line>
+          </g>
+
+          <!-- ROUTE CORRIDORS (VECTOR PIPELINES) -->
+          <!-- Pallet Town to Viridian City (Route 1) -->
+          <path d="M 170 510 L 170 410" opacity="0.65" stroke="#38bdf8" stroke-linecap="round" stroke-width="4"></path>
+          <!-- Viridian City to Pewter City through Route 2 & Viridian Forest -->
+          <path d="M 170 410 L 170 140" opacity="0.75" stroke="#10b981" stroke-dasharray="6 3" stroke-width="4.5"></path>
+          <!-- Pewter City to Mt. Moon & Cerulean City (Route 3 & 4) -->
+          <path d="M 170 140 L 530 140" opacity="0.7" stroke="#38bdf8" stroke-linecap="round" stroke-width="3.5"></path>
+          <!-- Cerulean North to Route 24 & 25 -->
+          <path d="M 530 140 L 540 68" opacity="0.7" stroke="#38bdf8" stroke-linecap="round" stroke-width="3.5"></path>
+          <!-- Cerulean to Saffron & Vermilion (Route 5 & 6) -->
+          <path d="M 530 140 L 530 390" opacity="0.7" stroke="#38bdf8" stroke-linecap="round" stroke-width="3.5"></path>
+          <!-- Saffron to Celadon (Route 7) & Lavender (Route 8) -->
+          <path d="M 390 270 L 690 270" opacity="0.7" stroke="#38bdf8" stroke-linecap="round" stroke-width="3.5"></path>
+          <!-- Cerulean to Rock Tunnel & Lavender (Route 9 & 10) -->
+          <path d="M 530 140 L 690 140 L 690 270" opacity="0.55" stroke="#38bdf8" stroke-width="3"></path>
+          <!-- Celadon to Fuchsia via Cycling Road (Route 16–18) -->
+          <path d="M 390 270 L 350 380 L 500 490" opacity="0.55" stroke="#38bdf8" stroke-width="3"></path>
+          <!-- Lavender to Fuchsia (Route 12–15) -->
+          <path d="M 690 270 L 690 440 L 500 490" opacity="0.55" stroke="#38bdf8" stroke-width="3"></path>
+          <!-- Fuchsia to Seafoam & Cinnabar & Pallet (Routes 19, 20, 21) -->
+          <path d="M 500 490 L 350 540 L 170 558 L 170 510" opacity="0.5" stroke="#38bdf8" stroke-dasharray="4 4" stroke-width="2.5"></path>
+          <!-- Viridian to Route 22, 23, Victory Road & Indigo Plateau -->
+          <path d="M 170 410 L 90 410 L 90 100" opacity="0.65" stroke="#f59e0b" stroke-dasharray="5 3" stroke-width="3"></path>
+
+          <!-- ================================================================= -->
+          <!-- CITY / GYM LANDMARKS (REFERENCE PINS)                             -->
+          <!-- ================================================================= -->
+          <!-- PALLET TOWN -->
+          <g transform="translate(170, 510)">
+            <circle cx="0" cy="0" fill="#151b2b" r="8" stroke="#38bdf8" stroke-width="2"></circle>
+            <circle cx="0" cy="0" fill="#38bdf8" r="3"></circle>
+            <text fill="#dde2f7" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" x="14" y="4">Pallet Town</text>
+          </g>
+          <!-- VIRIDIAN CITY -->
+          <g transform="translate(170, 410)">
+            <rect fill="#1e293b" height="14" rx="2" stroke="#10b981" stroke-width="2" width="14" x="-7" y="-7"></rect>
+            <text fill="#dde2f7" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" x="14" y="2">Viridian City</text>
+            <text fill="#10b981" font-family="JetBrains Mono" font-size="8.5" x="14" y="13">Gym 8 [Terra]</text>
+          </g>
+          <!-- PEWTER CITY -->
+          <g transform="translate(170, 140)">
+            <rect fill="#1e293b" height="14" rx="2" stroke="#f59e0b" stroke-width="2" width="14" x="-7" y="-7"></rect>
+            <text fill="#dde2f7" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" x="-78" y="-2">Pewter City</text>
+            <text fill="#ffb95f" font-family="JetBrains Mono" font-size="8.5" x="-78" y="9">Gym 1 [Pedra]</text>
+          </g>
+          <!-- CERULEAN CITY -->
+          <g transform="translate(530, 140)">
+            <rect fill="#1e293b" height="14" rx="2" stroke="#38bdf8" stroke-width="2" width="14" x="-7" y="-7"></rect>
+            <text fill="#dde2f7" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" x="12" y="2">Cerulean City</text>
+            <text fill="#38bdf8" font-family="JetBrains Mono" font-size="8.5" x="12" y="13">Gym 2 [Água]</text>
+          </g>
+          <!-- SAFFRON CITY -->
+          <g transform="translate(530, 270)">
+            <polygon fill="#242a3a" points="0,-9 9,0 0,9 -9,0" stroke="#c084fc" stroke-width="2"></polygon>
+            <text fill="#dde2f7" font-family="Plus Jakarta Sans" font-size="11" font-weight="800" x="14" y="2">Saffron City</text>
+            <text fill="#c084fc" font-family="JetBrains Mono" font-size="8.5" x="14" y="13">Gym 6 [Psíquico]</text>
+          </g>
+          <!-- CELADON CITY -->
+          <g transform="translate(390, 270)">
+            <rect fill="#1e293b" height="14" rx="2" stroke="#10b981" stroke-width="2" width="14" x="-7" y="-7"></rect>
+            <text fill="#dde2f7" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" x="-85" y="2">Celadon City</text>
+            <text fill="#10b981" font-family="JetBrains Mono" font-size="8.5" x="-85" y="13">Gym 4 [Planta]</text>
+          </g>
+          <!-- VERMILION CITY -->
+          <g transform="translate(530, 390)">
+            <rect fill="#1e293b" height="14" rx="2" stroke="#facc15" stroke-width="2" width="14" x="-7" y="-7"></rect>
+            <text fill="#dde2f7" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" x="-92" y="2">Vermilion City</text>
+            <text fill="#facc15" font-family="JetBrains Mono" font-size="8.5" x="-92" y="13">Gym 3 [Elétrico]</text>
+          </g>
+          <!-- LAVENDER TOWN -->
+          <g transform="translate(690, 270)">
+            <circle cx="0" cy="0" fill="#151b2b" r="7" stroke="#a855f7" stroke-width="2"></circle>
+            <text fill="#dde2f7" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" x="-90" y="-10">Lavender Town</text>
+          </g>
+          <!-- FUCHSIA CITY -->
+          <g transform="translate(500, 490)">
+            <rect fill="#1e293b" height="14" rx="2" stroke="#ec4899" stroke-width="2" width="14" x="-7" y="-7"></rect>
+            <text fill="#dde2f7" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" x="14" y="2">Fuchsia City</text>
+            <text fill="#ec4899" font-family="JetBrains Mono" font-size="8.5" x="14" y="13">Gym 5 [Veneno]</text>
+          </g>
+          <!-- INDIGO PLATEAU -->
+          <g transform="translate(90, 95)">
+            <polygon fill="#1e293b" filter="url(#glow-cyan)" points="0,-12 10,8 -10,8" stroke="#f59e0b" stroke-width="2"></polygon>
+            <text fill="#f59e0b" font-family="Plus Jakarta Sans" font-size="12" font-weight="800" x="16" y="0">Indigo Plateau</text>
+            <text fill="#dde2f7" font-family="JetBrains Mono" font-size="8.5" x="16" y="12">Liga Pokémon // Elite 4</text>
+          </g>
+
+          <!-- ================================================================= -->
+          <!-- DYNAMIC INTERACTIVE ROUTE & AREA NODES (RENDERED BY JS)           -->
+          <!-- ================================================================= -->
+          <g id="kanto-interactive-nodes"></g>
+        </svg>
+
+        <!-- MINI HUD DE TELEMETRIA EMBUTIDO NO CANTO DO MAPA -->
+        <div class="hidden sm:block absolute bottom-3 left-3 z-20 bg-surface-container-high/90 backdrop-blur border border-outline-variant px-space-md py-space-sm rounded-lg shadow-xl">
+          <div class="flex items-center justify-between border-b border-outline-variant/60 pb-1.5 mb-2">
+            <span class="font-label-sm text-label-sm text-primary font-bold flex items-center space-x-1">
+              <span class="material-symbols-outlined text-xs">sensors</span>
+              <span>TELEMETRIA DA ZONA</span>
+            </span>
+          </div>
+          <div class="flex items-center gap-5 font-label-sm text-label-sm whitespace-nowrap">
+            <div>
+              <span class="text-outline block">Nível na Rota:</span>
+              <span id="hud-level-range" class="text-on-surface font-bold text-label-md">Lv. 3 — 6</span>
+            </div>
+            <div class="border-l border-outline-variant/50 pl-4">
+              <span class="text-outline block">Tipo Dominante:</span>
+              <span id="hud-dominant-types" class="text-primary font-semibold">Inseto / Elétrico</span>
+            </div>
+            <div class="border-l border-outline-variant/50 pl-4">
+              <span class="text-outline block">Espécies na Rota:</span>
+              <span id="hud-species-count" class="text-secondary font-bold">5 Catalogadas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTROLES DE ZOOM NO CANTO INFERIOR DIREITO DO MAPA -->
+        <div class="absolute bottom-3 right-3 z-20 flex items-center bg-surface-container-high/90 backdrop-blur rounded-lg border border-outline-variant shadow-xl">
+          <button id="btn-zoom-in" type="button" class="p-2 hover:text-primary transition-colors text-on-surface-variant cursor-pointer" title="Aumentar Zoom">
+            <span class="material-symbols-outlined text-sm">add</span>
+          </button>
+          <button id="btn-zoom-out" type="button" class="p-2 hover:text-primary transition-colors text-on-surface-variant cursor-pointer border-l border-outline-variant/50" title="Diminuir Zoom">
+            <span class="material-symbols-outlined text-sm">remove</span>
+          </button>
+          <button id="btn-zoom-reset" type="button" class="p-2 hover:text-primary transition-colors text-on-surface-variant cursor-pointer border-l border-outline-variant/50" title="Resetar Zoom">
+            <span class="material-symbols-outlined text-sm">restart_alt</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- COLUNA DIREITA: PAINEL DE ENCONTROS & TAXAS DE SPAWN (~38% largura)   -->
+    <!-- ===================================================================== -->
+    <section class="flex-1 xl:w-[38%] bg-surface-container-low rounded-xl border border-outline-variant flex flex-col overflow-hidden shadow-2xl">
+      <!-- Header da Rota Selecionada -->
+      <div class="p-space-md bg-surface-container-high border-b border-outline-variant">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center space-x-2">
+            <span class="p-1.5 rounded bg-tertiary/15 text-tertiary border border-tertiary/30">
+              <span class="material-symbols-outlined text-base">pin_drop</span>
+            </span>
+            <div>
+              <h3 id="panel-area-title" class="font-headline-md text-headline-md text-on-surface">Viridian Forest</h3>
+            </div>
+          </div>
+
+          <!-- Version Toggle (Red / Blue / Compare) -->
+          <div class="inline-flex rounded-lg bg-surface-container-lowest p-1 border border-outline-variant shrink-0">
+            <button type="button" data-version-filter="red" class="px-2.5 py-1 rounded font-label-sm text-label-sm font-medium text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+              Red
+            </button>
+            <button type="button" data-version-filter="blue" class="px-2.5 py-1 rounded font-label-sm text-label-sm font-medium text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+              Blue
+            </button>
+            <button type="button" data-version-filter="both" class="px-2.5 py-1 rounded font-label-sm text-label-sm font-bold bg-surface-container-high text-primary border border-primary/40 cursor-pointer">
+              Comparar Ambas
+            </button>
+          </div>
+        </div>
+        <p id="panel-area-connections" class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+          Rota 2 Sul (Viridian) ⇄ Rota 2 Norte (Pewter City)
+        </p>
+      </div>
+
+      <!-- LISTA ROLÁVEL DE POKÉMON ENCONTRADOS -->
+      <div id="encounter-cards-list" class="flex-1 overflow-y-auto p-space-md space-y-space-sm max-h-[640px] custom-scroll"></div>
+    </section>
+  </main>
+
+  <script src="js/gps.js"></script>
+</body>
+</html>
