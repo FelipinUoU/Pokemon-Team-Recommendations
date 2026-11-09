@@ -1544,7 +1544,7 @@
 
         const weakTrayHtml = def.weakMembers.length > 0
           ? `
-            <div class="pt-1.5 border-t ${isCritical4x ? 'border-error/40' : 'border-outline-variant/20'} flex items-center justify-between gap-1 min-h-[30px]">
+            <div class="pt-1.5 border-t ${isCritical4x ? 'border-error/40' : 'border-outline-variant/20'} flex items-center justify-between gap-1 min-h-[28px]">
               <span class="text-[10px] font-mono ${def.weak4x > 0 || isAlert ? 'text-error font-bold' : 'text-on-surface-variant'} flex items-center gap-0.5 shrink-0">
                 ${def.weak4x > 0 || isAlert ? '<span class="material-symbols-outlined text-[13px] text-error">warning</span>' : ''}
                 ${def.weak4x > 0 ? 'Risco 4x:' : (def.weakMembers.length > 1 ? 'Vulneráveis:' : 'Vulnerável:')}
@@ -1562,19 +1562,44 @@
             </div>
           `
           : `
-            <div class="pt-1.5 border-t border-outline-variant/20 flex items-center justify-between gap-1 min-h-[30px] font-mono text-[10px]">
+            <div class="pt-1.5 border-t border-outline-variant/20 flex items-center justify-between gap-1 min-h-[28px] font-mono text-[10px]">
               <span class="flex items-center gap-1 text-tertiary font-semibold">
                 <span class="material-symbols-outlined text-[13px]">verified_user</span>
                 0 Vulneráveis
               </span>
-              <span class="text-on-surface-variant/75 text-[9px] truncate max-w-[95px]" title="${def.safeMembers.map(s => `${s.name} (${s.mult})`).join(', ')}">
-                ${def.safeMembers.length > 0 ? def.safeMembers.slice(0, 2).map(s => s.name.split(' ')[0].slice(0, 7)).join(', ') : 'Neutro'}
+            </div>
+          `;
+
+        const safeTrayHtml = def.safeMembers.length > 0
+          ? `
+            <div class="pt-1.5 border-t border-outline-variant/15 flex items-center justify-between gap-1 min-h-[28px]">
+              <span class="text-[10px] font-mono text-tertiary font-semibold flex items-center gap-0.5 shrink-0">
+                <span class="material-symbols-outlined text-[13px] text-tertiary">shield</span>
+                ${def.safeMembers.length > 1 ? 'Resistentes:' : 'Resistente:'}
+              </span>
+              <div class="flex items-center flex-wrap justify-end gap-1.5">
+                ${def.safeMembers.map(m => `
+                  <div class="relative group" title="${m.name} (${m.mult === '0x' ? 'Imune (0x)' : `${m.mult} Resistência`} a ${typeMeta.name})">
+                    <div class="w-6 h-6 rounded-full bg-surface-container-lowest ${m.mult === '0x' ? 'ring-2 ring-tertiary border border-tertiary bg-tertiary-container/25' : 'border border-tertiary/70'} flex items-center justify-center overflow-hidden shadow-sm">
+                      <img src="${ENGINE.getSpriteUrl(m.spriteId || m.dex)}" alt="${m.name}" class="w-5 h-5 object-contain" loading="lazy" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${m.dex || 1}.png'" />
+                    </div>
+                    <span class="absolute -top-1 -right-1 px-1 rounded-full bg-tertiary-container text-[8px] text-on-tertiary-fixed font-mono font-extrabold leading-none shadow-sm">${m.mult}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `
+          : `
+            <div class="pt-1.5 border-t border-outline-variant/15 flex items-center justify-between gap-1 min-h-[28px] font-mono text-[10px]">
+              <span class="flex items-center gap-1 text-on-surface-variant/75">
+                <span class="material-symbols-outlined text-[13px]">shield</span>
+                0 Resistentes
               </span>
             </div>
           `;
 
         return `
-          <div class="${cardBorderClass} transition-all p-2.5 rounded-lg flex flex-col justify-between gap-2 shadow-sm" title="Fracos: ${def.weakMembers.map(m => `${m.name}(${m.mult})`).join(', ') || 'Nenhum'} | Resistentes/Imunes: ${def.safeMembers.map(m => `${m.name}(${m.mult})`).join(', ') || 'Nenhum'}">
+          <div class="${cardBorderClass} transition-all p-2.5 rounded-lg flex flex-col justify-between gap-1.5 shadow-sm" title="Fracos: ${def.weakMembers.map(m => `${m.name}(${m.mult})`).join(', ') || 'Nenhum'} | Resistentes/Imunes: ${def.safeMembers.map(m => `${m.name}(${m.mult})`).join(', ') || 'Nenhum'}">
             <div class="flex items-center justify-between gap-1">
               <div class="flex items-center gap-1.5">
                 <span class="w-2.5 h-2.5 rounded-full shrink-0 ${isCritical4x ? 'animate-pulse' : ''}" style="background:${typeMeta.color}"></span>
@@ -1583,12 +1608,8 @@
               ${statusBadgeHtml}
             </div>
 
-            <div class="grid grid-cols-3 gap-1 py-1 px-1.5 rounded bg-surface-container-lowest/85 text-center font-mono text-[11px] border border-outline-variant/15">
-              <div class="flex flex-col" title="Quantos Pokémon seus têm ataques 2x contra ${typeMeta.name}">
-                <span class="text-on-surface-variant text-[9px] uppercase">⚔️ Ofens</span>
-                <span class="${off.superEffectiveCount > 0 ? 'text-secondary font-bold' : 'text-on-surface-variant font-semibold'}">${off.superEffectiveCount > 0 ? `2x (${off.superEffectiveCount})` : '0x'}</span>
-              </div>
-              <div class="flex flex-col border-x border-outline-variant/25" title="Pokémons Fracos a ${typeMeta.name}">
+            <div class="grid grid-cols-2 gap-1 py-1 px-1.5 rounded bg-surface-container-lowest/85 text-center font-mono text-[11px] border border-outline-variant/15">
+              <div class="flex flex-col border-r border-outline-variant/25" title="Pokémons Fracos a ${typeMeta.name}">
                 <span class="text-on-surface-variant text-[9px] uppercase">🔴 Fracos</span>
                 <span class="${def.totalWeak > 0 ? 'text-error font-extrabold' : 'text-tertiary font-bold'}">${def.totalWeak}${def.weak4x > 0 ? ' (4x)' : ''}</span>
               </div>
@@ -1599,6 +1620,7 @@
             </div>
 
             ${weakTrayHtml}
+            ${safeTrayHtml}
           </div>
         `;
       }).join('');
