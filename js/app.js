@@ -536,7 +536,8 @@
       // CARD DE SLOT PREENCHIDO (STITCH TACTICAL CARD)
       const eff = ENGINE.getEffectivePokemonState(slot, game);
       const itemObj = slot.item ? ITEMS[slot.item] : null;
-      const mechObj = slot.mechanic ? MECHANICS[slot.mechanic] : null;
+      const activeMechId = ENGINE.getActiveSlotMechanic ? ENGINE.getActiveSlotMechanic(slot, game) : slot.mechanic;
+      const mechObj = activeMechId ? MECHANICS[activeMechId] : null;
       const variants = ENGINE.getPokemonVariants ? ENGINE.getPokemonVariants(slot.pokemon, game) : [];
 
       const movesHtml = [0, 1, 2, 3].map(mIdx => {
@@ -581,7 +582,7 @@
               ` : ''}
               ${mechObj ? `
                 <span class="px-2 py-0.5 rounded font-label-sm text-[11px] font-bold flex items-center gap-1 border" style="background:${mechObj.badgeColor}20; color:${mechObj.badgeColor}; border-color:${mechObj.badgeColor}55">
-                  ${mechObj.icon} ${slot.mechanic === 'tera' ? `Tera ${TYPES[slot.teraType]?.name || ''}` : mechObj.shortName}
+                  ${mechObj.icon} ${activeMechId === 'tera' ? `Tera ${TYPES[slot.teraType]?.name || ''}` : mechObj.shortName}
                 </span>
               ` : ''}
             </div>
@@ -2366,8 +2367,12 @@
             slot.mechanic = 'mega';
             if (slot.pokemon.megaAlt && itemId === slot.pokemon.megaAlt.stone) slot.megaVariant = 'x';
             else slot.megaVariant = 'default';
+          } else if (itemObj && itemObj.category === 'primal') {
+            slot.mechanic = 'primal';
           } else if (itemObj && itemObj.category === 'zmove') {
             slot.mechanic = 'zmove';
+          } else if (slot.mechanic === 'mega' || slot.mechanic === 'primal' || slot.mechanic === 'zmove') {
+            slot.mechanic = null;
           }
           renderAll();
         }
@@ -2404,8 +2409,15 @@
         if (slot && slot.pokemon) {
           slot.mechanic = mType === 'none' ? null : mType;
           if (game.hasItems) {
-            const recs = ENGINE.getRecommendedItemsForPokemon(slot.pokemon, game, slot);
-            if (recs.length > 0) slot.item = recs[0].id;
+            if (slot.mechanic === 'mega' && slot.pokemon.mega) {
+              slot.item = (slot.megaVariant === 'x' && slot.pokemon.megaAlt) ? slot.pokemon.megaAlt.stone : slot.pokemon.mega.stone;
+            } else if (slot.mechanic === 'primal' && slot.pokemon.primal) {
+              slot.item = slot.pokemon.primal.stone;
+            } else {
+              const recs = ENGINE.getRecommendedItemsForPokemon(slot.pokemon, game, slot);
+              const nonMegaRec = recs.find(r => r.category !== 'mega' && r.category !== 'primal' && (slot.mechanic === 'zmove' ? r.category === 'zmove' : r.category !== 'zmove')) || recs[0];
+              if (nonMegaRec) slot.item = nonMegaRec.id;
+            }
           }
           renderAll();
         }

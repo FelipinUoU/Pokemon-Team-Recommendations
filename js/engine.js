@@ -60,26 +60,42 @@ window.POKE_ENGINE = (function () {
     let activeMechanicNote = null;
 
     // Verifica se a mecânica ativa altera forma/tipos/stats
-    if (slot.mechanic === 'mega' && canPokemonMegaInGame(mon, game)) {
-      const megaData = (slot.megaVariant === 'x' && canPokemonMegaAltInGame(mon, game)) ? mon.megaAlt : mon.mega;
+    // Regra: Em jogos com itens segurados, o Pokémon está em Mega Evolução se e somente se estiver segurando sua Mega Stone!
+    const megaActive = isPokemonMegaActive(slot, game);
+    const primalActive = isPokemonPrimalActive(slot, game);
+
+    if (megaActive) {
+      slot.mechanic = 'mega';
+      const useAltMega = (!game || game.hasItems)
+        ? Boolean(mon.megaAlt && canPokemonMegaAltInGame(mon, game) && slot.item === mon.megaAlt.stone)
+        : Boolean(slot.megaVariant === 'x' && canPokemonMegaAltInGame(mon, game));
+      if (useAltMega) slot.megaVariant = 'x';
+      else if (slot.megaVariant === 'x' && (!game || game.hasItems)) slot.megaVariant = 'default';
+      const megaData = useAltMega ? mon.megaAlt : mon.mega;
       types = [...megaData.types];
       stats = { ...megaData.stats };
       ability = megaData.ability;
       displayName = megaData.name;
       spriteId = megaData.spriteId || spriteId;
       activeMechanicNote = megaData.note;
-    } else if (slot.mechanic === 'primal' && mon.primal && game && game.mechanics.includes('primal')) {
+    } else if (primalActive) {
+      slot.mechanic = 'primal';
       types = [...mon.primal.types];
       stats = { ...mon.primal.stats };
       ability = mon.primal.ability;
       displayName = mon.primal.name;
       spriteId = mon.primal.spriteId || spriteId;
       activeMechanicNote = mon.primal.note;
-    } else if (slot.mechanic === 'tera' && slot.teraType && game && game.mechanics.includes('tera')) {
-      if (slot.applyTeraDefense) {
-        types = [slot.teraType];
+    } else {
+      if (game && game.hasItems && (slot.mechanic === 'mega' || slot.mechanic === 'primal')) {
+        slot.mechanic = null;
       }
-      activeMechanicNote = `Tera Tipo: ${TYPES[slot.teraType]?.name || slot.teraType} (Bônus STAB e mudança defensiva sob Terastal)`;
+      if (slot.mechanic === 'tera' && slot.teraType && game && game.mechanics.includes('tera')) {
+        if (slot.applyTeraDefense) {
+          types = [slot.teraType];
+        }
+        activeMechanicNote = `Tera Tipo: ${TYPES[slot.teraType]?.name || slot.teraType} (Bônus STAB e mudança defensiva sob Terastal)`;
+      }
     }
 
     const bst = stats.hp + stats.atk + stats.def + stats.spa + stats.spd + stats.spe;
@@ -444,6 +460,41 @@ window.POKE_ENGINE = (function () {
     return true;
   }
 
+  // Verifica se o Pokémon do slot está efetivamente Mega Evoluído (exige carregar sua Mega Stone nos jogos com itens)
+  function isPokemonMegaActive(slot, game) {
+    if (!slot || !slot.pokemon || !canPokemonMegaInGame(slot.pokemon, game)) return false;
+    if (!game || game.hasItems) {
+      const isPrimaryStone = Boolean(slot.pokemon.mega && slot.item === slot.pokemon.mega.stone);
+      const isAltStone = Boolean(slot.pokemon.megaAlt && canPokemonMegaAltInGame(slot.pokemon, game) && slot.item === slot.pokemon.megaAlt.stone);
+      return isPrimaryStone || isAltStone;
+    }
+    return slot.mechanic === 'mega';
+  }
+
+  function isPokemonPrimalActive(slot, game) {
+    if (!slot || !slot.pokemon || !slot.pokemon.primal || !game || !game.mechanics || !game.mechanics.includes('primal')) return false;
+    if (game.hasItems) {
+      return slot.item === slot.pokemon.primal.stone;
+    }
+    return slot.mechanic === 'primal';
+  }
+
+  // Retorna a mecânica ativa exibida no selo do slot (Mega só aparece se estiver segurando a Mega Stone correspondente)
+  function getActiveSlotMechanic(slot, game) {
+    if (!slot || !slot.pokemon) return null;
+    if (isPokemonMegaActive(slot, game)) return 'mega';
+    if (isPokemonPrimalActive(slot, game)) return 'primal';
+    if (slot.mechanic === 'mega' || slot.mechanic === 'primal') return null;
+    if (slot.mechanic === 'zmove' && game && game.hasItems) {
+      const itemObj = slot.item ? ITEMS[slot.item] : null;
+      if (!itemObj || itemObj.category !== 'zmove') return null;
+    }
+    if (slot.mechanic && game && game.mechanics && game.mechanics.includes(slot.mechanic)) {
+      return slot.mechanic;
+    }
+    return null;
+  }
+
   // ==========================================================================
   // RECOMENDADOR DE MELHOR ITEM PARA UM POKÉMON (RESPEITANDO GERAÇÃO E MECÂNICA)
   // ==========================================================================
@@ -451,6 +502,7 @@ window.POKE_ENGINE = (function () {
     if (!pokemon || (game && !game.hasItems)) return [];
     const maxGen = game ? game.maxDexGen : 9;
     const state = getEffectivePokemonState(currentSlot || { pokemon }, game);
+    const wantsMega = Boolean(currentSlot && (currentSlot.mechanic === 'mega' || isPokemonMegaActive(currentSlot, game)));
 
     const results = [];
 
@@ -464,7 +516,7 @@ window.POKE_ENGINE = (function () {
       if (stoneItem) {
         results.push({
           ...stoneItem,
-          score: currentSlot?.mechanic === 'mega' ? 200 : 120,
+          score: wantsMega ? 200 : 95,
           badge: '🧬 Mega Stone Oficial',
           reason: `Necessária para transformar em ${currentSlot?.megaVariant === 'x' && hasAlt ? pokemon.megaAlt.name : pokemon.mega.name}`
         });
@@ -474,7 +526,7 @@ window.POKE_ENGINE = (function () {
         if (altStone && altStone.id !== stoneId) {
           results.push({
             ...altStone,
-            score: 115,
+            score: wantsMega ? 190 : 92,
             badge: '🧬 Mega Alternativa',
             reason: `Transforma em ${pokemon.megaAlt.name}`
           });
@@ -1344,6 +1396,13 @@ window.POKE_ENGINE = (function () {
     }
 
     const teraType = forcedTera || pokemon.bestTera || pokemon.types[0];
+    let initialItem = null;
+    if (mechanic === 'mega' && (!game || game.hasItems) && pokemon.mega) {
+      initialItem = pokemon.mega.stone;
+    } else if (mechanic === 'primal' && (!game || game.hasItems) && pokemon.primal) {
+      initialItem = pokemon.primal.stone;
+    }
+
     const tempSlot = {
       pokemon,
       mechanic,
@@ -1352,7 +1411,7 @@ window.POKE_ENGINE = (function () {
       applyTeraDefense: false,
       ability: (pokemon.abilities && pokemon.abilities[0]) || 'Overgrow',
       nature: pokemon.bestNature || 'Adamant (+Atk, -SpA)',
-      item: null,
+      item: initialItem,
       moves: [null, null, null, null],
       evIvEnabled: false,
       ivs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
@@ -1769,6 +1828,9 @@ window.POKE_ENGINE = (function () {
     getVariantShortLabel,
     canPokemonMegaInGame,
     canPokemonMegaAltInGame,
+    isPokemonMegaActive,
+    isPokemonPrimalActive,
+    getActiveSlotMechanic,
     isPokemonAvailableInGame,
     createOptimizedSlot,
     fetchPokemonFromPokeAPI,
