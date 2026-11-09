@@ -1492,28 +1492,113 @@
     }
 
     if (matrixEl) {
+      matrixEl.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2.5 pt-1';
+
+      const headerBar = matrixEl.previousElementSibling;
+      if (headerBar) {
+        headerBar.className = 'flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 mb-space-xs border-b border-outline-variant/25';
+        headerBar.innerHTML = `
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="material-symbols-outlined text-primary text-[20px]">grid_view</span>
+            <h3 class="font-headline font-bold text-sm text-on-surface uppercase tracking-wider">
+              Matriz Tática de Resistências &amp; Cobertura (${analysis.activeTypes.length} Tipos)
+            </h3>
+            <span class="font-mono text-[11px] bg-surface-container-highest px-2 py-0.5 rounded text-on-surface-variant font-medium">
+              Equipe Atual (${analysis.filledCount} Integrante${analysis.filledCount === 1 ? '' : 's'})
+            </span>
+          </div>
+          <div class="flex items-center gap-3 font-mono text-[11px] text-on-surface-variant flex-wrap">
+            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-error animate-pulse"></span><strong class="text-error">CRÍTICO / ALERTA</strong> Fraqueza</span>
+            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-secondary"></span><strong class="text-secondary">COBRIR</strong> Falta Golpe 2x</span>
+            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-tertiary"></span><strong class="text-tertiary">OK</strong> Equilibrado</span>
+          </div>
+        `;
+      }
+
       matrixEl.innerHTML = analysis.activeTypes.map(t => {
         const def = analysis.defenseMatrix[t];
         const off = analysis.offensiveCoverage[t];
         const typeMeta = TYPES[t];
 
-        const isCritical = (def.totalWeak >= 2 && def.totalSafe === 0) || def.netScore <= -2;
-        const borderClass = isCritical
-          ? 'bg-error-container/15 border-2 border-error/60 shadow-lg shadow-error/5'
-          : 'bg-surface-container-low border border-outline-variant/20';
+        const isCritical4x = analysis.filledCount > 0 && ((def.weak4x > 0 && def.totalSafe === 0) || def.totalWeak >= 3);
+        const isAlert = !isCritical4x && analysis.filledCount > 0 && ((def.totalWeak >= 2 && def.totalSafe === 0) || def.netScore <= -2 || def.weak4x > 0);
+        const isCoverGap = !isCritical4x && !isAlert && analysis.filledCount > 0 && off.superEffectiveCount === 0;
 
-        return `
-          <div class="${borderClass} rounded-lg p-2.5 flex flex-col justify-between" title="Fracos: ${def.weakMembers.map(m => `${m.name}(${m.mult})`).join(', ') || 'Nenhum'} | Resistentes/Imunes: ${def.safeMembers.map(m => `${m.name}(${m.mult})`).join(', ') || 'Nenhum'}">
-            <div class="flex items-center justify-between mb-1.5">
-              ${renderTypeBadge(t, 'xs')}
-              <span class="font-mono text-[10px] ${off.superEffectiveCount > 0 ? 'text-primary font-bold' : 'text-error'}" title="Quantos Pokémon seus têm ataques 2x contra ${typeMeta.name}">
-                ⚔️ ${off.superEffectiveCount}x
+        let cardBorderClass = 'bg-surface-container-low hover:bg-surface-container-high border border-outline-variant/25';
+        let statusBadgeHtml = '<span class="px-1.5 py-0.5 rounded bg-tertiary/15 text-tertiary font-mono text-[10px] font-bold tracking-wider">OK</span>';
+
+        if (isCritical4x) {
+          cardBorderClass = 'bg-surface-container-low hover:bg-surface-container-high border-2 border-error shadow-[0_0_16px_rgba(255,180,171,0.2)]';
+          statusBadgeHtml = '<span class="px-1.5 py-0.5 rounded bg-error text-on-error font-mono text-[10px] font-extrabold tracking-wider animate-pulse">CRÍTICO</span>';
+        } else if (isAlert) {
+          cardBorderClass = 'bg-surface-container-low hover:bg-surface-container-high border border-error/45 shadow-[0_0_12px_rgba(147,0,10,0.18)]';
+          statusBadgeHtml = '<span class="px-1.5 py-0.5 rounded bg-error-container text-error font-mono text-[10px] font-extrabold tracking-wider">ALERTA</span>';
+        } else if (isCoverGap) {
+          cardBorderClass = 'bg-surface-container-low hover:bg-surface-container-high border border-secondary/35';
+          statusBadgeHtml = '<span class="px-1.5 py-0.5 rounded bg-secondary/20 text-secondary font-mono text-[10px] font-bold tracking-wider">COBRIR</span>';
+        }
+
+        const resistLabel = def.immune > 0 && def.totalSafe === def.immune
+          ? `${def.immune} Imun`
+          : `${def.totalSafe} Res${def.immune > 0 ? ` (${def.immune}★)` : ''}`;
+
+        const weakTrayHtml = def.weakMembers.length > 0
+          ? `
+            <div class="pt-1.5 border-t ${isCritical4x ? 'border-error/40' : 'border-outline-variant/20'} flex items-center justify-between gap-1 min-h-[30px]">
+              <span class="text-[10px] font-mono ${def.weak4x > 0 || isAlert ? 'text-error font-bold' : 'text-on-surface-variant'} flex items-center gap-0.5 shrink-0">
+                ${def.weak4x > 0 || isAlert ? '<span class="material-symbols-outlined text-[13px] text-error">warning</span>' : ''}
+                ${def.weak4x > 0 ? 'Risco 4x:' : (def.weakMembers.length > 1 ? 'Vulneráveis:' : 'Vulnerável:')}
+              </span>
+              <div class="flex items-center flex-wrap justify-end gap-1.5">
+                ${def.weakMembers.map(m => `
+                  <div class="relative group" title="${m.name} (${m.mult} Fraqueza a ${typeMeta.name})">
+                    <div class="w-6 h-6 rounded-full bg-surface-container-lowest ${m.mult === '4x' ? 'ring-2 ring-error border border-error bg-error-container/30' : 'border border-error/70'} flex items-center justify-center overflow-hidden shadow-sm">
+                      <img src="${ENGINE.getSpriteUrl(m.spriteId || m.dex)}" alt="${m.name}" class="w-5 h-5 object-contain" loading="lazy" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${m.dex || 1}.png'" />
+                    </div>
+                    <span class="absolute -top-1 -right-1 px-1 rounded-full bg-error text-[8px] text-on-error font-mono font-extrabold leading-none shadow-sm">${m.mult}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `
+          : `
+            <div class="pt-1.5 border-t border-outline-variant/20 flex items-center justify-between gap-1 min-h-[30px] font-mono text-[10px]">
+              <span class="flex items-center gap-1 text-tertiary font-semibold">
+                <span class="material-symbols-outlined text-[13px]">verified_user</span>
+                0 Vulneráveis
+              </span>
+              <span class="text-on-surface-variant/75 text-[9px] truncate max-w-[95px]" title="${def.safeMembers.map(s => `${s.name} (${s.mult})`).join(', ')}">
+                ${def.safeMembers.length > 0 ? def.safeMembers.slice(0, 2).map(s => s.name.split(' ')[0].slice(0, 7)).join(', ') : 'Neutro'}
               </span>
             </div>
-            <div class="flex items-center justify-between text-[11px] font-mono pt-1 border-t border-outline-variant/15">
-              <span class="${def.totalWeak > 0 ? 'text-error font-bold' : 'text-on-surface-variant'}" title="Pokémons Fracos">🔴 ${def.totalWeak}</span>
-              <span class="${def.totalSafe > 0 ? 'text-tertiary font-bold' : 'text-on-surface-variant'}" title="Pokémons Resistentes ou Imunes">🟢 ${def.totalSafe} Res${def.immune > 0 ? `(${def.immune}★)` : ''}</span>
+          `;
+
+        return `
+          <div class="${cardBorderClass} transition-all p-2.5 rounded-lg flex flex-col justify-between gap-2 shadow-sm" title="Fracos: ${def.weakMembers.map(m => `${m.name}(${m.mult})`).join(', ') || 'Nenhum'} | Resistentes/Imunes: ${def.safeMembers.map(m => `${m.name}(${m.mult})`).join(', ') || 'Nenhum'}">
+            <div class="flex items-center justify-between gap-1">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full shrink-0 ${isCritical4x ? 'animate-pulse' : ''}" style="background:${typeMeta.color}"></span>
+                ${renderTypeBadge(t, 'xs')}
+              </div>
+              ${statusBadgeHtml}
             </div>
+
+            <div class="grid grid-cols-3 gap-1 py-1 px-1.5 rounded bg-surface-container-lowest/85 text-center font-mono text-[11px] border border-outline-variant/15">
+              <div class="flex flex-col" title="Quantos Pokémon seus têm ataques 2x contra ${typeMeta.name}">
+                <span class="text-on-surface-variant text-[9px] uppercase">⚔️ Ofens</span>
+                <span class="${off.superEffectiveCount > 0 ? 'text-secondary font-bold' : 'text-on-surface-variant font-semibold'}">${off.superEffectiveCount > 0 ? `2x (${off.superEffectiveCount})` : '0x'}</span>
+              </div>
+              <div class="flex flex-col border-x border-outline-variant/25" title="Pokémons Fracos a ${typeMeta.name}">
+                <span class="text-on-surface-variant text-[9px] uppercase">🔴 Fracos</span>
+                <span class="${def.totalWeak > 0 ? 'text-error font-extrabold' : 'text-tertiary font-bold'}">${def.totalWeak}${def.weak4x > 0 ? ' (4x)' : ''}</span>
+              </div>
+              <div class="flex flex-col" title="Pokémons Resistentes ou Imunes a ${typeMeta.name}">
+                <span class="text-on-surface-variant text-[9px] uppercase">🟢 Resist</span>
+                <span class="${def.totalSafe > 0 ? 'text-tertiary font-bold' : 'text-on-surface-variant font-semibold'}">${resistLabel}</span>
+              </div>
+            </div>
+
+            ${weakTrayHtml}
           </div>
         `;
       }).join('');

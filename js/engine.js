@@ -170,31 +170,37 @@ window.POKE_ENGINE = (function () {
       activeTypes.forEach(t => {
         const m = prof[t];
         const cell = defenseMatrix[t];
+        const memberInfo = {
+          id: slot.pokemon.id,
+          dex: slot.pokemon.dex,
+          name: state.name,
+          spriteId: state.spriteId
+        };
         if (m >= 4) {
           cell.weak4x++;
           cell.totalWeak++;
           cell.netScore -= 2.2;
-          cell.weakMembers.push({ name: state.name, mult: '4x' });
+          cell.weakMembers.push({ ...memberInfo, mult: '4x' });
         } else if (m > 1) {
           cell.weak2x++;
           cell.totalWeak++;
           cell.netScore -= 1;
-          cell.weakMembers.push({ name: state.name, mult: '2x' });
+          cell.weakMembers.push({ ...memberInfo, mult: '2x' });
         } else if (m === 0) {
           cell.immune++;
           cell.totalSafe++;
           cell.netScore += 1.6;
-          cell.safeMembers.push({ name: state.name, mult: '0x' });
+          cell.safeMembers.push({ ...memberInfo, mult: '0x' });
         } else if (m <= 0.25) {
           cell.resist4x++;
           cell.totalSafe++;
           cell.netScore += 1.4;
-          cell.safeMembers.push({ name: state.name, mult: '¼x' });
+          cell.safeMembers.push({ ...memberInfo, mult: '¼x' });
         } else if (m < 1) {
           cell.resist2x++;
           cell.totalSafe++;
           cell.netScore += 1;
-          cell.safeMembers.push({ name: state.name, mult: '½x' });
+          cell.safeMembers.push({ ...memberInfo, mult: '½x' });
         }
       });
     });
