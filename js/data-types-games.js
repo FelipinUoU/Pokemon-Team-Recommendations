@@ -58,7 +58,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen1-rb',
     generation: 1,
-    genLabel: 'Geração I (Kanto)',
+    genLabel: 'Geração I',
     name: 'Pokémon Red / Blue',
     versions: ['Red', 'Blue'],
     region: 'Kanto',
@@ -74,7 +74,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen1-yellow',
     generation: 1,
-    genLabel: 'Geração I (Kanto)',
+    genLabel: 'Geração I',
     name: 'Pokémon Yellow (Special Pikachu Edition)',
     versions: ['Yellow'],
     region: 'Kanto',
@@ -92,7 +92,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen2-gsc',
     generation: 2,
-    genLabel: 'Geração II (Johto & Kanto)',
+    genLabel: 'Geração II',
     name: 'Pokémon Gold / Silver / Crystal',
     versions: ['Gold', 'Silver', 'Crystal'],
     region: 'Johto',
@@ -110,7 +110,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen3-rse',
     generation: 3,
-    genLabel: 'Geração III (Hoenn)',
+    genLabel: 'Geração III',
     name: 'Pokémon Ruby / Sapphire / Emerald',
     versions: ['Ruby', 'Sapphire', 'Emerald'],
     region: 'Hoenn',
@@ -126,7 +126,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen3-frlg',
     generation: 3,
-    genLabel: 'Geração III (Kanto Remake)',
+    genLabel: 'Geração III',
     name: 'Pokémon FireRed / LeafGreen',
     versions: ['FireRed', 'LeafGreen'],
     region: 'Kanto',
@@ -144,7 +144,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen4-dpp',
     generation: 4,
-    genLabel: 'Geração IV (Sinnoh)',
+    genLabel: 'Geração IV',
     name: 'Pokémon Diamond / Pearl / Platinum',
     versions: ['Diamond', 'Pearl', 'Platinum'],
     region: 'Sinnoh',
@@ -160,7 +160,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen4-hgss',
     generation: 4,
-    genLabel: 'Geração IV (Johto Remake)',
+    genLabel: 'Geração IV',
     name: 'Pokémon HeartGold / SoulSilver',
     versions: ['HeartGold', 'SoulSilver'],
     region: 'Johto',
@@ -178,7 +178,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen5-bw',
     generation: 5,
-    genLabel: 'Geração V (Unova)',
+    genLabel: 'Geração V',
     name: 'Pokémon Black / White',
     versions: ['Black', 'White'],
     region: 'Unova',
@@ -194,7 +194,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen5-b2w2',
     generation: 5,
-    genLabel: 'Geração V (Unova)',
+    genLabel: 'Geração V',
     name: 'Pokémon Black 2 / White 2',
     versions: ['Black 2', 'White 2'],
     region: 'Unova',
@@ -212,7 +212,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen6-xy',
     generation: 6,
-    genLabel: 'Geração VI (Kalos)',
+    genLabel: 'Geração VI',
     name: 'Pokémon X / Y',
     versions: ['X', 'Y'],
     region: 'Kalos',
@@ -228,7 +228,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen6-oras',
     generation: 6,
-    genLabel: 'Geração VI (Hoenn Remake)',
+    genLabel: 'Geração VI',
     name: 'Pokémon Omega Ruby / Alpha Sapphire',
     versions: ['Omega Ruby', 'Alpha Sapphire'],
     region: 'Hoenn',
@@ -246,7 +246,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen7-sm-usum',
     generation: 7,
-    genLabel: 'Geração VII (Alola)',
+    genLabel: 'Geração VII',
     name: 'Pokémon Sun / Moon / Ultra Sun / Ultra Moon',
     versions: ['Sun', 'Moon', 'Ultra Sun', 'Ultra Moon'],
     region: 'Alola',
@@ -262,7 +262,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen7-lgpe',
     generation: 7,
-    genLabel: 'Geração VII (Kanto)',
+    genLabel: 'Geração VII',
     name: "Pokémon Let's Go, Pikachu! / Let's Go, Eevee!",
     versions: ["Let's Go Pikachu", "Let's Go Eevee"],
     region: 'Kanto',
@@ -280,7 +280,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen8-swsh',
     generation: 8,
-    genLabel: 'Geração VIII (Galar)',
+    genLabel: 'Geração VIII',
     name: 'Pokémon Sword / Shield',
     versions: ['Sword', 'Shield'],
     region: 'Galar',
@@ -296,7 +296,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen8-bdsp',
     generation: 8,
-    genLabel: 'Geração VIII (Sinnoh Remake)',
+    genLabel: 'Geração VIII',
     name: 'Pokémon Brilliant Diamond / Shining Pearl',
     versions: ['Brilliant Diamond', 'Shining Pearl'],
     region: 'Sinnoh',
@@ -312,7 +312,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen8-pla',
     generation: 8,
-    genLabel: 'Geração VIII (Hisui)',
+    genLabel: 'Geração VIII',
     name: 'Pokémon Legends: Arceus',
     versions: ['Legends: Arceus'],
     region: 'Hisui',
@@ -330,7 +330,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen9-sv',
     generation: 9,
-    genLabel: 'Geração IX (Paldea)',
+    genLabel: 'Geração IX',
     name: 'Pokémon Scarlet / Violet',
     versions: ['Scarlet', 'Violet'],
     region: 'Paldea',
@@ -346,7 +346,7 @@ window.POKE_DATA.GAMES = [
   {
     id: 'gen9-lza',
     generation: 9,
-    genLabel: 'Geração IX (Kalos)',
+    genLabel: 'Geração IX',
     name: 'Pokémon Legends: Z-A (+ DLC Mega Dimension)',
     versions: ['Legends: Z-A'],
     region: 'Kalos (Lumiose)',
