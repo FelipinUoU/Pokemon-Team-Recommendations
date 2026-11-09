@@ -707,6 +707,32 @@ function selectArea(areaId) {
 }
 
 function initGpsPage() {
+  // Sidebar "Modos do GPS" (mesmo comportamento do menu lateral do PTR)
+  const sidebarEl = document.getElementById("gps-modes-sidebar");
+  const btnToggleSidebar = document.getElementById("btn-toggle-sidebar");
+  if (sidebarEl && btnToggleSidebar) {
+    // Desktop: inicia aberta. Mobile: inicia fechada (abre por cima, como no PTR)
+    if (window.matchMedia("(min-width: 1024px)").matches) {
+      sidebarEl.classList.remove("collapsed");
+      document.body.classList.remove("sidebar-closed");
+    }
+    btnToggleSidebar.addEventListener("click", () => {
+      sidebarEl.classList.toggle("collapsed");
+      document.body.classList.toggle("sidebar-closed");
+    });
+  }
+
+  // Modos do GPS: Pesquisa de Pokémon (ativo) | Pesquisa de Itens (futuro, sem função por enquanto)
+  document.getElementById("btn-gps-mode-items")?.addEventListener("click", () => {
+    // Placeholder: função ainda não implementada
+  });
+  document.getElementById("btn-gps-mode-pokemon")?.addEventListener("click", () => {
+    if (window.matchMedia("(max-width: 1023px)").matches && sidebarEl) {
+      sidebarEl.classList.add("collapsed");
+      document.body.classList.add("sidebar-closed");
+    }
+  });
+
   // Game Selector
   const gameSelect = document.getElementById("gps-game-select");
   if (gameSelect) {

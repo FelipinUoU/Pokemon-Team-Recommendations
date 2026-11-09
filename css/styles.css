@@ -39,7 +39,8 @@ html, body {
 }
 
 /* Sidebar Collapsible Behavior */
-#saved-teams-sidebar.collapsed {
+#saved-teams-sidebar.collapsed,
+#gps-modes-sidebar.collapsed {
   transform: translateX(-100%);
 }
 body.sidebar-closed #main-workspace {
@@ -47,7 +48,8 @@ body.sidebar-closed #main-workspace {
 }
 
 @media (max-width: 1023px) {
-  #saved-teams-sidebar {
+  #saved-teams-sidebar,
+  #gps-modes-sidebar {
     box-shadow: 16px 0 40px rgba(0, 0, 0, 0.65);
   }
 }

@@ -144,24 +144,31 @@
     }
   </style>
 </head>
-<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden sidebar-closed">
 
   <!-- ========================================================================= -->
   <!-- 1. CABEÇALHO SUPERIOR FIXO (NAVBAR TÁTICA + SELETOR DE PÁGINA)            -->
   <!-- ========================================================================= -->
-  <header class="bg-surface-container-lowest/95 backdrop-blur-md text-primary top-0 z-50 shadow-md border-b border-outline-variant/40 sticky flex justify-between items-center w-full px-margin py-space-sm h-16">
-    <!-- Brand / Logo HUD Section -->
-    <div class="flex items-center space-x-space-md">
-      <div class="relative flex items-center justify-center w-9 h-9 rounded-xl bg-surface-container-high border border-outline-variant/40 shrink-0">
-        <span class="material-symbols-outlined text-primary text-[22px]">radar</span>
-      </div>
-      <div class="flex flex-col">
-        <span class="font-headline font-extrabold text-base md:text-lg tracking-tight text-on-surface leading-none">
-          GPS <span class="text-primary">Pokémon</span>
-        </span>
-        <p class="text-xs text-on-surface-variant hidden md:block mt-0.5">
-          O guia interativo de rotas e localização de Pokémon!
-        </p>
+  <header class="fixed top-0 left-0 right-0 z-50 h-16 bg-surface-container-low/90 backdrop-blur-md border-b border-outline-variant/25 px-margin flex items-center justify-between gap-4">
+    <!-- Brand & Drawer Toggle -->
+    <div class="flex items-center gap-space-md">
+      <button id="btn-toggle-sidebar" type="button" class="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface transition-all border border-outline-variant/30 cursor-pointer" title="Mostrar/Ocultar Menu Lateral de Modos do GPS">
+        <span class="material-symbols-outlined text-primary text-[20px]">menu_open</span>
+        <span class="font-label-sm text-label-sm hidden sm:inline">Modos do GPS</span>
+      </button>
+
+      <div class="flex items-center gap-3">
+        <div class="relative flex items-center justify-center w-9 h-9 rounded-xl bg-surface-container-high border border-outline-variant/40 shrink-0">
+          <span class="material-symbols-outlined text-primary text-[22px]">radar</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-headline font-extrabold text-base md:text-lg tracking-tight text-on-surface leading-none">
+            GPS <span class="text-primary">Pokémon</span>
+          </span>
+          <p class="text-xs text-on-surface-variant hidden md:block mt-0.5">
+            O guia interativo de rotas e localização de Pokémon!
+          </p>
+        </div>
       </div>
     </div>
 
@@ -213,6 +220,69 @@
       </nav>
     </div>
   </header>
+
+  <!-- ========================================================================= -->
+  <!-- 1.5. LEFT COLLAPSIBLE SIDEBAR (MODOS DO GPS)                              -->
+  <!-- ========================================================================= -->
+  <aside id="gps-modes-sidebar" class="fixed top-16 left-0 bottom-0 z-40 w-80 bg-surface-container-low border-r border-outline-variant/20 flex flex-col justify-between transition-transform duration-300 overflow-hidden collapsed">
+    <div class="p-space-md flex flex-col h-full overflow-hidden">
+      <!-- Drawer Header -->
+      <div class="flex items-center justify-between pb-space-sm mb-space-md border-b border-outline-variant/20">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[20px]">explore</span>
+          <div>
+            <h2 class="font-headline font-bold text-headline-sm text-on-surface leading-tight">Modos do GPS</h2>
+            <p class="text-[11px] text-on-surface-variant">Selecione o modo de pesquisa no mapa</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de Modos do GPS -->
+      <div class="space-y-space-sm">
+        <!-- Modo 1: Pesquisa de Pokémon (Ativo) -->
+        <button type="button" id="btn-gps-mode-pokemon" class="w-full text-left p-space-md rounded-xl bg-surface-container-high border border-primary/50 shadow-md transition-all cursor-pointer flex items-start gap-3">
+          <div class="w-9 h-9 rounded-lg bg-primary/15 border border-primary/40 flex items-center justify-center text-primary shrink-0 mt-0.5">
+            <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" />
+              <circle cx="12" cy="12" r="3" />
+              <line x1="3" y1="12" x2="9" y2="12" />
+              <line x1="15" y1="12" x2="21" y2="12" />
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-headline font-bold text-body-md text-on-surface">Pesquisa de Pokémon</span>
+              <span class="px-2 py-0.5 rounded-full bg-primary text-on-primary font-label-sm text-[10px] font-bold">Ativo</span>
+            </div>
+            <p class="text-xs text-on-surface-variant mt-1 leading-relaxed">
+              Inspecione rotas, cavernas e taxas de aparição de Pokémon pelo mapa.
+            </p>
+          </div>
+        </button>
+
+        <!-- Modo 2: Pesquisa de Itens (Em breve / Inativo por enquanto) -->
+        <button type="button" id="btn-gps-mode-items" class="w-full text-left p-space-md rounded-xl bg-surface-container hover:bg-surface-container-high/60 border border-outline-variant/30 transition-all cursor-pointer flex items-start gap-3 opacity-75">
+          <div class="w-9 h-9 rounded-lg bg-surface-container-highest border border-outline-variant/40 flex items-center justify-center text-secondary shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[18px]">inventory_2</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-headline font-bold text-body-md text-on-surface">Pesquisa de Itens</span>
+              <span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-secondary border border-secondary/30 font-label-sm text-[10px]">Em breve</span>
+            </div>
+            <p class="text-xs text-on-surface-variant mt-1 leading-relaxed">
+              Localização de TMs, HMs, Pokébolas e itens ocultos nas rotas do jogo.
+            </p>
+          </div>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- WORKSPACE WRAPPER (DESLOCA COM A SIDEBAR NO DESKTOP IGUAL AO PTR)         -->
+  <!-- ========================================================================= -->
+  <div id="main-workspace" class="pt-16 lg:pl-80 min-h-screen flex flex-col transition-all duration-300">
 
   <!-- ========================================================================= -->
   <!-- 2. BARRA DE CONTROLE TÁTICO & SELEÇÃO DO GAME                             -->
@@ -504,6 +574,7 @@
       <div id="encounter-cards-list" class="flex-1 overflow-y-auto p-space-md space-y-space-sm max-h-[640px] custom-scroll"></div>
     </section>
   </main>
+  </div>
 
   <script src="js/gps.js"></script>
 </body>

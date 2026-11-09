@@ -39,6 +39,7 @@ O **Pokémon Team Recommendations** foi pensado exatamente para resolver esse pr
   - Os dados ficam salvos localmente no navegador da sua própria máquina (`localStorage`) **e** você também pode clicar em **⬇️ Baixar Backup no PC (`.json`)** e **⬆️ Carregar do PC (`.json`)** para guardar os arquivos das suas equipes diretamente em qualquer pasta do seu computador.
 - 🧭 **GPS Pokémon (`gps.html`) — Mapa Interativo de Rotas & Encontros**:
   - Nova página integrada ao ecossistema do site (acessível pelo seletor **PTR | GPS Pokémon** no topo da tela).
+  - **Menu Lateral "Modos do GPS"**: sidebar com os modos da página — **Pesquisa de Pokémon** (ativo) e **Pesquisa de Itens** (em breve). No mobile funciona como o menu lateral do PTR (abre por cima do conteúdo).
   - **Mapa Interativo da Região**: visualize o mapa tático da região do jogo (atualmente com suporte completo a **Pokémon Red & Blue — Região de Kanto**), com navegação livre segurando o botão do scroll do mouse (pan) e controle de zoom.
   - **Inspeção de Rotas, Cavernas e Zonas Especiais**: clique em qualquer rota ou área do mapa (*Rota 1, Viridian Forest, Mt. Moon, Rock Tunnel, Safari Zone, Power Plant, Seafoam Islands, Victory Road, Cerulean Cave*, etc.) para ver todos os Pokémon que aparecem naquele local.
   - **Taxas de Aparição (%) e Filtros de Captura**: consulte a porcentagem exata de encontrar cada Pokémon, faixa de nível (`Lv.`), método de encontro (*🌿 Grama Alta, ⛰️ Caverna, 🎣 Pesca, 🌊 Surf, 🎁 Estático / Troca*) e alterne entre as versões (*Red*, *Blue* ou *Comparar Ambas*).
