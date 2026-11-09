@@ -1,0 +1,20 @@
+# Android & Gradle
+.gradle/
+build/
+*/build/
+*/*/build/
+local.properties
+*.apk
+*.aab
+
+# Node & dependencies
+node_modules/
+mobile/node_modules/
+mobile/android/
+mobile/www/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
