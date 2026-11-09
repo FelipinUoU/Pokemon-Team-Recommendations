@@ -171,15 +171,28 @@
     </span>`;
   }
 
-  // Selo de Pokémon exclusivo de versão (com a cor da versão). Não exibe nada se o Pokémon estiver em ambas as versões.
-  function renderVersionExclusiveBadge(mon) {
-    if (!ENGINE.getVersionExclusiveInfo || !mon) return '';
-    const info = ENGINE.getVersionExclusiveInfo(mon, getCurrentGame(), state.selectedVersion);
-    if (!info) return '';
-    const title = info.isTrade
-      ? `Exclusivo de ${info.version} — disponível na sua versão apenas por troca`
-      : `Exclusivo da versão ${info.version}`;
-    return `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded font-mono text-[10px] font-bold leading-none shrink-0 align-middle border border-white/20 shadow-sm" style="background:${info.color}; color:${info.textColor};" title="${title}">${info.isTrade ? '🔄 ' : ''}${info.version}</span>`;
+  // Selo de Pokémon exclusivo de versão (com a cor da versão) e selo "DLC" (caso exclusivo de DLC nos jogos atuais).
+  function renderVersionExclusiveBadge(mon, slot = null) {
+    if (!mon) return '';
+    const game = getCurrentGame();
+    const badges = [];
+
+    if (ENGINE.getVersionExclusiveInfo) {
+      const info = ENGINE.getVersionExclusiveInfo(mon, game);
+      if (info) {
+        const title = `Exclusivo da versão ${info.version} (obtido por troca na versão oposta)`;
+        badges.push(`<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded font-mono text-[10px] font-bold leading-none shrink-0 align-middle border border-white/20 shadow-sm" style="background:${info.color}; color:${info.textColor};" title="${title}">${info.version}</span>`);
+      }
+    }
+
+    if (ENGINE.getDlcBadgeInfo) {
+      const dlcInfo = ENGINE.getDlcBadgeInfo(mon, game, slot);
+      if (dlcInfo) {
+        badges.push(`<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded font-mono text-[10px] font-bold leading-none shrink-0 align-middle border border-amber-300/40 shadow-sm" style="background:linear-gradient(135deg,#f59e0b,#d97706); color:#111827;" title="Exclusivo de DLC — ${dlcInfo.dlcName}">${dlcInfo.label}</span>`);
+      }
+    }
+
+    return badges.join(' ');
   }
 
   // ==========================================================================
@@ -579,7 +592,7 @@
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-1.5 min-w-0">
                 <h3 class="font-headline font-extrabold text-base text-on-surface truncate">${eff.name}</h3>
-                ${renderVersionExclusiveBadge(slot.pokemon)}
+                ${renderVersionExclusiveBadge(slot.pokemon, slot)}
               </div>
 
               <div class="flex flex-wrap gap-1 my-1.5">
@@ -684,7 +697,6 @@
     }
 
     const scopeInfo = ENGINE.getDexScopeInfo ? ENGINE.getDexScopeInfo(game) : { eraNationalGen: game.generation || 9, natMaxNum: 1025 };
-    const activeVerLabel = state.selectedVersion || game.region;
     const pickerSwitchEl = document.getElementById('picker-dex-scope-switch');
     if (pickerSwitchEl) {
       pickerSwitchEl.innerHTML = `
@@ -693,7 +705,7 @@
             ? 'bg-primary-container text-on-primary-container font-bold shadow'
             : 'text-on-surface-variant hover:text-on-surface font-semibold'
         }">
-          📖 Pokédex (${activeVerLabel})
+          📖 Pokédex (${game.region})
         </button>
         <button type="button" data-picker-dex-scope="national" class="px-3 py-1.5 rounded-lg font-headline text-xs transition-all cursor-pointer ${
           state.pickerNatDex
@@ -711,12 +723,15 @@
       searchQuery: state.pickerSearch,
       includePreEvos: state.pickerPreEvos,
       allowNationalDex: state.pickerNatDex,
-      selectedVersion: state.selectedVersion,
       includeCurrentTeam: true
     });
 
     if (state.pickerSort === 'dex') {
-      candidates.sort((a, b) => a.pokemon.dex - b.pokemon.dex);
+      if (!state.pickerNatDex && ENGINE.getRegionalDexNumber) {
+        candidates.sort((a, b) => ENGINE.getRegionalDexNumber(a.pokemon, game) - ENGINE.getRegionalDexNumber(b.pokemon, game));
+      } else {
+        candidates.sort((a, b) => a.pokemon.dex - b.pokemon.dex);
+      }
     } else if (state.pickerSort === 'alpha') {
       candidates.sort((a, b) => a.pokemon.name.localeCompare(b.pokemon.name));
     } else {
@@ -725,7 +740,7 @@
 
     if (countBarEl) {
       countBarEl.innerHTML = `
-        <span>Encontrados <strong class="text-primary">${candidates.length} Pokémon</strong> na <strong>${state.pickerNatDex ? `National Dex da época de ${game.name} (Até Gen ${scopeInfo.eraNationalGen} • #${scopeInfo.natMaxNum})` : `Pokédex da versão ${activeVerLabel} (${game.region})`}</strong></span>
+        <span>Encontrados <strong class="text-primary">${candidates.length} Pokémon</strong> na <strong>${state.pickerNatDex ? `National Dex da época de ${game.name} (Até Gen ${scopeInfo.eraNationalGen} • #${scopeInfo.natMaxNum})` : `Pokédex do Jogo — ${game.name} (${game.region})`}</strong></span>
         <span>Clique em qualquer card para selecionar no <strong class="text-on-surface">Slot #${state.pickerTargetSlot + 1}</strong></span>
       `;
     }
@@ -746,12 +761,19 @@
     gridEl.innerHTML = candidates.map(rec => {
       const { pokemon, state: eff, synergyPercent, reasonText } = rec;
       const alreadyInTeam = currentTeamIds.has(pokemon.id);
+      const regDexNum = (!state.pickerNatDex && ENGINE.getRegionalDexNumber)
+        ? ENGINE.getRegionalDexNumber(pokemon, game)
+        : pokemon.dex;
+      const dexBadgeHtml = state.pickerNatDex
+        ? `<span class="px-2 py-0.5 rounded bg-surface-container-highest font-mono text-xs font-bold text-primary" title="National Pokédex ${formatDexNum(pokemon.dex)}">${formatDexNum(pokemon.dex)}</span>`
+        : `<span class="px-2 py-0.5 rounded bg-surface-container-highest font-mono text-xs font-bold text-primary" title="Pokédex de ${game.name}: ${formatDexNum(regDexNum)} (National Dex ${formatDexNum(pokemon.dex)})">${formatDexNum(regDexNum)}</span>`;
+
       return `
         <div data-pick-modal-mon="${pokemon.id}" class="bg-surface-container-low hover:bg-surface-container-high rounded-xl p-space-md border ${
           alreadyInTeam ? 'border-tertiary/50 bg-tertiary-container/5' : 'border-outline-variant/20 hover:border-primary/50'
         } flex flex-col justify-between gap-2.5 transition-all cursor-pointer group">
           <div class="flex items-center justify-between">
-            <span class="px-2 py-0.5 rounded bg-surface-container-highest font-mono text-xs font-bold text-primary">${formatDexNum(pokemon.dex)}</span>
+            ${dexBadgeHtml}
             <span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary font-mono text-[11px] font-bold">${synergyPercent}% Sinergia</span>
           </div>
 
@@ -760,7 +782,7 @@
               <img src="${ENGINE.getSpriteUrl(eff.spriteId)}" alt="${pokemon.name}" class="w-12 h-12 object-contain group-hover:scale-110 transition-transform" loading="lazy" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.dex}.png'" />
             </div>
             <div class="min-w-0">
-              <div class="flex items-center gap-1.5 min-w-0">
+              <div class="flex items-center gap-1.5 min-w-0 flex-wrap">
                 <h4 class="font-headline font-bold text-sm text-on-surface truncate group-hover:text-primary">${pokemon.name}</h4>
                 ${renderVersionExclusiveBadge(pokemon)}
               </div>
@@ -1032,7 +1054,8 @@
     }
     // ABA 3: MECÂNICAS ESPECIAIS DO JOGO
     else if (state.activeEditorTab === 'mechanics') {
-      const canMega = game.mechanics.includes('mega') && Boolean(slot.pokemon.mega);
+      const canMega = ENGINE.canPokemonMegaInGame ? ENGINE.canPokemonMegaInGame(slot.pokemon, game) : (game.mechanics.includes('mega') && Boolean(slot.pokemon.mega));
+      const canMegaAlt = ENGINE.canPokemonMegaAltInGame ? ENGINE.canPokemonMegaAltInGame(slot.pokemon, game) : Boolean(slot.pokemon.megaAlt);
       const canPrimal = game.mechanics.includes('primal') && Boolean(slot.pokemon.primal);
       const canZMove = game.mechanics.includes('zmove');
       const canDynamax = game.mechanics.includes('dynamax');
@@ -1063,10 +1086,10 @@
                   : (canMega ? 'bg-surface-container-low hover:bg-surface-container-high border-outline-variant/20 cursor-pointer' : 'bg-surface-container-lowest/50 border-outline-variant/10 opacity-50 cursor-not-allowed')
               }">
                 <div class="flex items-center gap-2 font-headline font-bold text-sm text-on-surface mb-1">
-                  <span>🧬</span> Mega Evolução ${canMega ? `(${slot.pokemon.mega.name})` : '(Indisponível)'}
+                  <span>🧬</span> Mega Evolução ${canMega ? `(${slot.megaVariant === 'x' && canMegaAlt ? slot.pokemon.megaAlt.name : slot.pokemon.mega.name})` : '(Indisponível)'}
                 </div>
-                <p class="text-xs text-on-surface-variant">${canMega ? slot.pokemon.mega.note : `${slot.pokemon.name} não possui Mega Evolução oficial.`}</p>
-                ${canMega && slot.pokemon.megaAlt ? `
+                <p class="text-xs text-on-surface-variant">${canMega ? (slot.megaVariant === 'x' && canMegaAlt ? slot.pokemon.megaAlt.note : slot.pokemon.mega.note) : `${slot.pokemon.name} não possui Mega Evolução disponível neste jogo.`}</p>
+                ${canMega && canMegaAlt ? `
                   <div class="flex gap-2 mt-3">
                     <button data-mega-variant="default" class="flex-1 py-1.5 px-2 rounded font-mono text-xs font-bold cursor-pointer ${
                       slot.megaVariant !== 'x' ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-highest text-on-surface'
@@ -1310,7 +1333,7 @@
             </div>
             <div class="flex flex-wrap items-center gap-2 mt-1">
               <h2 class="font-headline text-headline-md text-on-surface">${eff.name}</h2>
-              ${renderVersionExclusiveBadge(slot.pokemon)}
+              ${renderVersionExclusiveBadge(slot.pokemon, slot)}
               ${eff.types.map(t => renderTypeBadge(t, 'sm')).join('')}
             </div>
             <p class="text-xs text-on-surface-variant mt-0.5">
@@ -1544,7 +1567,11 @@
     });
 
     if (state.sortMode === 'dex') {
-      recommendations.sort((a, b) => a.pokemon.dex - b.pokemon.dex);
+      if (!state.allowNationalDex && ENGINE.getRegionalDexNumber) {
+        recommendations.sort((a, b) => ENGINE.getRegionalDexNumber(a.pokemon, game) - ENGINE.getRegionalDexNumber(b.pokemon, game));
+      } else {
+        recommendations.sort((a, b) => a.pokemon.dex - b.pokemon.dex);
+      }
     } else if (state.sortMode === 'alpha') {
       recommendations.sort((a, b) => a.pokemon.name.localeCompare(b.pokemon.name));
     } else {
@@ -1577,6 +1604,9 @@
     const cardsHtml = visibleList.map((rec, idx) => {
       const { pokemon, state: eff, synergyPercent, reasonText, canBeTeamMega, isStarterInGame } = rec;
       const isTopSynergy = state.sortMode === 'synergy' && idx < 3;
+      const displayDexNum = (!state.allowNationalDex && ENGINE.getRegionalDexNumber)
+        ? ENGINE.getRegionalDexNumber(pokemon, game)
+        : pokemon.dex;
 
       return `
         <div class="bg-surface-container-low hover:bg-surface-container-high rounded-xl p-space-md border ${
@@ -1584,7 +1614,7 @@
         } flex flex-col justify-between gap-3 transition-all">
           <div class="flex items-center justify-between gap-2">
             <div class="flex flex-wrap items-center gap-1.5">
-              <span class="px-2 py-0.5 rounded bg-surface-container-highest font-mono text-xs font-bold text-primary">${formatDexNum(pokemon.dex)}</span>
+              <span class="px-2 py-0.5 rounded bg-surface-container-highest font-mono text-xs font-bold text-primary">${formatDexNum(displayDexNum)}</span>
               ${isTopSynergy ? `<span class="px-2 py-0.5 rounded bg-secondary-container/25 text-secondary font-mono text-[11px] font-bold">🏆 Top #${idx + 1}</span>` : `<span class="text-[11px] font-mono text-on-surface-variant">${pokemon.role}</span>`}
               ${isStarterInGame ? `<span class="px-1.5 py-0.5 rounded bg-primary-container/20 text-primary font-mono text-[10px]">🌟 Inicial</span>` : ''}
               ${pokemon.mega && game.mechanics.includes('mega') ? `<span class="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono text-[10px]">🧬 Mega</span>` : ''}
@@ -2208,7 +2238,7 @@
           const itemObj = ITEMS[itemId];
           if (itemObj && itemObj.category === 'mega') {
             slot.mechanic = 'mega';
-            if (itemId === 'charizardite-x') slot.megaVariant = 'x';
+            if (slot.pokemon.megaAlt && itemId === slot.pokemon.megaAlt.stone) slot.megaVariant = 'x';
             else slot.megaVariant = 'default';
           } else if (itemObj && itemObj.category === 'zmove') {
             slot.mechanic = 'zmove';

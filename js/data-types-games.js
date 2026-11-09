@@ -347,7 +347,7 @@ window.POKE_DATA.GAMES = [
     id: 'gen9-lza',
     generation: 9,
     genLabel: 'Geração IX (Kalos)',
-    name: 'Pokémon Legends: Z-A',
+    name: 'Pokémon Legends: Z-A (+ DLC Mega Dimension)',
     versions: ['Legends: Z-A'],
     region: 'Kalos (Lumiose)',
     maxDexGen: 9,
@@ -356,8 +356,8 @@ window.POKE_DATA.GAMES = [
     hasItems: true,
     hasAbilities: true,
     starters: ['chikorita', 'tepig', 'totodile'],
-    featuredMons: ['feraligatr', 'emboar', 'meganium', 'lucario', 'gardevoir', 'charizard', 'garchomp', 'aegislash', 'greninja', 'sylveon', 'dragonite', 'absol', 'ampharos', 'metagross'],
-    notes: 'Retorno triunfal das MEGA EVOLUÇÕES em Lumiose City com iniciais Chikorita, Tepig e Totodile!'
+    featuredMons: ['feraligatr', 'emboar', 'meganium', 'greninja', 'delphox', 'chesnaught', 'dragonite', 'lucario', 'garchomp', 'gardevoir', 'charizard', 'excadrill', 'chandelure', 'hawlucha', 'starmie', 'clefable', 'baxcalibur', 'zeraora', 'zygardite', 'zygarde', 'raichu', 'absol', 'staraptor'],
+    notes: 'Retorno triunfal das MEGA EVOLUÇÕES em Lumiose City com 26 novas Megas do jogo base (Mega Meganium, Mega Emboar, Mega Feraligatr, Mega Greninja, Mega Dragonite, etc.) + 19 novas Megas da DLC Mega Dimension (Mega Raichu X/Y, Mega Lucario Z, Mega Garchomp Z, Mega Baxcalibur, Mega Zeraora, etc.)!'
   },
 
   // ==========================================================================

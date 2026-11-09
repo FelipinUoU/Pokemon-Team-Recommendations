@@ -60,8 +60,8 @@ window.POKE_ENGINE = (function () {
     let activeMechanicNote = null;
 
     // Verifica se a mecânica ativa altera forma/tipos/stats
-    if (slot.mechanic === 'mega' && mon.mega && game && game.mechanics.includes('mega')) {
-      const megaData = (slot.megaVariant === 'x' && mon.megaAlt) ? mon.megaAlt : mon.mega;
+    if (slot.mechanic === 'mega' && canPokemonMegaInGame(mon, game)) {
+      const megaData = (slot.megaVariant === 'x' && canPokemonMegaAltInGame(mon, game)) ? mon.megaAlt : mon.mega;
       types = [...megaData.types];
       stats = { ...megaData.stats };
       ability = megaData.ability;
@@ -421,6 +421,23 @@ window.POKE_ENGINE = (function () {
     };
   }
 
+  // Verifica se o Pokémon pode Mega Evoluir no jogo selecionado (Megas de Legends: Z-A / DLC ficam ativas em Legends: Z-A e Fan Games)
+  function canPokemonMegaInGame(pokemon, game) {
+    if (!pokemon || !pokemon.mega || !game || !game.mechanics || !game.mechanics.includes('mega')) return false;
+    if (pokemon.mega.isLzaMega && !['gen9-lza', 'fangame-unbound', 'fangame-lazarus'].includes(game.id)) {
+      return false;
+    }
+    return true;
+  }
+
+  function canPokemonMegaAltInGame(pokemon, game) {
+    if (!pokemon || !pokemon.megaAlt || !game || !game.mechanics || !game.mechanics.includes('mega')) return false;
+    if (pokemon.megaAlt.isLzaMega && !['gen9-lza', 'fangame-unbound', 'fangame-lazarus'].includes(game.id)) {
+      return false;
+    }
+    return true;
+  }
+
   // ==========================================================================
   // RECOMENDADOR DE MELHOR ITEM PARA UM POKÉMON (RESPEITANDO GERAÇÃO E MECÂNICA)
   // ==========================================================================
@@ -432,8 +449,9 @@ window.POKE_ENGINE = (function () {
     const results = [];
 
     // 1. Se Mega Evolução está ativa ou disponível
-    if (pokemon.mega && game && game.mechanics.includes('mega')) {
-      const stoneId = (currentSlot?.megaVariant === 'x' && pokemon.megaAlt)
+    if (canPokemonMegaInGame(pokemon, game)) {
+      const hasAlt = canPokemonMegaAltInGame(pokemon, game);
+      const stoneId = (currentSlot?.megaVariant === 'x' && hasAlt)
         ? pokemon.megaAlt.stone
         : pokemon.mega.stone;
       const stoneItem = ITEMS[stoneId];
@@ -442,10 +460,10 @@ window.POKE_ENGINE = (function () {
           ...stoneItem,
           score: currentSlot?.mechanic === 'mega' ? 200 : 120,
           badge: '🧬 Mega Stone Oficial',
-          reason: `Necessária para transformar em ${currentSlot?.megaVariant === 'x' && pokemon.megaAlt ? pokemon.megaAlt.name : pokemon.mega.name}`
+          reason: `Necessária para transformar em ${currentSlot?.megaVariant === 'x' && hasAlt ? pokemon.megaAlt.name : pokemon.mega.name}`
         });
       }
-      if (pokemon.megaAlt) {
+      if (hasAlt) {
         const altStone = ITEMS[pokemon.megaAlt.stone];
         if (altStone && altStone.id !== stoneId) {
           results.push({
@@ -555,8 +573,82 @@ window.POKE_ENGINE = (function () {
     451, 452, 453, 454, 456, 457, 458, 461, 462, 463, 465, 466, 467, 468, 469, 470, 471, 472, 473, 475, 476, 478
   ]);
 
+  // ==========================================================================
+  // CONJUNTOS DE POKÉMON EXCLUSIVOS DE DLC NOS JOGOS MODERNOS (GEN 8 & GEN 9)
+  // ==========================================================================
+  // Pokémon exclusivos das DLCs de Sword / Shield (The Isle of Armor & The Crown Tundra)
+  const SWSH_DLC_DEX = new Set([
+    1, 2, 3, 7, 8, 9, 27, 28, 29, 30, 31, 32, 33, 34, 39, 40, 41, 42, 54, 55, 60, 61, 62, 63, 64, 65,
+    72, 73, 79, 80, 81, 82, 102, 103, 104, 105, 108, 113, 114, 115, 116, 117, 120, 121, 123, 124, 125, 126, 127, 128,
+    137, 138, 139, 140, 141, 142, 144, 145, 146, 147, 148, 149, 150, 151,
+    169, 173, 174, 179, 180, 181, 183, 184, 186, 199, 206, 212, 214, 226, 227, 230, 233, 238, 239, 240, 241, 242, 243, 244, 245, 249, 250, 251,
+    252, 253, 254, 255, 256, 257, 258, 259, 260, 293, 294, 295, 298, 304, 305, 306, 318, 319, 333, 334, 345, 346, 347, 348, 359, 363, 364, 365, 369,
+    371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385,
+    403, 404, 405, 427, 428, 440, 442, 443, 444, 445, 451, 452, 462, 463, 465, 466, 467, 469, 474, 480, 481, 482, 483, 484, 485, 486, 487, 488, 494,
+    506, 507, 508, 531, 543, 544, 545, 548, 549, 551, 552, 553, 561, 564, 565, 566, 567, 570, 571, 587, 590, 591, 615, 619, 620, 621, 626, 636, 637, 638, 639, 640, 641, 642, 643, 644, 645, 646, 647, 649,
+    661, 662, 663, 679, 680, 681, 690, 691, 692, 693, 696, 697, 698, 699, 702, 703, 707, 716, 717, 718, 719, 721,
+    722, 723, 724, 725, 726, 727, 728, 729, 730, 744, 745, 753, 754, 764, 769, 770, 785, 786, 787, 788, 789, 790, 791, 792, 793, 794, 795, 796, 797, 798, 799, 800, 801, 802, 803, 804, 805, 806, 807,
+    891, 892, 893, 894, 895, 896, 897, 898
+  ]);
+
+  // Pokémon exclusivos das DLCs de Scarlet / Violet (The Teal Mask & The Indigo Disk)
+  const SV_DLC_DEX = new Set([
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 23, 24, 27, 28, 35, 36, 37, 38, 43, 44, 45, 60, 61, 62, 69, 70, 71, 72, 73, 74, 75, 76, 79, 84, 85, 86, 87, 95,
+    102, 103, 106, 107, 108, 109, 110, 111, 112, 116, 117, 123, 125, 126, 131, 137, 143, 144, 145, 146, 150, 151,
+    152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 167, 168, 173, 182, 186, 190, 193, 199, 207, 208, 209, 210, 218, 219, 220, 221, 227, 230, 233, 235, 236, 237, 239, 240, 243, 244, 245, 249, 250,
+    252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 270, 271, 272, 273, 274, 275, 299, 307, 308, 311, 312, 313, 314, 315, 322, 323, 328, 329, 330, 339, 340, 341, 342, 349, 350, 355, 356, 358, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386,
+    387, 388, 389, 390, 391, 392, 393, 394, 395, 401, 402, 406, 407, 408, 409, 410, 411, 417, 424, 433, 446, 463, 464, 466, 467, 469, 472, 473, 474, 476, 477, 480, 481, 482, 483, 484, 485, 486, 487, 488, 491, 492, 493,
+    495, 496, 497, 498, 499, 500, 501, 502, 503, 522, 523, 529, 530, 532, 533, 534, 540, 541, 542, 546, 547, 559, 560, 572, 573, 577, 578, 579, 595, 596, 607, 608, 609, 619, 620, 622, 623, 629, 630, 638, 639, 640, 643, 644, 646, 647, 648,
+    650, 651, 652, 653, 654, 655, 656, 657, 658, 677, 678, 686, 687, 703, 708, 709, 719, 720, 721,
+    722, 723, 724, 725, 726, 727, 728, 729, 730, 731, 732, 733, 736, 737, 738, 742, 743, 751, 752, 764, 774, 779, 782, 783, 784, 791, 792, 800, 801,
+    810, 811, 812, 813, 814, 815, 816, 817, 818, 845, 868, 869, 884, 891, 892, 894, 895, 896, 897, 898, 900, 901,
+    1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025
+  ]);
+  const SV_DLC_IDS = new Set([
+    'sandshrew-alola', 'sandslash-alola', 'vulpix-alola', 'ninetales-alola', 'raichu-alola'
+  ]);
+
+  // Pokémon & Megas exclusivos da DLC de Pokémon Legends: Z-A ("Mega Dimension")
+  const LZA_DLC_DEX = new Set([
+    25, 26, 172, 358, 396, 397, 398, 433, 485, 491, 622, 623, 677, 678, 739, 740, 767, 768,
+    801, 807, 951, 952, 969, 970, 978, 996, 997, 998
+  ]);
+
+  // Retorna informações do selo "DLC" caso o Pokémon (ou Mega ativa) seja exclusivo de uma DLC nos jogos atuais
+  function getDlcBadgeInfo(mon, game, slot = null) {
+    if (!mon || !game) return null;
+
+    if (game.id === 'gen8-swsh') {
+      if (SWSH_DLC_DEX.has(mon.dex)) {
+        return {
+          label: 'DLC',
+          dlcName: 'Pokémon Sword/Shield Expansion Pass (Isle of Armor / Crown Tundra)'
+        };
+      }
+    } else if (game.id === 'gen9-sv') {
+      if (SV_DLC_DEX.has(mon.dex) || SV_DLC_IDS.has(mon.id)) {
+        return {
+          label: 'DLC',
+          dlcName: 'Pokémon Scarlet/Violet DLC: The Hidden Treasure of Area Zero (Teal Mask / Indigo Disk)'
+        };
+      }
+    } else if (game.id === 'gen9-lza') {
+      const hasDlcMegaActive = slot && slot.mechanic === 'mega' && (
+        (slot.megaVariant === 'x' && mon.megaAlt && mon.megaAlt.isDlcMega) ||
+        (slot.megaVariant !== 'x' && mon.mega && mon.mega.isDlcMega)
+      );
+      const isPrimaryDlcMegaMon = Boolean(mon.mega && mon.mega.isDlcMega);
+      if (LZA_DLC_DEX.has(mon.dex) || isPrimaryDlcMegaMon || hasDlcMegaActive) {
+        return {
+          label: 'DLC',
+          dlcName: 'Pokémon Legends: Z-A — DLC Mega Dimension'
+        };
+      }
+    }
+    return null;
+  }
+
   // Exclusivos de versão: Pokémon que NÃO podem ser capturados naquela versão específica (exclusivos da versão oposta)
-  // Aplicado APENAS quando o switch está em "Pokédex" normal (useNationalDex === false).
   const VERSION_EXCLUSIONS = {
     // Geração I — Red / Blue / Yellow
     'Red': { dex: new Set([27, 28, 37, 38, 52, 53, 69, 70, 71, 126, 127]) },
@@ -641,16 +733,7 @@ window.POKE_ENGINE = (function () {
     'Violet': { dex: new Set([246, 247, 248, 425, 426, 434, 435, 633, 634, 635, 690, 691, 765, 874, 936, 984, 985, 986, 987, 988, 989, 1005, 1007, 1009, 1020, 1021]) }
   };
 
-  function isExcludedByVersion(mon, game, selectedVersion) {
-    const versionKey = selectedVersion || (game && game.versions && game.versions[0]) || null;
-    if (!versionKey || !VERSION_EXCLUSIONS[versionKey]) return false;
-    const rule = VERSION_EXCLUSIONS[versionKey];
-    if (rule.ids && rule.ids.has(mon.id)) return true;
-    if (rule.dex && rule.dex.has(mon.dex)) return true;
-    return false;
-  }
-
-  // Versão "par" de cada jogo (ex.: FireRed ↔ LeafGreen). Versões sem par (Yellow, Crystal, Emerald, Platinum) não recebem selo.
+  // Versão "par" de cada jogo (ex.: FireRed ↔ LeafGreen).
   const VERSION_COUNTERPART = {
     'Red': 'Blue', 'Blue': 'Red',
     'Gold': 'Silver', 'Silver': 'Gold',
@@ -699,18 +782,18 @@ window.POKE_ENGINE = (function () {
   }
 
   // Retorna o selo de exclusivo de versão de um Pokémon (ou null se estiver disponível em ambas as versões)
-  // { version, color, textColor, isTrade } — isTrade = true quando o exclusivo é da versão oposta (obtido por troca)
-  function getVersionExclusiveInfo(mon, game, selectedVersion) {
-    if (!mon || !game) return null;
-    const current = selectedVersion || (game.versions && game.versions[0]);
-    const counterpart = VERSION_COUNTERPART[current];
-    if (!current || !counterpart || !(game.versions || []).includes(counterpart)) return null;
+  function getVersionExclusiveInfo(mon, game) {
+    if (!mon || !game || !Array.isArray(game.versions)) return null;
+    const primaryVer = game.versions.find(v => VERSION_COUNTERPART[v]);
+    if (!primaryVer) return null;
+    const counterpart = VERSION_COUNTERPART[primaryVer];
+    if (!counterpart || !game.versions.includes(counterpart)) return null;
 
-    const excludedInCurrent = isRuleExcluding(current, mon);
+    const excludedInPrimary = isRuleExcluding(primaryVer, mon);
     const excludedInCounterpart = isRuleExcluding(counterpart, mon);
-    if (excludedInCurrent === excludedInCounterpart) return null; // Disponível em ambos (ou em nenhum)
+    if (excludedInPrimary === excludedInCounterpart) return null; // Disponível em ambos (ou em nenhum)
 
-    const exclusiveVersion = excludedInCurrent ? counterpart : current;
+    const exclusiveVersion = excludedInPrimary ? counterpart : primaryVer;
     const color = VERSION_COLORS[exclusiveVersion] || '#8ed5ff';
     const hex = color.replace('#', '');
     const r = parseInt(hex.substring(0, 2), 16);
@@ -720,8 +803,7 @@ window.POKE_ENGINE = (function () {
     return {
       version: exclusiveVersion,
       color,
-      textColor: luminance > 0.6 ? '#111827' : '#ffffff',
-      isTrade: excludedInCurrent
+      textColor: luminance > 0.6 ? '#111827' : '#ffffff'
     };
   }
 
@@ -745,8 +827,8 @@ window.POKE_ENGINE = (function () {
     };
   }
 
-  // Verifica se um Pokémon pertence à Pokédex Regional (e versão específica) do jogo ou à National Dex da época em que o jogo foi lançado
-  function isPokemonAvailableInGame(mon, game, useNationalDex = false, selectedVersion = null) {
+  // Verifica se um Pokémon pertence à Pokédex Regional do jogo ou à National Dex da época em que o jogo foi lançado
+  function isPokemonAvailableInGame(mon, game, useNationalDex = false) {
     if (!game) return true;
     const { eraNationalGen } = getDexScopeInfo(game);
 
@@ -760,17 +842,12 @@ window.POKE_ENGINE = (function () {
       return false;
     }
 
-    // 2. Se o Switch estiver em "National Dex", libera toda a National Dex da época sem restringir por versão!
+    // 2. Se o Switch estiver em "National Dex", libera toda a National Dex da época!
     if (useNationalDex) {
       return true;
     }
 
-    // 3. Se o Switch estiver em "Pokédex" (normal), filtra também pelos exclusivos da versão selecionada!
-    if (isExcludedByVersion(mon, game, selectedVersion)) {
-      return false;
-    }
-
-    // 4. Verifica se o Pokémon faz parte da Pokédex Regional da campanha daquele jogo:
+    // 3. No modo "Pokédex" do jogo, mostra todos os Pokémon da Pokédex Regional do game (incluindo exclusivos de ambas as versões com seu selo e DLCs!)
     const isFeatured = (game.featuredMons || []).some(f => f.toLowerCase() === mon.id.toLowerCase());
     const isStarter = (game.starters || []).includes(mon.starterRef) || (game.starters || []).includes(mon.id);
 
@@ -806,22 +883,22 @@ window.POKE_ENGINE = (function () {
         return mon.gen === 5 || B2W2_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
 
       case 'gen6-xy':
-        return mon.gen === 6 || mon.gen === 1 || Boolean(mon.mega) || SINNOH_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
+        return mon.gen === 6 || mon.gen === 1 || canPokemonMegaInGame(mon, game) || SINNOH_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
 
       case 'gen7-sm-usum':
         return mon.gen === 7 || mon.id.endsWith('-alola') || mon.gen === 1 || HOENN_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
 
       case 'gen8-swsh':
-        return mon.gen === 8 || mon.id.endsWith('-galar') || B2W2_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
+        return mon.gen === 8 || mon.id.endsWith('-galar') || B2W2_RETURNING_DEX.has(mon.dex) || SWSH_DLC_DEX.has(mon.dex) || isFeatured || isStarter;
 
       case 'gen8-pla':
         return mon.id.endsWith('-hisui') || mon.gen === 4 || SINNOH_RETURNING_DEX.has(mon.dex) || (mon.dex >= 899 && mon.dex <= 905) || isFeatured || isStarter;
 
       case 'gen9-sv':
-        return mon.gen === 9 || mon.id.endsWith('-paldea') || B2W2_RETURNING_DEX.has(mon.dex) || SINNOH_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
+        return mon.gen === 9 || mon.id.endsWith('-paldea') || B2W2_RETURNING_DEX.has(mon.dex) || SINNOH_RETURNING_DEX.has(mon.dex) || SV_DLC_DEX.has(mon.dex) || SV_DLC_IDS.has(mon.id) || isFeatured || isStarter;
 
       case 'gen9-lza':
-        return mon.gen === 6 || Boolean(mon.mega) || mon.gen === 9 || HOENN_RETURNING_DEX.has(mon.dex) || isFeatured || isStarter;
+        return mon.gen === 6 || Boolean(mon.mega) || Boolean(mon.megaAlt) || LZA_DLC_DEX.has(mon.dex) || HOENN_RETURNING_DEX.has(mon.dex) || [152, 153, 154, 158, 159, 160, 498, 499, 500].includes(mon.dex) || isFeatured || isStarter;
 
       case 'fangame-unbound':
         return mon.gen <= 7 || mon.id.endsWith('-hisui') || isFeatured || isStarter;
@@ -830,6 +907,141 @@ window.POKE_ENGINE = (function () {
       default:
         return mon.gen <= eraNationalGen;
     }
+  }
+
+  // ==========================================================================
+  // NUMERAÇÃO E ORDEM OFICIAL DA POKÉDEX REGIONAL DE CADA JOGO (ex: Emerald #001 Treecko)
+  // ==========================================================================
+  // Ordem oficial da Pokédex de Hoenn (Ruby / Sapphire / Emerald — #001 Treecko até #202 Deoxys)
+  const HOENN_REGIONAL_ORDER = [
+    252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275,
+    276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 63, 64, 65, 290, 291, 292, 293, 294, 295,
+    296, 297, 118, 119, 129, 130, 298, 183, 184, 74, 75, 76, 299, 300, 301, 41, 42, 169, 72, 73, 302, 303, 304, 305, 306,
+    66, 67, 68, 307, 308, 309, 310, 311, 312, 81, 82, 100, 101, 313, 314, 43, 44, 45, 182, 84, 85, 315, 316, 317, 318, 319,
+    320, 321, 322, 323, 218, 219, 324, 88, 89, 109, 110, 325, 326, 27, 28, 327, 227, 328, 329, 330, 331, 332, 333, 334,
+    335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 174, 39, 40, 349, 350, 351, 120, 121, 352,
+    353, 354, 355, 356, 357, 358, 359, 37, 38, 172, 25, 26, 54, 55, 360, 202, 177, 178, 203, 231, 232, 127, 214, 111, 112,
+    361, 362, 363, 364, 365, 366, 367, 368, 369, 222, 170, 171, 370, 116, 117, 230, 371, 372, 373, 374, 375, 376,
+    377, 378, 379, 380, 381, 382, 383, 384, 385, 386
+  ];
+
+  // Ordem oficial da Pokédex de Sinnoh (Diamond / Pearl / Platinum — #001 Turtwig até #210 Giratina)
+  const SINNOH_REGIONAL_ORDER = [
+    387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 63, 64, 65, 129, 130,
+    406, 315, 407, 41, 42, 169, 74, 75, 76, 95, 208, 408, 409, 410, 411, 66, 67, 68, 54, 55, 412, 413, 414, 265, 266, 267, 268, 269,
+    415, 416, 417, 418, 419, 420, 421, 422, 423, 214, 190, 424, 425, 426, 427, 428, 92, 93, 94, 200, 429, 198, 430, 431, 432,
+    118, 119, 339, 340, 433, 358, 434, 435, 307, 308, 436, 437, 77, 78, 438, 185, 439, 122, 440, 113, 242, 173, 35, 36,
+    441, 172, 25, 26, 163, 164, 442, 443, 444, 445, 446, 143, 201, 447, 448, 194, 195, 278, 279, 203, 449, 450, 298, 183, 184,
+    451, 452, 453, 454, 455, 223, 224, 456, 457, 72, 73, 349, 350, 458, 226, 459, 460, 215, 461, 480, 481, 482, 483, 484, 490,
+    468, 175, 176, 228, 229, 280, 281, 282, 475, 108, 463, 193, 469, 333, 334, 133, 134, 135, 136, 196, 197, 470, 471,
+    207, 472, 299, 476, 81, 82, 462, 137, 233, 474, 355, 356, 477, 123, 212, 239, 125, 466, 240, 126, 467, 220, 221, 473,
+    361, 362, 478, 359, 479, 111, 112, 464, 114, 465, 487
+  ];
+
+  // Ordem oficial da Pokédex de Johto (Gold / Silver / Crystal / HGSS — #001 Chikorita até #251 Celebi)
+  const JOHTO_REGIONAL_ORDER = [
+    152, 153, 154, 155, 156, 157, 158, 159, 160, 16, 17, 18, 21, 22, 163, 164, 19, 20, 161, 162, 172, 25, 26,
+    10, 11, 12, 13, 14, 15, 165, 166, 167, 168, 74, 75, 76, 41, 42, 169, 173, 35, 36, 174, 39, 40, 175, 176,
+    27, 28, 23, 24, 206, 179, 180, 181, 194, 195, 92, 93, 94, 201, 95, 208, 69, 70, 71, 187, 188, 189, 46, 47,
+    60, 61, 62, 186, 129, 130, 118, 119, 79, 80, 199, 43, 44, 45, 182, 96, 97, 63, 64, 65, 132, 204, 205,
+    29, 30, 31, 32, 33, 34, 193, 469, 191, 192, 102, 103, 185, 202, 48, 49, 123, 212, 127, 214, 109, 110, 88, 89,
+    81, 82, 100, 101, 190, 424, 209, 210, 37, 38, 58, 59, 234, 183, 184, 50, 51, 56, 57, 52, 53, 54, 55,
+    66, 67, 68, 236, 106, 107, 237, 203, 128, 241, 240, 126, 238, 124, 239, 125, 122, 235, 83, 177, 178,
+    211, 72, 73, 98, 99, 213, 120, 121, 90, 91, 222, 223, 224, 170, 171, 86, 87, 108, 463, 114, 465,
+    133, 134, 135, 136, 196, 197, 116, 117, 230, 207, 225, 220, 221, 473, 216, 217, 231, 232, 226, 227,
+    84, 85, 77, 78, 104, 105, 115, 111, 112, 198, 228, 229, 218, 219, 215, 200, 137, 233, 113, 242, 131,
+    138, 139, 140, 141, 142, 143, 3, 2, 1, 6, 5, 4, 9, 8, 7, 144, 145, 146, 243, 244, 245, 147, 148, 149, 246, 247, 248, 249, 250, 150, 151, 251
+  ];
+
+  const regionalDexCache = {};
+
+  function buildRegionalDexMapForGame(game) {
+    if (!game) return new Map();
+    if (regionalDexCache[game.id]) return regionalDexCache[game.id];
+
+    const map = new Map();
+    let counter = 1;
+
+    function assignByDex(dexNum) {
+      POKEMON.forEach(m => {
+        if (m.dex === dexNum && !map.has(m.id) && isPokemonAvailableInGame(m, game, false)) {
+          map.set(m.id, counter++);
+        }
+      });
+    }
+
+    if (['gen1-rb', 'gen1-yellow', 'gen3-frlg', 'gen7-lgpe'].includes(game.id)) {
+      POKEMON.forEach(m => {
+        if (isPokemonAvailableInGame(m, game, false)) {
+          if (m.dex === 808) map.set(m.id, 152);
+          else if (m.dex === 809) map.set(m.id, 153);
+          else map.set(m.id, m.dex);
+        }
+      });
+    } else if (['gen3-rse', 'gen6-oras'].includes(game.id)) {
+      HOENN_REGIONAL_ORDER.forEach(d => assignByDex(d));
+    } else if (['gen4-dpp', 'gen8-bdsp'].includes(game.id)) {
+      SINNOH_REGIONAL_ORDER.forEach(d => assignByDex(d));
+    } else if (['gen2-gsc', 'gen4-hgss'].includes(game.id)) {
+      // Corrige ordem dos iniciais de Kanto no fim da Johto Dex (1, 2, 3, 4, 5, 6, 7, 8, 9)
+      const johtoFixed = JOHTO_REGIONAL_ORDER.map(x => x);
+      johtoFixed.forEach(d => assignByDex(d));
+    } else if (game.id === 'gen5-bw') {
+      POKEMON.filter(m => m.gen === 5).sort((a, b) => a.dex - b.dex).forEach(m => {
+        // Na Pokédex de Unova, Snivy (#495) é #001 (e Victini #494 é #000)
+        map.set(m.id, m.dex - 494);
+      });
+    } else {
+      // Jogos de Unova B2W2, Kalos, Alola, Galar, Hisui, Paldea, Lumiose (Legends Z-A) e Fan Games:
+      // 1º: Iniciais oficiais do jogo e suas linhas evolutivas (#001 a #009)
+      const starterOrderByGame = {
+        'gen5-b2w2': [495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 509, 510, 519, 520, 521, 540, 541, 542, 191, 192, 506, 507, 508, 179, 180, 181, 54, 55, 298, 183, 184, 447, 448],
+        'gen6-xy': [650, 651, 652, 653, 654, 655, 656, 657, 658, 659, 660, 661, 662, 663, 664, 665, 666, 667, 668, 669, 670, 671, 672, 673, 674, 675, 676, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+        'gen7-sm-usum': [722, 723, 724, 725, 726, 727, 728, 729, 730, 731, 732, 733, 734, 735, 736, 737, 738],
+        'gen8-swsh': [810, 811, 812, 813, 814, 815, 816, 817, 818, 819, 820, 821, 822, 823, 824, 825, 826, 827, 828, 829, 830, 831, 832, 833, 834, 835, 836, 837, 838, 839],
+        'gen8-pla': [722, 723, 724, 155, 156, 157, 501, 502, 503, 399, 400, 396, 397, 398, 403, 404, 405, 265, 266, 267, 268, 269, 77, 78, 133, 134, 135, 136, 196, 197, 470, 471, 700, 41, 42, 169, 425, 426, 401, 402, 418, 419, 412, 413, 414, 74, 75, 76, 234, 899],
+        'gen9-sv': [906, 907, 908, 909, 910, 911, 912, 913, 914, 915, 916, 917, 918, 919, 920, 921, 922, 923],
+        'gen9-lza': [152, 153, 154, 498, 499, 500, 158, 159, 160, 650, 651, 652, 653, 654, 655, 656, 657, 658, 659, 660, 661, 662, 663, 664, 665, 666, 667, 668, 669, 670, 671],
+        'fangame-unbound': [374, 375, 376, 246, 247, 248, 443, 444, 445],
+        'fangame-lazarus': [4, 5, 6, 158, 159, 160, 252, 253, 254, 447, 448, 133, 280, 281, 282, 475]
+      };
+
+      const priorityDexList = starterOrderByGame[game.id] || [];
+      priorityDexList.forEach(d => assignByDex(d));
+
+      // 2º: Pokémon nativos da geração principal do jogo (não-DLC)
+      const targetGen = game.id === 'gen9-lza' ? 6 : game.generation;
+      POKEMON.forEach(m => {
+        if (!map.has(m.id) && m.gen === targetGen && isPokemonAvailableInGame(m, game, false) && !getDlcBadgeInfo(m, game)) {
+          map.set(m.id, counter++);
+        }
+      });
+
+      // 3º: Demais Pokémon da Pokédex Regional base (não-DLC)
+      POKEMON.forEach(m => {
+        if (!map.has(m.id) && isPokemonAvailableInGame(m, game, false) && !getDlcBadgeInfo(m, game)) {
+          map.set(m.id, counter++);
+        }
+      });
+    }
+
+    // Por fim, atribui numeração sequencial a qualquer Pokémon restante da Pokédex / DLC do jogo
+    POKEMON.forEach(m => {
+      if (!map.has(m.id) && isPokemonAvailableInGame(m, game, false)) {
+        map.set(m.id, counter++);
+      }
+    });
+
+    regionalDexCache[game.id] = map;
+    return map;
+  }
+
+  function getRegionalDexNumber(mon, game) {
+    if (!mon) return 1;
+    if (!game) return mon.dex;
+    const map = buildRegionalDexMapForGame(game);
+    if (map.has(mon.id)) return map.get(mon.id);
+    return mon.dex;
   }
 
   // ==========================================================================
@@ -844,8 +1056,8 @@ window.POKE_ENGINE = (function () {
 
     const candidates = POKEMON.filter(mon => {
       if (!filterOptions.includeCurrentTeam && currentIds.has(mon.id)) return false;
-      // Filtra respeitando o jogo selecionado, a versão escolhida (no modo Pokédex) e o Switch "Pokédex" vs "National Dex"
-      if (!isPokemonAvailableInGame(mon, game, Boolean(filterOptions.allowNationalDex), filterOptions.selectedVersion)) {
+      // Filtra respeitando o jogo selecionado e o Switch "Pokédex" vs "National Dex"
+      if (!isPokemonAvailableInGame(mon, game, Boolean(filterOptions.allowNationalDex))) {
         return false;
       }
       // Se não estiver pesquisando nem no modo Pokédex completa, prioriza formas finais nas recomendações
@@ -859,23 +1071,26 @@ window.POKE_ENGINE = (function () {
         if (!mon.types.includes(filterOptions.secondaryTypeFilter)) return false;
       }
       if (filterOptions.mechanicFilter === 'mega') {
-        if (!mon.mega) return false;
+        if (!canPokemonMegaInGame(mon, game) && !canPokemonMegaAltInGame(mon, game)) return false;
       }
       if (filterOptions.searchQuery) {
         const rawQ = filterOptions.searchQuery.toLowerCase().trim();
         const numQ = rawQ.replace(/^#0*/, '');
-        const paddedDex = String(mon.dex).padStart(3, '0');
+        const paddedNatDex = String(mon.dex).padStart(3, '0');
+        const regNum = getRegionalDexNumber(mon, game);
+        const paddedRegDex = String(regNum).padStart(3, '0');
         const matchName = mon.name.toLowerCase().includes(rawQ) || mon.id.toLowerCase().includes(rawQ);
         const matchRole = (mon.role || '').toLowerCase().includes(rawQ);
-        const matchDex = String(mon.dex) === numQ || paddedDex.includes(rawQ.replace('#', ''));
-        if (!matchName && !matchRole && !matchDex) return false;
+        const matchNatDex = String(mon.dex) === numQ || paddedNatDex.includes(rawQ.replace('#', ''));
+        const matchRegDex = !filterOptions.allowNationalDex && (String(regNum) === numQ || paddedRegDex.includes(rawQ.replace('#', '')));
+        if (!matchName && !matchRole && !matchNatDex && !matchRegDex) return false;
       }
       return true;
     });
 
     const scoredCandidates = candidates.map(mon => {
       // Se o jogo suporta Mega e a equipe ainda não tem Mega, avalia o Pokémon considerando sua potencial Mega
-      const canBeTeamMega = !hasMegaInTeam && mon.mega && game && game.mechanics.includes('mega');
+      const canBeTeamMega = !hasMegaInTeam && canPokemonMegaInGame(mon, game);
       const virtualSlot = {
         pokemon: mon,
         mechanic: canBeTeamMega ? 'mega' : null
@@ -1005,7 +1220,7 @@ window.POKE_ENGINE = (function () {
 
     let mechanic = forcedMechanic;
     if (!mechanic && game) {
-      if (game.mechanics.includes('mega') && pokemon.mega && !hasMegaAlready) {
+      if (canPokemonMegaInGame(pokemon, game) && !hasMegaAlready) {
         mechanic = 'mega';
       } else if (game.mechanics.includes('primal') && pokemon.primal) {
         mechanic = 'primal';
@@ -1286,6 +1501,18 @@ window.POKE_ENGINE = (function () {
     'Thermal Exchange': 'Aumenta o Ataque Físico em +1 estágio quando atingido por um golpe de Fogo e torna o Pokémon totalmente imune a Queimadura (Burn).',
     'Good as Gold': 'Concede imunidade total a todos os movimentos de Status usados por oponentes (imune a Spore, Thunder Wave, Toxic, Defog, Roar).',
     'Quark Drive': 'Sob Electric Terrain ou segurando Booster Energy, aumenta o seu maior atributo em 30% (ou 50% se for Velocidade).',
+    'No Guard': 'Garante que todos os ataques usados por ou contra este Pokémon tenham 100% de precisão (Hurricane, Focus Blast e Stone Edge nunca erram!).',
+    'Parental Bond': 'Permite que o Pokémon ataque 2 vezes seguidas no mesmo turno com cada golpe ofensivo.',
+    'Insomnia': 'Impede completamente que o Pokémon adormeça (imune a Spore, Sleep Powder e Hypnosis).',
+    'Pure Power': 'Dobra (2x) o atributo de Ataque Físico (Attack) efetivo do Pokémon em batalha!',
+    'Refrigerate': 'Transforma ataques do tipo Normal em tipo Gelo e aumenta seu poder em 20% (além de ganhar STAB Gelo!).',
+    'Delta Stream': 'Invoca ventos misteriosos extremos que eliminam todas as fraquezas dos Pokémon do tipo Voador.',
+    'Healer': '30% de chance ao final de cada turno de curar problemas de status dos aliados em batalha.',
+    'Aura Break': 'Inverte os efeitos de Fairy Aura e Dark Aura em campo, reduzindo o poder de ataques Fada e Sombrio do oponente.',
+    'Berserk': 'Aumenta o Ataque Especial (Sp. Atk) em +1 estágio sempre que um ataque reduz o HP do Pokémon abaixo da metade.',
+    'Bad Dreams': 'Causa dano de 1/8 do HP máximo por turno a qualquer Pokémon adversário que esteja dormindo.',
+    'Soul-Heart': 'Aumenta o Ataque Especial (Sp. Atk) em +1 estágio toda vez que qualquer Pokémon em campo é nocauteado.',
+    'Storm Drain': 'Concede imunidade total a ataques do tipo Água e aumenta o Ataque Especial (Sp. Atk) em +1 estágio ao ser atingido por um.',
     'Natural Talent': 'Habilidade versátil que mantém o foco e o desempenho consistente do Pokémon em batalha.'
   };
 
@@ -1424,6 +1651,10 @@ window.POKE_ENGINE = (function () {
     getRecommendedPokemonForTeam,
     getDexScopeInfo,
     getVersionExclusiveInfo,
+    getDlcBadgeInfo,
+    getRegionalDexNumber,
+    canPokemonMegaInGame,
+    canPokemonMegaAltInGame,
     isPokemonAvailableInGame,
     createOptimizedSlot,
     fetchPokemonFromPokeAPI,

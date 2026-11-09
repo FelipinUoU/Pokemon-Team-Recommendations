@@ -410,6 +410,618 @@ window.POKE_DATA.FULL_DEX_COMPACT = [
     });
   });
 
+  // ==========================================================================
+  // CATÁLOGO COMPLETO DE MEGA EVOLUÇÕES (CLÁSSICAS GEN 6 + LEGENDS: Z-A + DLC MEGA DIMENSION)
+  // ==========================================================================
+  const EXTRA_MEGA_EVOLUTIONS = {
+    // --- Clássicas da Geração 6 que faltavam na lista hidratada ---
+    'beedrill': {
+      mega: {
+        name: 'Mega Beedrill', stone: 'beedrillite', stoneName: 'Beedrillite', spriteId: 10090,
+        types: ['bug', 'poison'], ability: 'Adaptability',
+        stats: { hp: 65, atk: 150, def: 40, spa: 15, spd: 80, spe: 145 },
+        note: '150 Attack e 145 Speed com Adaptability (STAB 2x em U-turn e Poison Jab)!'
+      }
+    },
+    'pidgeot': {
+      mega: {
+        name: 'Mega Pidgeot', stone: 'pidgeotite', stoneName: 'Pidgeotite', spriteId: 10073,
+        types: ['normal', 'flying'], ability: 'No Guard',
+        stats: { hp: 83, atk: 80, def: 80, spa: 135, spd: 80, spe: 121 },
+        note: 'No Guard garante 100% de precisão em Hurricane e Heat Wave com 135 Sp. Atk!'
+      }
+    },
+    'slowbro': {
+      mega: {
+        name: 'Mega Slowbro', stone: 'slowbronite', stoneName: 'Slowbronite', spriteId: 10071,
+        types: ['water', 'psychic'], ability: 'Shell Armor',
+        stats: { hp: 95, atk: 75, def: 180, spa: 130, spd: 80, spe: 30 },
+        note: 'Muralha física impenetrável com 180 de Defense e imunidade a Critical Hits (Shell Armor)!'
+      }
+    },
+    'kangaskhan': {
+      mega: {
+        name: 'Mega Kangaskhan', stone: 'kangaskhanite', stoneName: 'Kangaskhanite', spriteId: 10039,
+        types: ['normal'], ability: 'Parental Bond',
+        stats: { hp: 105, atk: 125, def: 100, spa: 60, spd: 100, spe: 100 },
+        note: 'Parental Bond faz cada ataque atingir 2 vezes no mesmo turno!'
+      }
+    },
+    'pinsir': {
+      mega: {
+        name: 'Mega Pinsir', stone: 'pinsirite', stoneName: 'Pinsirite', spriteId: 10040,
+        types: ['bug', 'flying'], ability: 'Aerilate',
+        stats: { hp: 65, atk: 155, def: 120, spa: 65, spd: 90, spe: 105 },
+        note: 'Aerilate transforma Return e Quick Attack em golpes Voadores devastadores (+20% + STAB)!'
+      }
+    },
+    'mewtwo': {
+      mega: {
+        name: 'Mega Mewtwo Y', stone: 'mewtwonite-y', stoneName: 'Mewtwonite Y', spriteId: 10044,
+        types: ['psychic'], ability: 'Insomnia',
+        stats: { hp: 106, atk: 150, def: 70, spa: 194, spd: 120, spe: 140 },
+        note: '194 de Ataque Especial e 140 de Velocidade (780 BST)!'
+      },
+      megaAlt: {
+        name: 'Mega Mewtwo X', stone: 'mewtwonite-x', stoneName: 'Mewtwonite X', spriteId: 10043,
+        types: ['psychic', 'fighting'], ability: 'Steadfast',
+        stats: { hp: 106, atk: 190, def: 100, spa: 154, spd: 100, spe: 130 },
+        note: 'Ganha o tipo Lutador com colossais 190 de Ataque Físico (780 BST)!'
+      }
+    },
+    'steelix': {
+      mega: {
+        name: 'Mega Steelix', stone: 'steelixite', stoneName: 'Steelixite', spriteId: 10072,
+        types: ['steel', 'ground'], ability: 'Sand Force',
+        stats: { hp: 75, atk: 125, def: 230, spa: 55, spd: 95, spe: 30 },
+        note: '230 de Defesa Física e 125 de Attack com Sand Force!'
+      }
+    },
+    'houndoom': {
+      mega: {
+        name: 'Mega Houndoom', stone: 'houndoominite', stoneName: 'Houndoominite', spriteId: 10048,
+        types: ['dark', 'fire'], ability: 'Solar Power',
+        stats: { hp: 75, atk: 90, def: 90, spa: 140, spd: 90, spe: 115 },
+        note: '140 Sp. Atk e 115 Speed com Solar Power!'
+      }
+    },
+    'sableye': {
+      mega: {
+        name: 'Mega Sableye', stone: 'sablenite', stoneName: 'Sablenite', spriteId: 10066,
+        types: ['dark', 'ghost'], ability: 'Magic Bounce',
+        stats: { hp: 50, atk: 85, def: 125, spa: 85, spd: 115, spe: 20 },
+        note: 'Reflete hazards e status com Magic Bounce e apenas 1 fraqueza (Fada)!'
+      }
+    },
+    'medicham': {
+      mega: {
+        name: 'Mega Medicham', stone: 'medichamite', stoneName: 'Medichamite', spriteId: 10054,
+        types: ['fighting', 'psychic'], ability: 'Pure Power',
+        stats: { hp: 60, atk: 100, def: 85, spa: 80, spd: 85, spe: 100 },
+        note: 'Pure Power dobra seu Attack de 100 para um poder físico equivalente a 200 base!'
+      }
+    },
+    'sharpedo': {
+      mega: {
+        name: 'Mega Sharpedo', stone: 'sharpedonite', stoneName: 'Sharpedonite', spriteId: 10070,
+        types: ['water', 'dark'], ability: 'Strong Jaw',
+        stats: { hp: 70, atk: 140, def: 70, spa: 110, spd: 65, spe: 105 },
+        note: 'Strong Jaw aumenta Crunch e Ice Fang em +50% com 140 Attack!'
+      }
+    },
+    'camerupt': {
+      mega: {
+        name: 'Mega Camerupt', stone: 'cameruptite', stoneName: 'Cameruptite', spriteId: 10087,
+        types: ['fire', 'ground'], ability: 'Sheer Force',
+        stats: { hp: 70, atk: 120, def: 100, spa: 145, spd: 105, spe: 20 },
+        note: '145 Sp. Atk com Sheer Force (+30% em Fire Blast e Earth Power)!'
+      }
+    },
+    'banette': {
+      mega: {
+        name: 'Mega Banette', stone: 'banettite', stoneName: 'Banettite', spriteId: 10056,
+        types: ['ghost'], ability: 'Prankster',
+        stats: { hp: 64, atk: 165, def: 75, spa: 93, spd: 83, spe: 75 },
+        note: '165 de Attack combinado com prioridade em movimentos de status (Prankster)!'
+      }
+    },
+    'glalie': {
+      mega: {
+        name: 'Mega Glalie', stone: 'glalitite', stoneName: 'Glalitite', spriteId: 10074,
+        types: ['ice'], ability: 'Refrigerate',
+        stats: { hp: 80, atk: 120, def: 80, spa: 120, spd: 80, spe: 100 },
+        note: 'Refrigerate converte golpes Normais (Double-Edge/Explosion) em tipo Gelo +20%!'
+      }
+    },
+    'latias': {
+      mega: {
+        name: 'Mega Latias', stone: 'latiasite', stoneName: 'Latiasite', spriteId: 10062,
+        types: ['dragon', 'psychic'], ability: 'Levitate',
+        stats: { hp: 80, atk: 100, def: 120, spa: 140, spd: 150, spe: 110 },
+        note: '700 BST com 120 Def / 150 SpD e 140 Sp. Atk para Calm Mind imbatível!'
+      }
+    },
+    'latios': {
+      mega: {
+        name: 'Mega Latios', stone: 'latiosite', stoneName: 'Latiosite', spriteId: 10063,
+        types: ['dragon', 'psychic'], ability: 'Levitate',
+        stats: { hp: 80, atk: 130, def: 100, spa: 160, spd: 120, spe: 110 },
+        note: '700 BST com 160 Sp. Atk e 130 Attack!'
+      }
+    },
+    'rayquaza': {
+      mega: {
+        name: 'Mega Rayquaza', stone: 'dragon-ascent-mega', stoneName: 'Dragon Ascent (Meteorito)', spriteId: 10079,
+        types: ['dragon', 'flying'], ability: 'Delta Stream',
+        stats: { hp: 105, atk: 180, def: 100, spa: 180, spd: 100, spe: 115 },
+        note: '780 BST com 180 Attack, 180 Sp. Atk e Delta Stream que elimina as fraquezas do tipo Voador!'
+      }
+    },
+    'abomasnow': {
+      mega: {
+        name: 'Mega Abomasnow', stone: 'abomasite', stoneName: 'Abomasite', spriteId: 10060,
+        types: ['grass', 'ice'], ability: 'Snow Warning',
+        stats: { hp: 90, atk: 132, def: 105, spa: 132, spd: 105, spe: 30 },
+        note: 'Invoca Neve para Blizzard 100% preciso com 132 Attack e 132 Sp. Atk!'
+      }
+    },
+    'audino': {
+      mega: {
+        name: 'Mega Audino', stone: 'audinite', stoneName: 'Audinite', spriteId: 10069,
+        types: ['normal', 'fairy'], ability: 'Healer',
+        stats: { hp: 103, atk: 60, def: 126, spa: 80, spd: 126, spe: 50 },
+        note: 'Ganha o tipo Fada com 103 HP, 126 Defense e 126 Sp. Def!'
+      }
+    },
+    'diancie': {
+      mega: {
+        name: 'Mega Diancie', stone: 'diancite', stoneName: 'Diancite', spriteId: 10075,
+        types: ['rock', 'fairy'], ability: 'Magic Bounce',
+        stats: { hp: 50, atk: 160, def: 110, spa: 160, spd: 110, spe: 110 },
+        note: '700 BST com 160 Attack, 160 Sp. Atk, 110 Speed e Magic Bounce!'
+      }
+    },
+
+    // ========================================================================
+    // NOVAS MEGA EVOLUÇÕES DE POKÉMON LEGENDS: Z-A (JOGO BASE — 26 NOVAS MEGAS)
+    // ========================================================================
+    'clefable': {
+      mega: {
+        name: 'Mega Clefable', stone: 'clefablite', stoneName: 'Clefablite', spriteId: 36,
+        isLzaMega: true,
+        types: ['fairy', 'flying'], ability: 'Magic Guard',
+        stats: { hp: 95, atk: 80, def: 93, spa: 135, spd: 110, spe: 70 },
+        note: 'Nova Mega de Legends: Z-A! Ganha o tipo Fada/Voador (imune a Terrestre e Dragão) com 135 Sp. Atk e 110 Sp. Def!'
+      }
+    },
+    'victreebel': {
+      mega: {
+        name: 'Mega Victreebel', stone: 'victreebelite', stoneName: 'Victreebelite', spriteId: 71,
+        isLzaMega: true,
+        types: ['grass', 'poison'], ability: 'Corrosion',
+        stats: { hp: 80, atk: 125, def: 85, spa: 135, spd: 95, spe: 70 },
+        note: 'Nova Mega de Legends: Z-A! Atacante misto letal com 125 Attack e 135 Sp. Atk (590 BST)!'
+      }
+    },
+    'starmie': {
+      mega: {
+        name: 'Mega Starmie', stone: 'starmite', stoneName: 'Starmite', spriteId: 121,
+        isLzaMega: true,
+        types: ['water', 'psychic'], ability: 'Analytic',
+        stats: { hp: 60, atk: 140, def: 105, spa: 130, spd: 105, spe: 120 },
+        note: 'Nova Mega de Legends: Z-A! Chega a 660 BST com 140 Attack, 130 Sp. Atk, 105 nas duas defesas e 120 Speed!'
+      }
+    },
+    'dragonite': {
+      mega: {
+        name: 'Mega Dragonite', stone: 'dragonitite', stoneName: 'Dragonitite', spriteId: 149,
+        isLzaMega: true,
+        types: ['dragon', 'flying'], ability: 'Multiscale',
+        stats: { hp: 91, atk: 124, def: 115, spa: 145, spd: 125, spe: 100 },
+        note: 'Nova Mega de Legends: Z-A! 700 BST com 145 Sp. Atk, 124 Attack, 100 Speed e defesas colossais (115/125)!'
+      }
+    },
+    'meganium': {
+      mega: {
+        name: 'Mega Meganium', stone: 'meganiumite', stoneName: 'Meganiumite', spriteId: 154,
+        isLzaMega: true,
+        types: ['grass', 'fairy'], ability: 'Pixilate',
+        stats: { hp: 80, atk: 92, def: 115, spa: 143, spd: 115, spe: 80 },
+        note: 'Inicial de Legends: Z-A! Ganha o tipo Planta/Fada com 143 Sp. Atk e 115 em ambas as defesas!'
+      }
+    },
+    'feraligatr': {
+      mega: {
+        name: 'Mega Feraligatr', stone: 'feraligatrite', stoneName: 'Feraligatrite', spriteId: 160,
+        isLzaMega: true,
+        types: ['water', 'dragon'], ability: 'Strong Jaw',
+        stats: { hp: 85, atk: 160, def: 125, spa: 89, spd: 93, spe: 78 },
+        note: 'Inicial de Legends: Z-A! Muda para Água/Dragão com devastadores 160 de Attack e 125 de Defense!'
+      }
+    },
+    'skarmory': {
+      mega: {
+        name: 'Mega Skarmory', stone: 'skarmorite', stoneName: 'Skarmorite', spriteId: 227,
+        isLzaMega: true,
+        types: ['steel', 'flying'], ability: 'Tough Claws',
+        stats: { hp: 65, atk: 140, def: 110, spa: 40, spd: 100, spe: 110 },
+        note: 'Nova Mega de Legends: Z-A! Transforma Skarmory em um Sweeper veloz com 140 Attack e 110 Speed!'
+      }
+    },
+    'froslass': {
+      mega: {
+        name: 'Mega Froslass', stone: 'froslassite', stoneName: 'Froslassite', spriteId: 478,
+        isLzaMega: true,
+        types: ['ice', 'ghost'], ability: 'Snow Warning',
+        stats: { hp: 70, atk: 80, def: 70, spa: 140, spd: 100, spe: 120 },
+        note: 'Nova Mega de Legends: Z-A! 140 Sp. Atk e 120 Speed para varrer equipes com Blizzard e Shadow Ball!'
+      }
+    },
+    'emboar': {
+      mega: {
+        name: 'Mega Emboar', stone: 'emboarite', stoneName: 'Emboarite', spriteId: 500,
+        isLzaMega: true,
+        types: ['fire', 'fighting'], ability: 'Reckless',
+        stats: { hp: 110, atk: 148, def: 75, spa: 110, spd: 110, spe: 75 },
+        note: 'Inicial de Legends: Z-A! 148 de Attack, 110 Sp. Atk e 110 Sp. Def com Reckless!'
+      }
+    },
+    'excadrill': {
+      mega: {
+        name: 'Mega Excadrill', stone: 'excadrillite', stoneName: 'Excadrillite', spriteId: 530,
+        isLzaMega: true,
+        types: ['ground', 'steel'], ability: 'Mold Breaker',
+        stats: { hp: 110, atk: 165, def: 100, spa: 65, spd: 65, spe: 103 },
+        note: 'Nova Mega de Legends: Z-A! 165 de Attack, 100 de Defense e 103 de Speed!'
+      }
+    },
+    'scolipede': {
+      mega: {
+        name: 'Mega Scolipede', stone: 'scolipedite', stoneName: 'Scolipedite', spriteId: 545,
+        isLzaMega: true,
+        types: ['bug', 'poison'], ability: 'Speed Boost',
+        stats: { hp: 60, atk: 140, def: 149, spa: 75, spd: 99, spe: 62 },
+        note: 'Nova Mega de Legends: Z-A! 140 de Attack e 149 de Defense!'
+      }
+    },
+    'scrafty': {
+      mega: {
+        name: 'Mega Scrafty', stone: 'scraftinite', stoneName: 'Scraftinite', spriteId: 560,
+        isLzaMega: true,
+        types: ['dark', 'fighting'], ability: 'Intimidate',
+        stats: { hp: 65, atk: 130, def: 135, spa: 55, spd: 135, spe: 68 },
+        note: 'Nova Mega de Legends: Z-A! 130 de Attack com 135 Defense e 135 Sp. Def!'
+      }
+    },
+    'eelektross': {
+      mega: {
+        name: 'Mega Eelektross', stone: 'eelektrossite', stoneName: 'Eelektrossite', spriteId: 604,
+        isLzaMega: true,
+        types: ['electric'], ability: 'Levitate',
+        stats: { hp: 85, atk: 145, def: 80, spa: 135, spd: 90, spe: 80 },
+        note: 'Nova Mega de Legends: Z-A! Zero fraquezas (Elétrico + Levitate) com 145 Attack e 135 Sp. Atk (615 BST)!'
+      }
+    },
+    'chandelure': {
+      mega: {
+        name: 'Mega Chandelure', stone: 'chandelurite', stoneName: 'Chandelurite', spriteId: 609,
+        isLzaMega: true,
+        types: ['ghost', 'fire'], ability: 'Infiltrator',
+        stats: { hp: 60, atk: 75, def: 110, spa: 175, spd: 110, spe: 90 },
+        note: 'Nova Mega de Legends: Z-A! 175 de Sp. Atk e 110 em ambas as defesas!'
+      }
+    },
+    'chesnaught': {
+      mega: {
+        name: 'Mega Chesnaught', stone: 'chesnaughtite', stoneName: 'Chesnaughtite', spriteId: 652,
+        isLzaMega: true,
+        types: ['grass', 'fighting'], ability: 'Bulletproof',
+        stats: { hp: 88, atk: 137, def: 172, spa: 74, spd: 115, spe: 44 },
+        note: 'Nova Mega de Legends: Z-A! Tanque físico colosso com 172 de Defense, 115 Sp. Def e 137 Attack!'
+      }
+    },
+    'delphox': {
+      mega: {
+        name: 'Mega Delphox', stone: 'delphoxite', stoneName: 'Delphoxite', spriteId: 655,
+        isLzaMega: true,
+        types: ['fire', 'psychic'], ability: 'Magic Guard',
+        stats: { hp: 75, atk: 69, def: 72, spa: 159, spd: 125, spe: 134 },
+        note: 'Nova Mega de Legends: Z-A! 159 Sp. Atk, 134 Speed e 125 Sp. Def!'
+      }
+    },
+    'greninja': {
+      mega: {
+        name: 'Mega Greninja', stone: 'greninjite', stoneName: 'Greninjite', spriteId: 658,
+        isLzaMega: true,
+        types: ['water', 'dark'], ability: 'Protean',
+        stats: { hp: 72, atk: 125, def: 77, spa: 133, spd: 81, spe: 142 },
+        note: 'Nova Mega de Legends: Z-A! 142 de Speed, 133 Sp. Atk e 125 Attack!'
+      }
+    },
+    'pyroar': {
+      mega: {
+        name: 'Mega Pyroar', stone: 'pyroarite', stoneName: 'Pyroarite', spriteId: 668,
+        isLzaMega: true,
+        types: ['fire', 'normal'], ability: 'Competitive',
+        stats: { hp: 86, atk: 88, def: 92, spa: 129, spd: 86, spe: 126 },
+        note: 'Nova Mega de Legends: Z-A! 129 Sp. Atk e 126 Speed!'
+      }
+    },
+    'floette': {
+      mega: {
+        name: 'Mega Floette (Eternal)', stone: 'floettite', stoneName: 'Floettite', spriteId: 670,
+        isLzaMega: true,
+        types: ['fairy'], ability: 'Pixilate',
+        stats: { hp: 74, atk: 85, def: 87, spa: 155, spd: 148, spe: 102 },
+        note: 'Nova Mega de Legends: Z-A! Floette Eternal Flower atinge 651 BST com 155 Sp. Atk e 148 Sp. Def!'
+      }
+    },
+    'malamar': {
+      mega: {
+        name: 'Mega Malamar', stone: 'malamarite', stoneName: 'Malamarite', spriteId: 687,
+        isLzaMega: true,
+        types: ['dark', 'psychic'], ability: 'Contrary',
+        stats: { hp: 86, atk: 102, def: 88, spa: 98, spd: 120, spe: 88 },
+        note: 'Nova Mega de Legends: Z-A! Mantém Contrary (Superpower aumenta Attack e Defense) com 120 Sp. Def!'
+      }
+    },
+    'barbaracle': {
+      mega: {
+        name: 'Mega Barbaracle', stone: 'barbaracite', stoneName: 'Barbaracite', spriteId: 689,
+        isLzaMega: true,
+        types: ['rock', 'fighting'], ability: 'Tough Claws',
+        stats: { hp: 72, atk: 140, def: 130, spa: 64, spd: 106, spe: 88 },
+        note: 'Nova Mega de Legends: Z-A! Muda para Pedra/Lutador com 140 Attack, 130 Defense e Tough Claws!'
+      }
+    },
+    'dragalge': {
+      mega: {
+        name: 'Mega Dragalge', stone: 'dragalgite', stoneName: 'Dragalgite', spriteId: 691,
+        isLzaMega: true,
+        types: ['poison', 'dragon'], ability: 'Adaptability',
+        stats: { hp: 65, atk: 85, def: 105, spa: 132, spd: 163, spe: 44 },
+        note: 'Nova Mega de Legends: Z-A! 132 Sp. Atk e 163 Sp. Def com Adaptability (STAB 2x)!'
+      }
+    },
+    'hawlucha': {
+      mega: {
+        name: 'Mega Hawlucha', stone: 'hawluchanite', stoneName: 'Hawluchanite', spriteId: 701,
+        isLzaMega: true,
+        types: ['fighting', 'flying'], ability: 'Mold Breaker',
+        stats: { hp: 78, atk: 137, def: 100, spa: 74, spd: 93, spe: 118 },
+        note: 'Nova Mega de Legends: Z-A! 137 de Attack, 100 Defense e 118 de Speed (600 BST)!'
+      }
+    },
+    'zygarde': {
+      mega: {
+        name: 'Mega Zygarde', stone: 'zygardite', stoneName: 'Zygardite', spriteId: 718,
+        isLzaMega: true,
+        types: ['dragon', 'ground'], ability: 'Aura Break',
+        stats: { hp: 216, atk: 70, def: 91, spa: 216, spd: 85, spe: 100 },
+        note: 'Nova Mega Lendária de Legends: Z-A! 778 BST com 216 de HP e 216 de Sp. Atk!'
+      }
+    },
+    'drampa': {
+      mega: {
+        name: 'Mega Drampa', stone: 'drampanite', stoneName: 'Drampanite', spriteId: 780,
+        isLzaMega: true,
+        types: ['normal', 'dragon'], ability: 'Berserk',
+        stats: { hp: 78, atk: 85, def: 110, spa: 160, spd: 116, spe: 36 },
+        note: 'Nova Mega de Legends: Z-A! 160 Sp. Atk, 110 Defense e 116 Sp. Def!'
+      }
+    },
+    'falinks': {
+      mega: {
+        name: 'Mega Falinks', stone: 'falinksite', stoneName: 'Falinksite', spriteId: 870,
+        isLzaMega: true,
+        types: ['fighting'], ability: 'Defiant',
+        stats: { hp: 65, atk: 135, def: 135, spa: 70, spd: 65, spe: 100 },
+        note: 'Nova Mega de Legends: Z-A! 135 Attack, 135 Defense e 100 Speed!'
+      }
+    },
+
+    // ========================================================================
+    // MEGA EVOLUÇÕES DA DLC DE LEGENDS: Z-A ("MEGA DIMENSION" — 19 MEGAS)
+    // ========================================================================
+    'raichu': {
+      mega: {
+        name: 'Mega Raichu Y', stone: 'raichunite-y', stoneName: 'Raichunite Y', spriteId: 26,
+        isLzaMega: true, isDlcMega: true,
+        types: ['electric', 'psychic'], ability: 'Surge Surfer',
+        stats: { hp: 60, atk: 100, def: 55, spa: 160, spd: 80, spe: 130 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! Vira Elétrico/Psíquico com 160 Sp. Atk e 130 Speed!'
+      },
+      megaAlt: {
+        name: 'Mega Raichu X', stone: 'raichunite-x', stoneName: 'Raichunite X', spriteId: 26,
+        isLzaMega: true, isDlcMega: true,
+        types: ['electric', 'fighting'], ability: 'Iron Fist',
+        stats: { hp: 60, atk: 135, def: 95, spa: 90, spd: 95, spe: 110 },
+        bestMoves: ['wild-charge', 'close-combat', 'volt-switch', 'brick-break'],
+        note: 'DLC Mega Dimension (Legends: Z-A)! Vira Elétrico/Lutador físico com 135 Attack e 110 Speed!'
+      }
+    },
+    'chimecho': {
+      mega: {
+        name: 'Mega Chimecho', stone: 'chimechite', stoneName: 'Chimechite', spriteId: 358,
+        isLzaMega: true, isDlcMega: true,
+        types: ['psychic', 'steel'], ability: 'Levitate',
+        stats: { hp: 75, atk: 50, def: 110, spa: 135, spd: 120, spe: 65 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! Ganha o tipo Psíquico/Metálico + Levitate com 135 Sp. Atk e 110/120 nas defesas!'
+      }
+    },
+    'absol': {
+      megaAlt: {
+        name: 'Mega Absol Z', stone: 'absolite-z', stoneName: 'Absolite Z', spriteId: 359,
+        isLzaMega: true, isDlcMega: true,
+        types: ['dark', 'ghost'], ability: 'Magic Bounce',
+        stats: { hp: 65, atk: 154, def: 60, spa: 75, spd: 60, spe: 151 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! Ganha o tipo Sombrio/Fantasma com 154 Attack e 151 Speed!'
+      }
+    },
+    'staraptor': {
+      mega: {
+        name: 'Mega Staraptor', stone: 'staraptorite', stoneName: 'Staraptorite', spriteId: 398,
+        isLzaMega: true, isDlcMega: true,
+        types: ['flying', 'fighting'], ability: 'Reckless',
+        stats: { hp: 85, atk: 140, def: 100, spa: 60, spd: 90, spe: 110 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! Ganha o tipo Voador/Lutador (STAB em Close Combat!) com 140 Attack e 110 Speed!'
+      }
+    },
+    'garchomp': {
+      megaAlt: {
+        name: 'Mega Garchomp Z', stone: 'garchompite-z', stoneName: 'Garchompite Z', spriteId: 445,
+        isLzaMega: true, isDlcMega: true,
+        types: ['dragon'], ability: 'Tough Claws',
+        stats: { hp: 108, atk: 130, def: 85, spa: 141, spd: 85, spe: 151 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! Dragão puro hiper-veloz com 151 Speed, 130 Attack e 141 Sp. Atk (700 BST)!'
+      }
+    },
+    'lucario': {
+      megaAlt: {
+        name: 'Mega Lucario Z', stone: 'lucarionite-z', stoneName: 'Lucarionite Z', spriteId: 448,
+        isLzaMega: true, isDlcMega: true,
+        types: ['fighting', 'steel'], ability: 'Adaptability',
+        stats: { hp: 70, atk: 100, def: 70, spa: 164, spd: 70, spe: 151 },
+        bestMoves: ['aura-sphere', 'flash-cannon', 'nasty-plot', 'vacuum-wave'],
+        note: 'DLC Mega Dimension (Legends: Z-A)! Foco Especial extremo com 164 Sp. Atk e 151 Speed com Adaptability!'
+      }
+    },
+    'heatran': {
+      mega: {
+        name: 'Mega Heatran', stone: 'heatranite', stoneName: 'Heatranite', spriteId: 485,
+        isLzaMega: true, isDlcMega: true,
+        types: ['fire', 'steel'], ability: 'Flash Fire',
+        stats: { hp: 91, atk: 120, def: 106, spa: 175, spd: 141, spe: 67 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! 700 BST com colossais 175 Sp. Atk e 141 Sp. Def!'
+      }
+    },
+    'darkrai': {
+      mega: {
+        name: 'Mega Darkrai', stone: 'darkraite', stoneName: 'Darkraite', spriteId: 491,
+        isLzaMega: true, isDlcMega: true,
+        types: ['dark'], ability: 'Bad Dreams',
+        stats: { hp: 70, atk: 120, def: 130, spa: 165, spd: 130, spe: 85 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! 700 BST com 165 Sp. Atk e 130 em ambas as defesas!'
+      }
+    },
+    'golurk': {
+      mega: {
+        name: 'Mega Golurk', stone: 'golurkite', stoneName: 'Golurkite', spriteId: 623,
+        isLzaMega: true, isDlcMega: true,
+        types: ['ground', 'ghost'], ability: 'Iron Fist',
+        stats: { hp: 89, atk: 159, def: 105, spa: 70, spd: 105, spe: 55 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! 159 de Attack e 105 nas duas defesas!'
+      }
+    },
+    'meowstic': {
+      mega: {
+        name: 'Mega Meowstic', stone: 'meowsticite', stoneName: 'Meowsticite', spriteId: 678,
+        isLzaMega: true, isDlcMega: true,
+        types: ['psychic'], ability: 'Prankster',
+        stats: { hp: 74, atk: 48, def: 76, spa: 143, spd: 101, spe: 124 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! 143 Sp. Atk e 124 Speed!'
+      }
+    },
+    'crabominable': {
+      mega: {
+        name: 'Mega Crabominable', stone: 'crabominite', stoneName: 'Crabominite', spriteId: 740,
+        isLzaMega: true, isDlcMega: true,
+        types: ['fighting', 'ice'], ability: 'Iron Fist',
+        stats: { hp: 97, atk: 157, def: 122, spa: 62, spd: 107, spe: 33 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! 157 Attack, 122 Defense e 107 Sp. Def com Iron Fist!'
+      }
+    },
+    'golisopod': {
+      mega: {
+        name: 'Mega Golisopod', stone: 'golisopodite', stoneName: 'Golisopodite', spriteId: 768,
+        isLzaMega: true, isDlcMega: true,
+        types: ['bug', 'water'], ability: 'Shell Armor',
+        stats: { hp: 75, atk: 150, def: 175, spa: 70, spd: 120, spe: 40 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! Sem Emergency Exit, com 150 Attack, 175 Defense e 120 Sp. Def!'
+      }
+    },
+    'magearna': {
+      mega: {
+        name: 'Mega Magearna', stone: 'magearnite', stoneName: 'Magearnite', spriteId: 801,
+        isLzaMega: true, isDlcMega: true,
+        types: ['steel', 'fairy'], ability: 'Soul-Heart',
+        stats: { hp: 80, atk: 125, def: 115, spa: 170, spd: 115, spe: 95 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! 700 BST com 170 Sp. Atk, 95 Speed e o melhor tipo defensivo do jogo!'
+      }
+    },
+    'zeraora': {
+      mega: {
+        name: 'Mega Zeraora', stone: 'zeraorite', stoneName: 'Zeraorite', spriteId: 807,
+        isLzaMega: true, isDlcMega: true,
+        types: ['electric'], ability: 'Volt Absorb',
+        stats: { hp: 88, atk: 157, def: 75, spa: 147, spd: 80, spe: 153 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! 700 BST com 157 Attack, 147 Sp. Atk e 153 Speed!'
+      }
+    },
+    'scovillain': {
+      mega: {
+        name: 'Mega Scovillain', stone: 'scovillainite', stoneName: 'Scovillainite', spriteId: 952,
+        isLzaMega: true, isDlcMega: true,
+        types: ['grass', 'fire'], ability: 'Chlorophyll',
+        stats: { hp: 65, atk: 138, def: 85, spa: 138, spd: 85, spe: 75 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! 138 Attack e 138 Sp. Atk com combinação única Planta/Fogo!'
+      }
+    },
+    'glimmora': {
+      mega: {
+        name: 'Mega Glimmora', stone: 'glimmorite', stoneName: 'Glimmorite', spriteId: 970,
+        isLzaMega: true, isDlcMega: true,
+        types: ['rock', 'poison'], ability: 'Corrosion',
+        stats: { hp: 83, atk: 90, def: 105, spa: 150, spd: 96, spe: 101 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! 150 Sp. Atk, 105 Defense e 101 Speed (625 BST)!'
+      }
+    },
+    'tatsugiri': {
+      mega: {
+        name: 'Mega Tatsugiri', stone: 'tatsugirinite', stoneName: 'Tatsugirinite', spriteId: 978,
+        isLzaMega: true, isDlcMega: true,
+        types: ['dragon', 'water'], ability: 'Storm Drain',
+        stats: { hp: 68, atk: 65, def: 90, spa: 135, spd: 125, spe: 92 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! 135 Sp. Atk e 125 Sp. Def (Curly, Droopy & Stretchy)!'
+      }
+    },
+    'baxcalibur': {
+      mega: {
+        name: 'Mega Baxcalibur', stone: 'baxcaliburite', stoneName: 'Baxcaliburite', spriteId: 998,
+        isLzaMega: true, isDlcMega: true,
+        types: ['dragon', 'ice'], ability: 'Thermal Exchange',
+        stats: { hp: 115, atk: 165, def: 102, spa: 95, spd: 96, spe: 104 },
+        note: 'DLC Mega Dimension (Legends: Z-A)! 165 Attack, 104 Speed e defesas 102/96 com Thermal Exchange!'
+      }
+    }
+  };
+
+  const itemsCatalog = window.POKE_DATA.ITEMS || {};
+  existingList.forEach(mon => {
+    const extra = EXTRA_MEGA_EVOLUTIONS[mon.id];
+    if (!extra) return;
+
+    if (extra.mega && !mon.mega) {
+      mon.mega = extra.mega;
+    }
+    if (extra.megaAlt && !mon.megaAlt) {
+      mon.megaAlt = extra.megaAlt;
+    }
+
+    [mon.mega, mon.megaAlt].forEach(m => {
+      if (m && m.stone && !itemsCatalog[m.stone]) {
+        itemsCatalog[m.stone] = {
+          id: m.stone,
+          name: m.stoneName || m.stone.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+          minGen: m.isLzaMega ? 9 : 6,
+          category: 'mega',
+          icon: '🧬',
+          desc: `Permite Mega Evoluir para ${m.name} (${m.note})`
+        };
+      }
+    });
+  });
+
   // Ordena lista global por número da Pokédex
   existingList.sort((a, b) => a.dex - b.dex);
 })();
