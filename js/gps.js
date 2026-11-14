@@ -1402,8 +1402,6 @@ function doesAreaMatchFilter(area) {
 function syncModeSidebarUI() {
   const btnPokemon = document.getElementById("btn-gps-mode-pokemon");
   const btnItems = document.getElementById("btn-gps-mode-items");
-  const badgePokemon = document.getElementById("badge-mode-pokemon");
-  const badgeItems = document.getElementById("badge-mode-items");
   const searchInput = document.getElementById("gps-search-input");
   const methodSelect = document.getElementById("gps-method-select");
 
@@ -1413,25 +1411,9 @@ function syncModeSidebarUI() {
     if (!isItems) {
       btnPokemon.className = "w-full text-left p-space-md rounded-xl bg-surface-container-high border border-primary/50 shadow-md transition-all cursor-pointer flex items-start gap-3";
       btnItems.className = "w-full text-left p-space-md rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/40 transition-all cursor-pointer flex items-start gap-3";
-      if (badgePokemon) {
-        badgePokemon.textContent = "Ativo";
-        badgePokemon.className = "px-2 py-0.5 rounded-full bg-primary text-on-primary font-label-sm text-[10px] font-bold";
-      }
-      if (badgeItems) {
-        badgeItems.textContent = "Disponível";
-        badgeItems.className = "px-2 py-0.5 rounded-full bg-surface-container-highest text-secondary border border-secondary/30 font-label-sm text-[10px]";
-      }
     } else {
       btnItems.className = "w-full text-left p-space-md rounded-xl bg-surface-container-high border border-secondary/60 shadow-md transition-all cursor-pointer flex items-start gap-3";
       btnPokemon.className = "w-full text-left p-space-md rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/40 transition-all cursor-pointer flex items-start gap-3";
-      if (badgeItems) {
-        badgeItems.textContent = "Ativo";
-        badgeItems.className = "px-2 py-0.5 rounded-full bg-secondary text-on-secondary font-label-sm text-[10px] font-bold";
-      }
-      if (badgePokemon) {
-        badgePokemon.textContent = "Disponível";
-        badgePokemon.className = "px-2 py-0.5 rounded-full bg-surface-container-highest text-primary border border-primary/30 font-label-sm text-[10px]";
-      }
     }
   }
 
