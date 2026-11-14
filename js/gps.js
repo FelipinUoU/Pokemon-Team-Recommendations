@@ -1678,7 +1678,7 @@ function renderSelectedAreaDetails() {
 
   const regionTitleEl = document.getElementById("map-region-title");
   if (regionTitleEl) {
-    regionTitleEl.textContent = `Região de ${gameConfig.region} — ${gameConfig.name}`;
+    regionTitleEl.textContent = `Região de ${gameConfig.region}`;
   }
 
   // Update telemetry HUD on map
