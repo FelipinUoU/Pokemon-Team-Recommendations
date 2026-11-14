@@ -220,6 +220,17 @@
     return `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-label-sm text-[10px] font-bold bg-[#e6005c]/20 text-[#ff5c8d] border border-[#ff2a6d]/55 shrink-0 ${extraClass}" title="${title}">${svg}<span>Gigantamax</span></span>`;
   }
 
+  // Ícone de pesquisa ao lado direito do nome do Pokémon para buscá-lo no GPS na versão do jogo atual
+  function renderPokemonGpsSearchLink(mon, sizeClass = 'w-5 h-5', iconSize = 'text-[13px]') {
+    if (!mon) return '';
+    const game = getCurrentGame();
+    const cleanName = (mon.name || '').replace(/\s*\(.*?\)\s*/g, '').trim();
+    const href = `gps.html?game=${encodeURIComponent(state.selectedGameId)}&mode=pokemon&q=${encodeURIComponent(cleanName)}`;
+    return `<a href="${href}" data-gps-locate="true" class="inline-flex items-center justify-center ${sizeClass} rounded bg-surface-container-lowest hover:bg-primary-container hover:text-on-primary-container text-primary border border-primary/30 shrink-0 transition-colors" title="Pesquisar ${mon.name} no GPS Pokémon (${game.name})">
+      <span class="material-symbols-outlined ${iconSize}">search</span>
+    </a>`;
+  }
+
   // ==========================================================================
   // 0. RENDERIZAÇÃO DO MENU LATERAL DE EQUIPES SALVAS (STITCH DRAWER)
   // ==========================================================================
@@ -508,6 +519,7 @@
                         <div class="min-w-0">
                           <div class="flex items-center gap-1">
                             <span class="text-xs font-semibold text-on-surface truncate">${rec.pokemon.name}</span>
+                            ${renderPokemonGpsSearchLink(rec.pokemon, 'w-4 h-4', 'text-[11px]')}
                             ${renderVersionExclusiveBadge(rec.pokemon)}
                           </div>
                           <span class="text-[10px] font-mono text-tertiary">${rec.synergyPercent}% sinergia</span>
@@ -638,6 +650,7 @@
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-1.5 min-w-0">
                 <h3 class="font-headline font-extrabold text-base text-on-surface truncate">${eff.name}</h3>
+                ${renderPokemonGpsSearchLink(slot.pokemon, 'w-5 h-5', 'text-[13px]')}
                 ${renderVersionExclusiveBadge(slot.pokemon, slot)}
               </div>
 
@@ -838,6 +851,7 @@
             <div class="min-w-0">
               <div class="flex items-center gap-1.5 min-w-0 flex-wrap">
                 <h4 class="font-headline font-bold text-sm text-on-surface truncate group-hover:text-primary">${pokemon.name}</h4>
+                ${renderPokemonGpsSearchLink(pokemon, 'w-4 h-4', 'text-[12px]')}
                 ${renderVersionExclusiveBadge(pokemon)}
               </div>
               <div class="flex flex-wrap gap-1 mt-1">
@@ -1292,13 +1306,10 @@
               <span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-mono text-xs font-bold">SLOT #${state.activeSlotIndex + 1} EM FOCO</span>
               <span class="font-mono text-xs text-on-surface-variant font-bold">${formatDexNum(eff.dex)}</span>
               ${renderGigantamaxBadge(slot.pokemon)}
-              <a href="gps.html?game=${encodeURIComponent(state.selectedGameId)}&mode=pokemon&q=${encodeURIComponent(slot.pokemon.name)}" data-gps-locate="true" class="px-2.5 py-1 rounded-lg bg-surface-container-lowest hover:bg-primary-container text-primary hover:text-on-primary-container border border-primary/30 font-mono text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer" title="Localizar ${slot.pokemon.name} no GPS Pokémon (${game.name})">
-                <span class="material-symbols-outlined text-[14px]">search</span>
-                Onde Capturar (GPS)
-              </a>
             </div>
             <div class="flex flex-wrap items-center gap-2 mt-1">
               <h2 class="font-headline text-headline-md text-on-surface">${eff.name}</h2>
+              ${renderPokemonGpsSearchLink(slot.pokemon, 'w-6 h-6', 'text-[15px]')}
               ${renderVersionExclusiveBadge(slot.pokemon, slot)}
               ${eff.types.map(t => renderTypeBadge(t, 'sm')).join('')}
             </div>
@@ -1697,6 +1708,7 @@
             <div class="min-w-0 flex-1">
               <h4 class="font-headline font-bold text-base text-on-surface truncate flex items-center gap-1.5">
                 <span class="truncate">${pokemon.name} ${canBeTeamMega ? `<small class="text-xs text-primary font-normal">(${pokemon.mega.name})</small>` : ''}</span>
+                ${renderPokemonGpsSearchLink(pokemon, 'w-5 h-5', 'text-[13px]')}
                 ${renderVersionExclusiveBadge(pokemon)}
               </h4>
               <div class="flex flex-wrap items-center gap-1 my-1">
