@@ -341,10 +341,9 @@
             <optgroup label="Geração VIII" class="bg-surface-container-highest text-on-surface">
               <option value="gen8-swsh">Pokémon Sword / Shield</option>
               <option value="gen8-bdsp">Pokémon Brilliant Diamond / Shining Pearl</option>
-              <option value="gen8-pla">Pokémon Legends: Arceus</option>
             </optgroup>
             <optgroup label="Fan Game / ROM Hack" class="bg-surface-container-highest text-on-surface">
-              <option value="fangame-unbound">Pokémon Unbound (Borrius)</option>
+              <option value="fangame-unbound">⚠️ Pokémon Unbound (Borrius) — [Mapa Bugado]</option>
               <option value="fangame-lazarus">Pokémon Lazarus (Ilios)</option>
             </optgroup>
           </select>
@@ -415,6 +414,28 @@
               Região de Kanto
             </h2>
             <p class="font-label-sm text-label-sm text-on-surface-variant">Selecione qualquer rota, caverna ou zona especial no mapa abaixo para inspecionar os Pokémon e taxas de aparição</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- AVISO CHAMATIVO DE MAPA BUGADO (EXIBIDO EM POKÉMON UNBOUND) -->
+      <div id="unbound-bug-warning-banner" class="hidden px-space-md py-3 bg-[#450a0a]/95 border-b-2 border-[#ef4444] text-[#fecaca] flex flex-col sm:flex-row sm:items-center justify-between gap-3 z-30 shadow-[0_4px_24px_rgba(239,68,68,0.35)]">
+        <div class="flex items-start sm:items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[#ef4444]/25 border-2 border-[#ef4444] flex items-center justify-center text-[#f87171] shrink-0 animate-pulse">
+            <span class="material-symbols-outlined text-2xl">warning</span>
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-[#ef4444] text-white font-label-sm text-[11px] font-extrabold uppercase tracking-wider">
+                ⚠️ MAPA BUGADO
+              </span>
+              <p class="font-headline-sm text-sm sm:text-base font-extrabold text-[#fca5a5] uppercase tracking-wide">
+                Este mapa está bugado e será arrumado em outro momento!
+              </p>
+            </div>
+            <p class="font-body-sm text-xs sm:text-sm text-[#fecaca]/90 mt-1">
+              O traçado visual de <strong>Pokémon Unbound (Borrius)</strong> apresenta falhas de posicionamento e será reconstruído futuramente. Você ainda pode consultar os Pokémon, Rotas, Itens e TMs pela barra de rotas acima ou pela busca.
+            </p>
           </div>
         </div>
       </div>

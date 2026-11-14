@@ -185,20 +185,11 @@ const GAME_GPS_CONFIG = {
       { key: "both", label: "Comparar Ambas", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
     ]
   },
-  "gen8-pla": {
-    id: "gen8-pla",
-    name: "Pokémon Legends: Arceus",
-    region: "Hisui",
-    hasTimeOfDay: true,
-    hasSeasons: false,
-    versions: [
-      { key: "both", label: "Legends: Arceus (Hisui)", activeClass: "bg-tertiary-container/30 text-tertiary border border-tertiary/50" }
-    ]
-  },
   "fangame-unbound": {
     id: "fangame-unbound",
     name: "Pokémon Unbound (Borrius)",
     region: "Borrius",
+    isMapBugged: true,
     hasTimeOfDay: true,
     hasSeasons: false,
     versions: [
@@ -243,7 +234,6 @@ const PTR_GAME_ID_MAP = {
   "gen7-lgpe": "gen7-lgpe",
   "gen8-swsh": "gen8-swsh",
   "gen8-bdsp": "gen8-bdsp",
-  "gen8-pla": "gen8-pla",
   "fangame-unbound": "fangame-unbound",
   "fangame-lazarus": "fangame-lazarus"
 };
@@ -1999,94 +1989,6 @@ const GALAR_AREAS = [
 ];
 
 // ============================================================================
-// 4F. DADOS DE HISUI (POKÉMON LEGENDS: ARCEUS — 5 GRANDES SETORES & FORMAS DE HISUI)
-// ============================================================================
-const HISUI_AREAS = [
-  {
-    id: "hisui-jubilife-obsidian",
-    name: "Jubilife Village & Obsidian Fieldlands (Campo Obsidiana / Lake Verity)",
-    sector: "Setor Hisui 01 — Campo Obsidiana",
-    category: "route",
-    connections: "Jubilife Village ⇄ Aspiration Hill ⇄ Deertrack Heights ⇄ Grandtree Arena ⇄ Lake Verity & Ramanas Island",
-    levelRange: "Lv. 2 — 60",
-    dominantTypes: "Inseto / Pedra / Normal / Lutador",
-    encounters: [
-      { id: 722, name: "Rowlet", types: ["Planta", "Voador"], method: "static", methodLabel: "🎁 Inicial do Prof. Laventon em Jubilife Village", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "🍂 Evolui p/ Hisuian Decidueye (Planta/Lutador)", recommended: true },
-      { id: 155, name: "Cyndaquil", types: ["Fogo"], method: "static", methodLabel: "🎁 Inicial do Prof. Laventon em Jubilife Village", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "👻 Evolui p/ Hisuian Typhlosion (Fogo/Fantasma)", recommended: true },
-      { id: 501, name: "Oshawott", types: ["Água"], method: "static", methodLabel: "🎁 Inicial do Prof. Laventon em Jubilife Village", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "🗡️ Evolui p/ Hisuian Samurott (Água/Sombrio)", recommended: true },
-      { id: 123, name: "Scyther", types: ["Inseto", "Voador"], method: "grass", methodLabel: "🌿 Grandtree Arena (Obsidian Fieldlands)", levels: "Lv. 18 — 22", rateRed: 35, rateBlue: 35, highlight: "🪓 Evolui p/ Kleavor (Black Augurite) ou Scizor!", recommended: true },
-      { id: 396, name: "Starly", types: ["Normal", "Voador"], method: "grass", methodLabel: "🌿 Aspiration Hill & Horseshoe Plains", levels: "Lv. 2 — 10", rateRed: 50, rateBlue: 50, highlight: "Evolui p/ Staraptor", recommended: true },
-      { id: 403, name: "Shinx", types: ["Elétrico"], method: "grass", methodLabel: "🌿 Aspiration Hill & Floaro Gardens", levels: "Lv. 3 — 10", rateRed: 40, rateBlue: 40, recommended: true },
-      { id: 392, name: "Alpha Infernape", types: ["Fogo", "Lutador"], method: "static", methodLabel: "🎁 Alpha Estático em Ramanas Island (Obsidian Fieldlands)", levels: "Lv. 65", rateRed: 100, rateBlue: 100, highlight: "🔥 ALPHA LV. 65", recommended: true }
-    ],
-    items: [
-      { name: "Black Augurite (Evolui Scyther p/ Kleavor)", category: "stone", icon: "🪨", how: "Drop de Graveler selvagens, escavando com Ursaluna no Crimson Mirelands ou em Space-Time Distortions!" },
-      { name: "Linking Cord, Metal Coat, Razor Claw & Razor Fang", category: "stone", icon: "🪢", how: "Vendidos por Simona na barraquinha de Merit Points (Trading Post) em Jubilife Village ou encontrados em Space-Time Distortions!" },
-      { name: "Move Tutor (Zisu — Flamethrower, Thunderbolt, Ice Beam, Earth Power, Close Combat, Calm Mind, Swords Dance)", move: "Earth Power", moveType: "Terra", category: "tm", icon: "🥋", how: "Dojo de Treinamento (Training Grounds) em Jubilife Village falando com a Capitã Zisu!" }
-    ]
-  },
-  {
-    id: "hisui-crimson-mirelands",
-    name: "Crimson Mirelands (Pantanal Carmesim, Solaceon Ruins & Lake Valor)",
-    sector: "Setor Hisui 02 — Pantanal Carmesim",
-    category: "route",
-    connections: "Jubilife Village ⇄ Golden Lowlands ⇄ Ursa's Ring ⇄ Solaceon Ruins ⇄ Holm of Trials ⇄ Lake Valor",
-    levelRange: "Lv. 15 — 55",
-    dominantTypes: "Terra / Normal / Dragão / Aço",
-    encounters: [
-      { id: 216, name: "Teddiursa", types: ["Normal"], method: "grass", methodLabel: "🌿 Ursa's Ring (+ Alpha Ursaring Lv. 30 no Ursa's Ring!)", levels: "Lv. 18 — 30", rateRed: 45, rateBlue: 45, highlight: "👑 Evolui p/ Ursaluna (Peat Block na Lua Cheia — Top 1 Hisui!)", recommended: true },
-      { id: 704, name: "Goomy", types: ["Dragão"], method: "grass", methodLabel: "🌿 Holm of Trials (+ Alpha Hisuian Sliggoo Lv. 50!)", levels: "Lv. 26 — 50", rateRed: 40, rateBlue: 40, highlight: "🛡️ Evolui p/ Hisuian Goodra (Dragão/Aço)", recommended: true },
-      { id: 280, name: "Ralts", types: ["Psíquico", "Fada"], method: "grass", methodLabel: "🌿 Gapejaw Bog & Shrouded Ruins", levels: "Lv. 16 — 22", rateRed: 30, rateBlue: 30, highlight: "Evolui p/ Gardevoir ou Gallade", recommended: true },
-      { id: 175, name: "Togepi", types: ["Fada"], method: "grass", methodLabel: "🌿 Cottonsedge Prairie (Crimson Mirelands)", levels: "Lv. 22 — 25", rateRed: 15, rateBlue: 15, highlight: "Evolui p/ Togekiss", recommended: true }
-    ],
-    items: [
-      { name: "Peat Block (Evolui Ursaring p/ Ursaluna na Lua Cheia)", category: "stone", icon: "🌕", how: "Escavando tesouros no chão do Crimson Mirelands montado em Ursaluna (ou recompensa da Request 86: Gone Astray... in the Icelands)!" },
-      { name: "Shiny Stone, Dawn Stone & Dusk Stone", category: "stone", icon: "✨", how: "Depósitos de minério que se mexem, Space-Time Distortions e barraca de Merit Points de Jubilife Village!" }
-    ]
-  },
-  {
-    id: "hisui-cobalt-coastlands",
-    name: "Cobalt Coastlands (Costa Cobalto, Windbreak Stand & Firespit Island)",
-    sector: "Setor Hisui 03 — Costa Cobalto",
-    category: "route",
-    connections: "Jubilife Village ⇄ Crossing Slope ⇄ Windbreak Stand ⇄ Veilstone Cape ⇄ Tranquility Cove ⇄ Firespit Island",
-    levelRange: "Lv. 26 — 55",
-    dominantTypes: "Fogo / Pedra / Água / Fantasma",
-    encounters: [
-      { id: 58, name: "Hisuian Growlithe", types: ["Fogo", "Pedra"], method: "grass", methodLabel: "🌿 Windbreak Stand & Veilstone Cape", levels: "Lv. 28 — 34", rateRed: 35, rateBlue: 35, highlight: "🔥 Evolui p/ Hisuian Arcanine (Fire Stone)", recommended: true },
-      { id: 550, name: "White-Striped Basculin", types: ["Água"], method: "surf", methodLabel: "🌊 Islespy Shore & Tranquility Cove", levels: "Lv. 32 — 38", rateRed: 40, rateBlue: 40, highlight: "👻 Evolui p/ Basculegion (Água/Fantasma)", recommended: true },
-      { id: 395, name: "Alpha Empoleon", types: ["Água", "Aço"], method: "static", methodLabel: "🎁 Alpha Estático em Islespy Shore", levels: "Lv. 69", rateRed: 100, rateBlue: 100, highlight: "👑 ALPHA LV. 69", recommended: true },
-      { id: 485, name: "Heatran", types: ["Fogo", "Aço"], method: "static", methodLabel: "🎁 Lava Dome Sanctum em Firespit Island", levels: "Lv. 70", rateRed: 100, rateBlue: 100, highlight: "🌋 Lendário Lv. 70", recommended: true }
-    ],
-    items: [
-      { name: "Fire Stone, Water Stone, Thunder Stone & Leaf Stone", category: "stone", icon: "🔥", how: "Cristais vermelhos/azuis de minério na Cobalt Coastlands (ou compradas no Trading Post de Jubilife Village)!" }
-    ]
-  },
-  {
-    id: "hisui-coronet-alabaster",
-    name: "Coronet Highlands & Alabaster Icelands (Mount Coronet, Snowpoint Temple & Spear Pillar)",
-    sector: "Setor Hisui 04 & 05 — Terras Altas & Tundra",
-    category: "special",
-    connections: "Coronet Highlands (Ancient Quarry / Spear Pillar) ⇄ Alabaster Icelands (Bonechill Wastes / Lake Acuity / Snowpoint Temple)",
-    levelRange: "Lv. 38 — 85",
-    dominantTypes: "Dragão / Normal / Fantasma / Lutador",
-    encounters: [
-      { id: 570, name: "Hisuian Zorua", types: ["Normal", "Fantasma"], method: "cave", methodLabel: "⛰️ túneis de gelo de Bonechill Wastes (Alabaster Icelands)", levels: "Lv. 26 — 30", rateRed: 40, rateBlue: 40, highlight: "👑 Evolui p/ Hisuian Zoroark (3 Imunidades: Normal, Lutador e Fantasma!)", recommended: true },
-      { id: 443, name: "Gible", types: ["Dragão", "Terra"], method: "grass", methodLabel: "🌿 Wayward Wood (Coronet Highlands) & Avalanche Slopes (+ Alpha Garchomp Lv. 85!)", levels: "Lv. 38 — 85", rateRed: 35, rateBlue: 35, highlight: "🐉 Alpha Garchomp Lv. 85 em Avalanche Slopes!", recommended: true },
-      { id: 447, name: "Riolu", types: ["Lutador"], method: "grass", methodLabel: "🌿 Icebound Falls (Alabaster Icelands — + Alpha Lucario Lv. 70!)", levels: "Lv. 42 — 70", rateRed: 25, rateBlue: 25, highlight: "🥋 Alpha Lucario Lv. 70!", recommended: true },
-      { id: 215, name: "Hisuian Sneasel", types: ["Lutador", "Veneno"], method: "grass", methodLabel: "🌿 Celestica Trail (Coronet Highlands)", levels: "Lv. 38 — 42", rateRed: 35, rateBlue: 35, highlight: "Evolui p/ Sneasler (Razor Claw de Dia)", recommended: true },
-      { id: 483, name: "Dialga (Origin Forme)", types: ["Aço", "Dragão"], method: "static", methodLabel: "🎁 Temple of Sinnoh / Spear Pillar", levels: "Lv. 65", rateRed: 100, rateBlue: 100, highlight: "⏳ Roar of Time", recommended: true },
-      { id: 484, name: "Palkia (Origin Forme)", types: ["Água", "Dragão"], method: "static", methodLabel: "🎁 Temple of Sinnoh / Spear Pillar", levels: "Lv. 65", rateRed: 100, rateBlue: 100, highlight: "🌌 Spacial Rend", recommended: true },
-      { id: 493, name: "Arceus", types: ["Normal"], method: "static", methodLabel: "🎁 Temple of Sinnoh (Toque a Azure Flute com a Pokédex completa)", levels: "Lv. 75", rateRed: 100, rateBlue: 100, highlight: "✨ DEUS POKÉMON (Legend Plate)", recommended: true }
-    ],
-    items: [
-      { name: "Adamant Crystal, Lustrous Globe & Griseous Core", category: "held", icon: "💎", how: "Transformam Dialga, Palkia e Giratina em suas Origin Formes (obtidos nas Missões pós-game de Adaman, Irida e Turnback Cave)!" },
-      { name: "Ice Stone & Dawn Stone", category: "stone", icon: "🧊", how: "Cristais azuis de gelo na Alabaster Icelands e no Snowpoint Temple!" }
-    ]
-  }
-];
-
-// ============================================================================
 // 4G. DADOS DE BORRIUS (POKÉMON UNBOUND — BASEADO NA DOCUMENTAÇÃO OFICIAL)
 // ============================================================================
 const BORRIUS_AREAS = [
@@ -2904,33 +2806,6 @@ const REGION_MAP_LAYOUTS = {
     ]
   },
 
-  Hisui: {
-    terrainSvg: ``,
-    routes: [
-      { num: "01", areaId: "hisui-jubilife-obsidian", path: "M 225 465 L 305 565", lx: 265, ly: 515, marine: false },
-      { num: "02", areaId: "hisui-crimson-mirelands", path: "M 225 465 L 575 565", lx: 400, ly: 515, marine: false },
-      { num: "03", areaId: "hisui-cobalt-coastlands", path: "M 575 565 L 745 365", lx: 660, ly: 465, marine: true },
-      { num: "04", areaId: "hisui-coronet-alabaster", path: "M 225 465 L 455 355", lx: 340, ly: 410, marine: false },
-      { num: "05", areaId: "hisui-coronet-alabaster", path: "M 455 355 L 425 135", lx: 440, ly: 245, marine: false }
-    ],
-    cities: [
-      { name: "Jubilife Village", areaId: "hisui-jubilife-obsidian", x: 225, y: 465, lx: 185, ly: 470, anchor: "end" },
-      { name: "Obsidian Fieldlands", areaId: "hisui-jubilife-obsidian", x: 305, y: 565, lx: 305, ly: 605, anchor: "middle" },
-      { name: "Crimson Mirelands", areaId: "hisui-crimson-mirelands", x: 575, y: 565, lx: 575, ly: 605, anchor: "middle" },
-      { name: "Cobalt Coastlands", areaId: "hisui-cobalt-coastlands", x: 745, y: 365, lx: 745, ly: 405, anchor: "middle" },
-      { name: "Coronet Highlands", areaId: "hisui-coronet-alabaster", x: 455, y: 355, lx: 495, ly: 360, anchor: "start" },
-      { name: "Alabaster Icelands", areaId: "hisui-coronet-alabaster", x: 425, y: 135, lx: 465, ly: 140, anchor: "start" }
-    ],
-    sites: [
-      { name: "Grandtree Arena", areaId: "hisui-jubilife-obsidian", x: 355, y: 615, lx: 355, ly: 645, anchor: "middle" },
-      { name: "Lake Verity", areaId: "hisui-jubilife-obsidian", x: 185, y: 585, lx: 185, ly: 615, anchor: "middle" },
-      { name: "Solaceon Ruins", areaId: "hisui-crimson-mirelands", x: 645, y: 515, lx: 675, ly: 518, anchor: "start" },
-      { name: "Firespit Island", areaId: "hisui-cobalt-coastlands", x: 785, y: 265, lx: 785, ly: 238, anchor: "middle" },
-      { name: "Temple of Sinnoh", areaId: "hisui-coronet-alabaster", x: 455, y: 295, lx: 455, ly: 268, anchor: "middle" },
-      { name: "Snowpoint Temple", areaId: "hisui-coronet-alabaster", x: 425, y: 75, lx: 425, ly: 46, anchor: "middle" }
-    ]
-  },
-
   // ==========================================================================
   // GEOMETRIA EXATA DE BORRIUS (POKÉMON UNBOUND — BASEADO NA IMAGEM ENVIADA)
   // ==========================================================================
@@ -3089,7 +2964,6 @@ function getAreasForCurrentGame() {
   if (cfg.region === "Kalos") return KALOS_AREAS;
   if (cfg.region === "Alola") return ALOLA_AREAS;
   if (cfg.region === "Galar") return GALAR_AREAS;
-  if (cfg.region === "Hisui") return HISUI_AREAS;
   if (cfg.region === "Borrius") return BORRIUS_AREAS;
   if (cfg.region === "Ilios") return ILIOS_AREAS;
   return KANTO_AREAS;
@@ -3233,6 +3107,11 @@ function renderInteractiveMapNodes() {
   const areas = getAreasForCurrentGame();
   const query = gpsState.searchQuery.trim().toLowerCase();
 
+  const warningBanner = document.getElementById("unbound-bug-warning-banner");
+  if (warningBanner) {
+    warningBanner.classList.toggle("hidden", !cfg.isMapBugged);
+  }
+
   if (terrainGroup) {
     terrainGroup.innerHTML = layout.terrainSvg;
   }
@@ -3360,7 +3239,16 @@ function renderInteractiveMapNodes() {
     `;
   }).join("");
 
-  nodesGroup.innerHTML = routesSvg + citiesSvg + sitesSvg;
+  const buggedStampSvg = cfg.isMapBugged ? `
+    <g pointer-events="none">
+      <rect x="110" y="10" width="660" height="40" rx="10" fill="#450a0a" fill-opacity="0.92" stroke="#ef4444" stroke-width="2.5" />
+      <text x="440" y="35" fill="#fecaca" font-family="Plus Jakarta Sans" font-size="13.5" font-weight="800" text-anchor="middle">
+        ⚠️ AVISO: MAPA DE POKÉMON UNBOUND ESTÁ BUGADO E SERÁ ARRUMADO EM OUTRO MOMENTO
+      </text>
+    </g>
+  ` : "";
+
+  nodesGroup.innerHTML = routesSvg + citiesSvg + sitesSvg + buggedStampSvg;
 
   nodesGroup.querySelectorAll("[data-area-id]").forEach(node => {
     node.addEventListener("click", () => {
@@ -3412,7 +3300,16 @@ function renderSelectedAreaDetails() {
 
   const regionTitleEl = document.getElementById("map-region-title");
   if (regionTitleEl) {
-    regionTitleEl.textContent = `Região de ${gameConfig.region}`;
+    if (gameConfig.isMapBugged) {
+      regionTitleEl.innerHTML = `
+        <span>Região de ${gameConfig.region}</span>
+        <span class="px-2.5 py-0.5 rounded-full bg-[#ef4444] text-white font-label-sm text-[11px] font-extrabold uppercase tracking-wider shadow-md animate-pulse">
+          ⚠️ Mapa Bugado — Será arrumado em outro momento
+        </span>
+      `;
+    } else {
+      regionTitleEl.textContent = `Região de ${gameConfig.region}`;
+    }
   }
 
   // Update telemetry HUD on map
