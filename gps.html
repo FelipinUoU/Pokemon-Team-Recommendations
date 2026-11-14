@@ -305,17 +305,47 @@
   <!-- ========================================================================= -->
   <section class="w-full bg-surface-container-low border-b border-outline-variant px-margin py-space-sm">
     <div class="max-w-[1920px] mx-auto flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-sm">
-      <!-- Esquerda: Seleção de Game (Até Hoenn) -->
-      <div class="relative md:w-[310px] shrink-0">
+      <!-- Esquerda: Seleção de Game (Padrão PTR: Gen 1 a Gen 8 + ROM Hacks) -->
+      <div class="relative md:w-[360px] shrink-0">
         <label for="gps-game-select" class="sr-only">Selecionar Jogo</label>
         <div class="flex items-center bg-surface-container border border-outline-variant rounded-lg px-space-sm py-1.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
           <span class="material-symbols-outlined text-primary text-base mr-1.5">videogame_asset</span>
           <select id="gps-game-select" class="w-full bg-transparent border-0 text-on-surface font-label-md text-label-md focus:outline-none focus:ring-0 cursor-pointer py-0">
-            <option class="bg-surface-container-highest text-on-surface" selected value="rb">Pokémon Red &amp; Blue (Gen 1 - Kanto)</option>
-            <option class="bg-surface-container-highest text-on-surface" value="yellow">Pokémon Yellow (Gen 1 - Kanto)</option>
-            <option class="bg-surface-container-highest text-on-surface" value="gsc">Pokémon Gold, Silver &amp; Crystal (Gen 2 - Johto)</option>
-            <option class="bg-surface-container-highest text-on-surface" value="rse">Pokémon Ruby, Sapphire &amp; Emerald (Gen 3 - Hoenn)</option>
-            <option class="bg-surface-container-highest text-on-surface" value="frlg">Pokémon FireRed &amp; LeafGreen (Gen 3 - Kanto)</option>
+            <optgroup label="Geração I" class="bg-surface-container-highest text-on-surface">
+              <option value="gen1-rb" selected>Pokémon Red / Blue</option>
+              <option value="gen1-yellow">Pokémon Yellow (Special Pikachu Edition)</option>
+            </optgroup>
+            <optgroup label="Geração II" class="bg-surface-container-highest text-on-surface">
+              <option value="gen2-gsc">Pokémon Gold / Silver / Crystal</option>
+            </optgroup>
+            <optgroup label="Geração III" class="bg-surface-container-highest text-on-surface">
+              <option value="gen3-rse">Pokémon Ruby / Sapphire / Emerald</option>
+              <option value="gen3-frlg">Pokémon FireRed / LeafGreen</option>
+            </optgroup>
+            <optgroup label="Geração IV" class="bg-surface-container-highest text-on-surface">
+              <option value="gen4-dpp">Pokémon Diamond / Pearl / Platinum</option>
+              <option value="gen4-hgss">Pokémon HeartGold / SoulSilver</option>
+            </optgroup>
+            <optgroup label="Geração V" class="bg-surface-container-highest text-on-surface">
+              <option value="gen5-bw">Pokémon Black / White</option>
+              <option value="gen5-b2w2">Pokémon Black 2 / White 2</option>
+            </optgroup>
+            <optgroup label="Geração VI" class="bg-surface-container-highest text-on-surface">
+              <option value="gen6-xy">Pokémon X / Y</option>
+              <option value="gen6-oras">Pokémon Omega Ruby / Alpha Sapphire</option>
+            </optgroup>
+            <optgroup label="Geração VII" class="bg-surface-container-highest text-on-surface">
+              <option value="gen7-sm-usum">Pokémon Sun / Moon / Ultra Sun / Ultra Moon</option>
+              <option value="gen7-lgpe">Pokémon Let's Go, Pikachu! / Let's Go, Eevee!</option>
+            </optgroup>
+            <optgroup label="Geração VIII" class="bg-surface-container-highest text-on-surface">
+              <option value="gen8-swsh">Pokémon Sword / Shield</option>
+              <option value="gen8-bdsp">Pokémon Brilliant Diamond / Shining Pearl</option>
+              <option value="gen8-pla">Pokémon Legends: Arceus</option>
+            </optgroup>
+            <optgroup label="Fan Game / ROM Hack" class="bg-surface-container-highest text-on-surface">
+              <option value="fangame-unbound">Pokémon Unbound (Borrius)</option>
+            </optgroup>
           </select>
         </div>
       </div>

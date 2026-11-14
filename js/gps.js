@@ -1,14 +1,15 @@
 /**
- * GPS POKÉMON — SISTEMA CARTOGRÁFICO TÁTICO (KANTO, JOHTO & HOENN — GEN 1 A GEN 3)
- * - Jogos suportados: Red & Blue, Yellow, Gold/Silver/Crystal, Ruby/Sapphire/Emerald, FireRed/LeafGreen
- * - Modos do GPS: "Pesquisa de Pokémon" (Encontros & Spawns) e "Pesquisa de Itens & TMs" (Held Items, TMs/HMs, Pedras)
+ * GPS POKÉMON — SISTEMA CARTOGRÁFICO TÁTICO (GEN 1 A GEN 8 + POKÉMON UNBOUND)
+ * - Jogos suportados: Gen 1 (RB/Y), Gen 2 (GSC), Gen 3 (RSE/FRLG), Gen 4 (DPP/HGSS),
+ *   Gen 5 (BW/B2W2), Gen 6 (XY/ORAS), Gen 7 (SM/USUM/LGPE), Gen 8 (SwSh/BDSP/PLA) e Pokémon Unbound (Borrius)
+ * - Modos do GPS: "Pesquisa de Pokémon" (Encontros & Spawns) e "Pesquisa de Itens & TMs" (Held Items, TMs/HMs, Pedras, Mega Stones)
  * - Integração direta com o Pokémon Team Recommendations (PTR) via parâmetros de URL (?game=...&mode=items&q=...)
  */
 
 const GAME_GPS_CONFIG = {
-  rb: {
-    id: "rb",
-    name: "Pokémon Red & Blue (Gen 1 - Kanto)",
+  "gen1-rb": {
+    id: "gen1-rb",
+    name: "Pokémon Red / Blue",
     region: "Kanto",
     hasTimeOfDay: false,
     hasSeasons: false,
@@ -18,9 +19,9 @@ const GAME_GPS_CONFIG = {
       { key: "both", label: "Comparar Ambas", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
     ]
   },
-  yellow: {
-    id: "yellow",
-    name: "Pokémon Yellow (Gen 1 - Kanto)",
+  "gen1-yellow": {
+    id: "gen1-yellow",
+    name: "Pokémon Yellow (Special Pikachu Edition)",
     region: "Kanto",
     hasTimeOfDay: false,
     hasSeasons: false,
@@ -28,9 +29,9 @@ const GAME_GPS_CONFIG = {
       { key: "both", label: "Special Pikachu Edition (Yellow)", activeClass: "bg-secondary-container/30 text-secondary border border-secondary/50" }
     ]
   },
-  gsc: {
-    id: "gsc",
-    name: "Pokémon Gold, Silver & Crystal (Gen 2 - Johto)",
+  "gen2-gsc": {
+    id: "gen2-gsc",
+    name: "Pokémon Gold / Silver / Crystal",
     region: "Johto",
     hasTimeOfDay: true,
     hasSeasons: false,
@@ -40,9 +41,9 @@ const GAME_GPS_CONFIG = {
       { key: "both", label: "Gold / Silver / Crystal", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
     ]
   },
-  rse: {
-    id: "rse",
-    name: "Pokémon Ruby, Sapphire & Emerald (Gen 3 - Hoenn)",
+  "gen3-rse": {
+    id: "gen3-rse",
+    name: "Pokémon Ruby / Sapphire / Emerald",
     region: "Hoenn",
     hasTimeOfDay: false,
     hasSeasons: false,
@@ -52,9 +53,9 @@ const GAME_GPS_CONFIG = {
       { key: "both", label: "Ruby / Sapphire / Emerald", activeClass: "bg-tertiary-container/30 text-tertiary border border-tertiary/50" }
     ]
   },
-  frlg: {
-    id: "frlg",
-    name: "Pokémon FireRed & LeafGreen (Gen 3 - Kanto)",
+  "gen3-frlg": {
+    id: "gen3-frlg",
+    name: "Pokémon FireRed / LeafGreen",
     region: "Kanto",
     hasTimeOfDay: false,
     hasSeasons: false,
@@ -63,19 +64,175 @@ const GAME_GPS_CONFIG = {
       { key: "blue", label: "LeafGreen", activeClass: "bg-tertiary-container/30 text-tertiary border border-tertiary/50" },
       { key: "both", label: "Comparar Ambas", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
     ]
+  },
+  "gen4-dpp": {
+    id: "gen4-dpp",
+    name: "Pokémon Diamond / Pearl / Platinum",
+    region: "Sinnoh",
+    hasTimeOfDay: true,
+    hasSeasons: false,
+    versions: [
+      { key: "red", label: "Diamond", activeClass: "bg-primary-container/30 text-primary border border-primary/50" },
+      { key: "blue", label: "Pearl", activeClass: "bg-error-container/40 text-error border border-error/50" },
+      { key: "both", label: "Diamond / Pearl / Platinum", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
+    ]
+  },
+  "gen4-hgss": {
+    id: "gen4-hgss",
+    name: "Pokémon HeartGold / SoulSilver",
+    region: "Johto",
+    hasTimeOfDay: true,
+    hasSeasons: false,
+    versions: [
+      { key: "red", label: "HeartGold", activeClass: "bg-secondary-container/35 text-secondary border border-secondary/50" },
+      { key: "blue", label: "SoulSilver", activeClass: "bg-primary-container/30 text-primary border border-primary/50" },
+      { key: "both", label: "Comparar Ambas", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
+    ]
+  },
+  "gen5-bw": {
+    id: "gen5-bw",
+    name: "Pokémon Black / White",
+    region: "Unova",
+    hasTimeOfDay: true,
+    hasSeasons: true,
+    versions: [
+      { key: "red", label: "Black", activeClass: "bg-surface-container-highest text-on-surface border border-outline" },
+      { key: "blue", label: "White", activeClass: "bg-primary-container/30 text-primary border border-primary/50" },
+      { key: "both", label: "Comparar Ambas", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
+    ]
+  },
+  "gen5-b2w2": {
+    id: "gen5-b2w2",
+    name: "Pokémon Black 2 / White 2",
+    region: "Unova",
+    hasTimeOfDay: true,
+    hasSeasons: true,
+    versions: [
+      { key: "red", label: "Black 2", activeClass: "bg-primary-container/30 text-primary border border-primary/50" },
+      { key: "blue", label: "White 2", activeClass: "bg-error-container/40 text-error border border-error/50" },
+      { key: "both", label: "Comparar Ambas", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
+    ]
+  },
+  "gen6-xy": {
+    id: "gen6-xy",
+    name: "Pokémon X / Y",
+    region: "Kalos",
+    hasTimeOfDay: true,
+    hasSeasons: false,
+    versions: [
+      { key: "red", label: "Pokémon X", activeClass: "bg-primary-container/30 text-primary border border-primary/50" },
+      { key: "blue", label: "Pokémon Y", activeClass: "bg-error-container/40 text-error border border-error/50" },
+      { key: "both", label: "Comparar Ambas", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
+    ]
+  },
+  "gen6-oras": {
+    id: "gen6-oras",
+    name: "Pokémon Omega Ruby / Alpha Sapphire",
+    region: "Hoenn",
+    hasTimeOfDay: true,
+    hasSeasons: false,
+    versions: [
+      { key: "red", label: "Omega Ruby", activeClass: "bg-error-container/40 text-error border border-error/50" },
+      { key: "blue", label: "Alpha Sapphire", activeClass: "bg-primary-container/30 text-primary border border-primary/50" },
+      { key: "both", label: "Comparar Ambas", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
+    ]
+  },
+  "gen7-sm-usum": {
+    id: "gen7-sm-usum",
+    name: "Pokémon Sun / Moon / Ultra Sun / Ultra Moon",
+    region: "Alola",
+    hasTimeOfDay: true,
+    hasSeasons: false,
+    versions: [
+      { key: "red", label: "Sun / Ultra Sun", activeClass: "bg-secondary-container/35 text-secondary border border-secondary/50" },
+      { key: "blue", label: "Moon / Ultra Moon", activeClass: "bg-primary-container/30 text-primary border border-primary/50" },
+      { key: "both", label: "Todas as Versões", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
+    ]
+  },
+  "gen7-lgpe": {
+    id: "gen7-lgpe",
+    name: "Pokémon Let's Go, Pikachu! / Let's Go, Eevee!",
+    region: "Kanto",
+    hasTimeOfDay: false,
+    hasSeasons: false,
+    versions: [
+      { key: "red", label: "Let's Go Pikachu", activeClass: "bg-secondary-container/35 text-secondary border border-secondary/50" },
+      { key: "blue", label: "Let's Go Eevee", activeClass: "bg-error-container/40 text-error border border-error/50" },
+      { key: "both", label: "Comparar Ambas", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
+    ]
+  },
+  "gen8-swsh": {
+    id: "gen8-swsh",
+    name: "Pokémon Sword / Shield",
+    region: "Galar",
+    hasTimeOfDay: true,
+    hasSeasons: false,
+    versions: [
+      { key: "red", label: "Sword", activeClass: "bg-primary-container/30 text-primary border border-primary/50" },
+      { key: "blue", label: "Shield", activeClass: "bg-error-container/40 text-error border border-error/50" },
+      { key: "both", label: "Comparar Ambas", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
+    ]
+  },
+  "gen8-bdsp": {
+    id: "gen8-bdsp",
+    name: "Pokémon Brilliant Diamond / Shining Pearl",
+    region: "Sinnoh",
+    hasTimeOfDay: true,
+    hasSeasons: false,
+    versions: [
+      { key: "red", label: "Brilliant Diamond", activeClass: "bg-primary-container/30 text-primary border border-primary/50" },
+      { key: "blue", label: "Shining Pearl", activeClass: "bg-error-container/40 text-error border border-error/50" },
+      { key: "both", label: "Comparar Ambas", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
+    ]
+  },
+  "gen8-pla": {
+    id: "gen8-pla",
+    name: "Pokémon Legends: Arceus",
+    region: "Hisui",
+    hasTimeOfDay: true,
+    hasSeasons: false,
+    versions: [
+      { key: "both", label: "Legends: Arceus (Hisui)", activeClass: "bg-tertiary-container/30 text-tertiary border border-tertiary/50" }
+    ]
+  },
+  "fangame-unbound": {
+    id: "fangame-unbound",
+    name: "Pokémon Unbound (Borrius)",
+    region: "Borrius",
+    hasTimeOfDay: true,
+    hasSeasons: false,
+    versions: [
+      { key: "red", label: "Vanilla / Difficult", activeClass: "bg-primary-container/30 text-primary border border-primary/50" },
+      { key: "blue", label: "Expert / Insane", activeClass: "bg-error-container/40 text-error border border-error/50" },
+      { key: "both", label: "Todas as Dificuldades", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
+    ]
   }
 };
 
-// Mapeamento dos IDs de jogos do PTR (index.html) para o GPS Pokémon
+// Mapeamento dos IDs de jogos do PTR (index.html) e atalhos legados para o GPS Pokémon
 const PTR_GAME_ID_MAP = {
-  "gen1-rb": "rb",
-  "gen1-yellow": "yellow",
-  "gen2-gsc": "gsc",
-  "gen3-rse": "rse",
-  "gen3-frlg": "frlg",
-  "gen4-hgss": "gsc",
-  "gen6-oras": "rse",
-  "gen7-lgpe": "yellow"
+  "rb": "gen1-rb",
+  "yellow": "gen1-yellow",
+  "gsc": "gen2-gsc",
+  "rse": "gen3-rse",
+  "frlg": "gen3-frlg",
+  "gen1-rb": "gen1-rb",
+  "gen1-yellow": "gen1-yellow",
+  "gen2-gsc": "gen2-gsc",
+  "gen3-rse": "gen3-rse",
+  "gen3-frlg": "gen3-frlg",
+  "gen4-dpp": "gen4-dpp",
+  "gen4-hgss": "gen4-hgss",
+  "gen5-bw": "gen5-bw",
+  "gen5-b2w2": "gen5-b2w2",
+  "gen6-xy": "gen6-xy",
+  "gen6-oras": "gen6-oras",
+  "gen7-sm-usum": "gen7-sm-usum",
+  "gen7-lgpe": "gen7-lgpe",
+  "gen8-swsh": "gen8-swsh",
+  "gen8-bdsp": "gen8-bdsp",
+  "gen8-pla": "gen8-pla",
+  "fangame-unbound": "fangame-unbound"
 };
 
 const TYPE_BADGE_STYLES = {
@@ -87,7 +244,9 @@ const TYPE_BADGE_STYLES = {
   "Gelo": "bg-cyan-400/20 text-cyan-200 border-cyan-400/40",
   "Lutador": "bg-rose-600/20 text-rose-300 border-rose-500/40",
   "Veneno": "bg-purple-500/20 text-purple-300 border-purple-500/40",
+  "Venenoso": "bg-purple-500/20 text-purple-300 border-purple-500/40",
   "Terra": "bg-amber-600/20 text-amber-300 border-amber-500/40",
+  "Terrestre": "bg-amber-600/20 text-amber-300 border-amber-500/40",
   "Voador": "bg-indigo-400/20 text-indigo-200 border-indigo-400/40",
   "Psíquico": "bg-pink-500/20 text-pink-300 border-pink-500/40",
   "Inseto": "bg-lime-500/20 text-lime-300 border-lime-500/40",
@@ -95,7 +254,10 @@ const TYPE_BADGE_STYLES = {
   "Fantasma": "bg-violet-600/25 text-violet-300 border-violet-500/40",
   "Dragão": "bg-indigo-600/25 text-indigo-300 border-indigo-500/40",
   "Aço": "bg-slate-400/25 text-slate-200 border-slate-400/40",
-  "Noturno": "bg-neutral-700/40 text-neutral-200 border-neutral-500/40"
+  "Metálico": "bg-slate-400/25 text-slate-200 border-slate-400/40",
+  "Noturno": "bg-neutral-700/40 text-neutral-200 border-neutral-500/40",
+  "Sombrio": "bg-neutral-700/40 text-neutral-200 border-neutral-500/40",
+  "Fada": "bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/40"
 };
 
 const ITEM_CATEGORY_META = {
@@ -1158,6 +1320,972 @@ const HOENN_AREAS = [
 ];
 
 // ============================================================================
+// 4A. DADOS DE SINNOH (DIAMOND/PEARL/PLATINUM & BRILLIANT DIAMOND/SHINING PEARL)
+// ============================================================================
+const SINNOH_AREAS = [
+  {
+    id: "sinnoh-twinleaf-jubilife",
+    name: "Twinleaf Town, Lake Verity, Sandgem & Jubilife (Rotas 201–203)",
+    sector: "Setor Sinnoh Sul-Oeste",
+    category: "route",
+    connections: "Twinleaf Town ⇄ Lake Verity ⇄ Sandgem Town ⇄ Jubilife City (Rotas 201, 202 e 203)",
+    levelRange: "Lv. 2 — 7",
+    dominantTypes: "Normal / Voador / Elétrico / Planta",
+    encounters: [
+      { id: 387, name: "Turtwig", types: ["Planta"], method: "static", methodLabel: "🎁 Inicial do Prof. Rowan (Rota 201 / Lake Verity)", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "Inicial de Planta", recommended: true },
+      { id: 390, name: "Chimchar", types: ["Fogo"], method: "static", methodLabel: "🎁 Inicial do Prof. Rowan (Rota 201 / Lake Verity)", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "⭐ Melhor Inicial de Sinnoh", recommended: true },
+      { id: 393, name: "Piplup", types: ["Água"], method: "static", methodLabel: "🎁 Inicial do Prof. Rowan (Rota 201 / Lake Verity)", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "Inicial de Água", recommended: true },
+      { id: 396, name: "Starly", types: ["Normal", "Voador"], method: "grass", methodLabel: "🌿 Grama Alta (Rotas 201, 202 e 203)", levels: "Lv. 2 — 6", rateRed: 50, rateBlue: 50, highlight: "Evolui p/ Staraptor (Intimidate + Close Combat)", recommended: true },
+      { id: 403, name: "Shinx", types: ["Elétrico"], method: "grass", methodLabel: "🌿 Grama Alta (Rotas 202 e 203)", levels: "Lv. 3 — 6", rateRed: 30, rateBlue: 30, highlight: "Evolui p/ Luxray", recommended: true },
+      { id: 63, name: "Abra", types: ["Psíquico"], method: "grass", methodLabel: "🌿 Grama Alta (Rota 203)", levels: "Lv. 4 — 6", rateRed: 15, rateBlue: 15, recommended: true },
+      { id: 280, name: "Ralts", types: ["Psíquico", "Fada"], method: "grass", methodLabel: "🌿 Rota 203 / 204 (Platinum & Grand Underground em BDSP)", levels: "Lv. 4 — 7", rateRed: 15, rateBlue: 15, highlight: "Evolui p/ Gardevoir ou Gallade", recommended: true },
+      { id: 481, name: "Mesprit", types: ["Psíquico"], method: "static", methodLabel: "🎁 Lake Verity Cavern (Passa a vagar por Sinnoh)", levels: "Lv. 50", rateRed: 100, rateBlue: 100, highlight: "Lendário Guardião" }
+    ],
+    items: [
+      { name: "TM27 — Return", move: "Return", moveType: "Normal", category: "tm", icon: "💿", how: "Entregue pelo Prof. Rowan na Rota 201/Sandgem Town (ou em Jubilife TV Station)!" },
+      { name: "Quick Claw", category: "held", icon: "🐾", how: "Entregue pela garota no 1º andar do condomínio de Jubilife City (nordeste)." },
+      { name: "Old Rod", category: "key", icon: "🎣", how: "Pescador no portão oeste de Jubilife City (saída para a Rota 218)." },
+      { name: "Pokétch", category: "key", icon: "⌚", how: "Entregue pelo presidente da Pokétch Company em Jubilife City após responder aos 3 palhaços." }
+    ]
+  },
+  {
+    id: "sinnoh-oreburgh-floaroma-eterna",
+    name: "Oreburgh City, Floaroma, Valley Windworks & Eterna Forest (Rotas 204–205)",
+    sector: "Setor Sinnoh Oeste",
+    category: "route",
+    connections: "Jubilife ⇄ Oreburgh City ⇄ Floaroma Town ⇄ Valley Windworks ⇄ Eterna Forest",
+    levelRange: "Lv. 5 — 16",
+    dominantTypes: "Planta / Água / Fantasma / Pedra",
+    encounters: [
+      { id: 406, name: "Budew", types: ["Planta", "Veneno"], method: "grass", methodLabel: "🌿 Rota 204 & Eterna Forest", levels: "Lv. 4 — 12", rateRed: 25, rateBlue: 25, highlight: "Evolui p/ Roserade", recommended: true },
+      { id: 422, name: "Shellos", types: ["Água"], method: "grass", methodLabel: "🌿 Rota 205 & Valley Windworks (West Sea Rosa)", levels: "Lv. 8 — 12", rateRed: 45, rateBlue: 45, highlight: "Evolui p/ Gastrodon (Água/Terra)", recommended: true },
+      { id: 425, name: "Drifloon", types: ["Fantasma", "Voador"], method: "static", methodLabel: "🎁 Em frente à Valley Windworks (Sextas-feiras)", levels: "Lv. 15 — 22", rateRed: 100, rateBlue: 100, highlight: "🎈 Estático de Sexta-feira", recommended: true },
+      { id: 92, name: "Gastly", types: ["Fantasma", "Veneno"], method: "cave", methodLabel: "⛰️ Old Chateau (Interior da Eterna Forest)", levels: "Lv. 12 — 16", rateRed: 100, rateBlue: 100, highlight: "Evolui p/ Gengar", recommended: true },
+      { id: 479, name: "Rotom", types: ["Elétrico", "Fantasma"], method: "static", methodLabel: "🎁 TV do Old Chateau na Eterna Forest (Noite)", levels: "Lv. 15 — 20", rateRed: 100, rateBlue: 100, timeTag: "🌙 Noite", highlight: "📺 Formas Rotom (Platinum/BDSP)", recommended: true },
+      { id: 408, name: "Cranidos", types: ["Pedra"], method: "static", methodLabel: "🎁 Reviver Skull Fossil no Museu de Oreburgh", levels: "Lv. 20", rateRed: 100, rateBlue: 0, versionTag: "🔵 Exclusivo Diamond / BD" },
+      { id: 410, name: "Shieldon", types: ["Pedra", "Aço"], method: "static", methodLabel: "🎁 Reviver Armor Fossil no Museu de Oreburgh", levels: "Lv. 20", rateRed: 0, rateBlue: 100, versionTag: "🔴 Exclusivo Pearl / SP" }
+    ],
+    items: [
+      { name: "TM76 — Stealth Rock", move: "Stealth Rock", moveType: "Pedra", category: "tm", icon: "💿", how: "Prêmio do Líder Roark no Ginásio de Oreburgh City!" },
+      { name: "TM31 — Brick Break", move: "Brick Break", moveType: "Lutador", category: "tm", icon: "💿", how: "Andar B1F do Oreburgh Gate (use Rock Smash e Surf)!" },
+      { name: "TM24 — Thunderbolt", move: "Thunderbolt", moveType: "Elétrico", category: "tm", icon: "💿", how: "Atrás da usina Valley Windworks (use Surf no rio à direita da usina) ou no Cassino de Veilstone!" },
+      { name: "TM35 — Flamethrower", move: "Flamethrower", moveType: "Fogo", category: "tm", icon: "💿", how: "Interior da Fuego Ironworks (use Surf ao norte do Floaroma Meadow na Rota 205)!" },
+      { name: "Fire Stone", category: "stone", icon: "🔥", how: "Interior da Fuego Ironworks (encontram-se 2 Fire Stones na fundição!)." },
+      { name: "Electirizer & Magmarizer", category: "stone", icon: "⚡", how: "Valley Windworks (Electirizer) e Fuego Ironworks (Magmarizer) em Pokémon Platinum (ou via Elekid/Magby no Grand Underground em BDSP)!" },
+      { name: "Miracle Seed", category: "held", icon: "🌱", how: "Floaroma Meadow (entrada norte da Rota 204 usando Cut)." },
+      { name: "Soothe Bell", category: "held", icon: "🔔", how: "Pokémon Mansion na Rota 212 ou entregue por Cheryl na Eterna Forest." }
+    ]
+  },
+  {
+    id: "sinnoh-eterna-wayward-coronet",
+    name: "Eterna City, Cycling Road (Rota 206), Wayward Cave & Mt. Coronet",
+    sector: "Setor Sinnoh Central-Oeste",
+    category: "cave",
+    connections: "Eterna City ⇄ Rota 206 (Wayward Cave) ⇄ Rota 207 ⇄ Mt. Coronet (Spear Pillar)",
+    levelRange: "Lv. 14 — 47",
+    dominantTypes: "Dragão / Terra / Lutador / Aço",
+    encounters: [
+      { id: 443, name: "Gible", types: ["Dragão", "Terra"], method: "cave", methodLabel: "⛰️ Wayward Cave (Entrada Secreta sob a Ponte da Rota 206)", levels: "Lv. 15 — 20", rateRed: 20, rateBlue: 20, highlight: "👑 Evolui p/ Garchomp (Top 1 Sinnoh)", recommended: true },
+      { id: 207, name: "Gligar", types: ["Terra", "Voador"], method: "grass", methodLabel: "🌿 Rota 206 (Platinum & Grand Underground BD)", levels: "Lv. 14 — 19", rateRed: 20, rateBlue: 15, highlight: "Evolui p/ Gliscor (Razor Fang)", recommended: true },
+      { id: 175, name: "Togepi", types: ["Fada"], method: "static", methodLabel: "🎁 Ovo entregue por Cynthia em Eterna City (Platinum) / Grand Underground (BDSP)", levels: "Lv. 1", rateRed: 100, rateBlue: 100, highlight: "🥚 Evolui p/ Togekiss (Shiny Stone)", recommended: true },
+      { id: 436, name: "Bronzor", types: ["Aço", "Psíquico"], method: "cave", methodLabel: "⛰️ Wayward Cave & Mt. Coronet", levels: "Lv. 14 — 25", rateRed: 30, rateBlue: 30, recommended: true },
+      { id: 35, name: "Clefairy", types: ["Fada"], method: "cave", methodLabel: "⛰️ Mt. Coronet", levels: "Lv. 14 — 38", rateRed: 25, rateBlue: 25, recommended: true },
+      { id: 349, name: "Feebas", types: ["Água"], method: "fish", methodLabel: "🎣 Lago subterrâneo do Mt. Coronet B1F (4 tiles especiais)", levels: "Lv. 10 — 20", rateRed: 50, rateBlue: 50, highlight: "Evolui p/ Milotic" },
+      { id: 483, name: "Dialga", types: ["Aço", "Dragão"], method: "static", methodLabel: "🎁 Spear Pillar no topo do Mt. Coronet", levels: "Lv. 47 — 70", rateRed: 100, rateBlue: 0, versionTag: "🔵 Diamond / BD / Platinum", highlight: "⏳ LENDÁRIO DE CAPA", recommended: true },
+      { id: 484, name: "Palkia", types: ["Água", "Dragão"], method: "static", methodLabel: "🎁 Spear Pillar no topo do Mt. Coronet", levels: "Lv. 47 — 70", rateRed: 0, rateBlue: 100, versionTag: "🔴 Pearl / SP / Platinum", highlight: "🌌 LENDÁRIO DE CAPA", recommended: true }
+    ],
+    items: [
+      { name: "TM26 — Earthquake", move: "Earthquake", moveType: "Terra", category: "tm", icon: "💿", how: "Fundo da entrada secreta da Wayward Cave (debaixo da ponte de ciclismo na Rota 206, onde se captura Gible)!" },
+      { name: "TM02 — Dragon Claw", move: "Dragon Claw", moveType: "Dragão", category: "tm", icon: "💿", how: "Interior do Mt. Coronet (andar 4F na subida para o Spear Pillar, usando Surf e Rock Climb)!" },
+      { name: "TM86 — Grass Knot", move: "Grass Knot", moveType: "Planta", category: "tm", icon: "💿", how: "Prêmio da Líder Gardenia no Ginásio de Eterna City!" },
+      { name: "HM01 — Cut", move: "Cut", moveType: "Normal", category: "tm", icon: "💿", how: "Entregue por Cynthia em frente ao prédio da Team Galactic em Eterna City!" },
+      { name: "Exp. Share", category: "held", icon: "🧢", how: "Entregue pelo assistente do Prof. Rowan no portão sul da Rota 206 após registrar 35 Pokémon na Pokédex!" },
+      { name: "Adamant Orb & Lustrous Orb", category: "held", icon: "💎", how: "Topo do Spear Pillar no Mt. Coronet!" }
+    ]
+  },
+  {
+    id: "sinnoh-hearthome-solaceon-celestic",
+    name: "Hearthome City, Solaceon Town & Celestic Town (Rotas 208–211)",
+    sector: "Setor Sinnoh Central",
+    category: "route",
+    connections: "Hearthome City ⇄ Rota 209 (Lost Tower) ⇄ Solaceon Town ⇄ Rota 210 ⇄ Celestic Town",
+    levelRange: "Lv. 16 — 28",
+    dominantTypes: "Fantasma / Normal / Psíquico / Fogo",
+    encounters: [
+      { id: 133, name: "Eevee", types: ["Normal"], method: "static", methodLabel: "🎁 Entregue por Bebe na casa ao lado do Pokémon Center de Hearthome City", levels: "Lv. 20", rateRed: 100, rateBlue: 100, highlight: "⭐ Evolui p/ Espeon, Umbreon, Leafeon, Glaceon, Jolteon...", recommended: true },
+      { id: 123, name: "Scyther", types: ["Inseto", "Voador"], method: "grass", methodLabel: "🌿 Rota 210 e Rota 215 (Diamond/Platinum/BD)", levels: "Lv. 19 — 24", rateRed: 15, rateBlue: 10, highlight: "Evolui p/ Scizor", recommended: true },
+      { id: 113, name: "Chansey", types: ["Normal"], method: "grass", methodLabel: "🌿 Rota 209 & Rota 210 (5% Chance de segurar Lucky Egg!)", levels: "Lv. 16 — 20", rateRed: 5, rateBlue: 5 },
+      { id: 355, name: "Duskull", types: ["Fantasma"], method: "cave", methodLabel: "⛰️ Lost Tower (Rota 209)", levels: "Lv. 16 — 20", rateRed: 25, rateBlue: 25 },
+      { id: 442, name: "Spiritomb", types: ["Fantasma", "Noturno"], method: "static", methodLabel: "🎁 Hallowed Tower na Rota 209 (Use Odd Keystone + 32 conversas no Underground)", levels: "Lv. 25", rateRed: 100, rateBlue: 100, highlight: "Sem Fraquezas na Gen 4!" }
+    ],
+    items: [
+      { name: "TM30 — Shadow Ball", move: "Shadow Ball", moveType: "Fantasma", category: "tm", icon: "💿", how: "Rota 210 Norte (use Defog e atravesse as pontes de bicicleta na neblina)!" },
+      { name: "TM29 — Psychic", move: "Psychic", moveType: "Psíquico", category: "tm", icon: "💿", how: "Rota 211 Leste (use Rock Climb na encosta ao lado de Celestic Town) ou no Cassino de Veilstone!" },
+      { name: "TM51 — Roost", move: "Roost", moveType: "Voador", category: "tm", icon: "💿", how: "Entregue pela garota no penhasco sul da Rota 210!" },
+      { name: "HM03 — Surf", move: "Surf", moveType: "Água", category: "tm", icon: "💿", how: "Entregue pela avó de Cynthia nas ruínas de Celestic Town!" },
+      { name: "HM04 — Strength", move: "Strength", moveType: "Normal", category: "tm", icon: "💿", how: "Topo da Lost Tower na Rota 209 (ou entregue por Riley na Iron Island em Platinum)!" },
+      { name: "Choice Specs", category: "held", icon: "👓", how: "Loja de Celestic Town falando com o homem de óculos escuros entre 04h00 e 09h59 da manhã!" },
+      { name: "Wise Glasses & Black Glasses", category: "held", icon: "🕶️", how: "Mesma loja de Celestic Town (Wise Glasses das 10h às 19h59; Black Glasses das 20h às 03h59)!" },
+      { name: "Good Rod", category: "key", icon: "🎣", how: "Pescador na Rota 209 (ao lado do riacho)." }
+    ]
+  },
+  {
+    id: "sinnoh-veilstone-pastoria-valor",
+    name: "Veilstone City, Pastoria (Great Marsh) & Lake Valor (Rotas 212–215)",
+    sector: "Setor Sinnoh Sudeste",
+    category: "route",
+    connections: "Veilstone City ⇄ Rota 214 ⇄ Lake Valor ⇄ Rota 213 ⇄ Pastoria City (Great Marsh) ⇄ Rota 212",
+    levelRange: "Lv. 20 — 32",
+    dominantTypes: "Lutador / Fogo / Água / Veneno",
+    encounters: [
+      { id: 228, name: "Houndour", types: ["Noturno", "Fogo"], method: "grass", methodLabel: "🌿 Rota 214 (Platinum) & Grand Underground (BDSP)", levels: "Lv. 22 — 26", rateRed: 20, rateBlue: 20, highlight: "🔥 Evolui p/ Houndoom", recommended: true },
+      { id: 137, name: "Porygon", types: ["Normal"], method: "static", methodLabel: "🎁 Entregue por um homem na casa ao norte do Pokémon Center de Veilstone (Platinum)", levels: "Lv. 25", rateRed: 100, rateBlue: 100, highlight: "Evolui p/ Porygon-Z", recommended: true },
+      { id: 453, name: "Croagunk", types: ["Veneno", "Lutador"], method: "grass", methodLabel: "🌿 Great Marsh (Pastoria Safari) & Rota 212", levels: "Lv. 22 — 28", rateRed: 20, rateBlue: 20, recommended: true },
+      { id: 183, name: "Marill", types: ["Água", "Fada"], method: "grass", methodLabel: "🌿 Great Marsh & Rota 215", levels: "Lv. 20 — 26", rateRed: 25, rateBlue: 25, highlight: "Huge Power Azumarill", recommended: true },
+      { id: 482, name: "Azelf", types: ["Psíquico"], method: "static", methodLabel: "🎁 Valor Cavern no centro do Lake Valor", levels: "Lv. 50", rateRed: 100, rateBlue: 100, highlight: "⭐ Guardião Lendário (Nasty Plot)", recommended: true }
+    ],
+    items: [
+      { name: "HM02 — Fly", move: "Fly", moveType: "Voador", category: "tm", icon: "💿", how: "Galpão da Team Galactic (Galactic Warehouse) em Veilstone City após vencer a Líder Maylene!" },
+      { name: "HM05 — Defog", move: "Defog", moveType: "Voador", category: "tm", icon: "💿", how: "Entregue pelo treinador logo na entrada do Great Marsh (Safari de Pastoria City)!" },
+      { name: "TM75 — Swords Dance, TM13 — Ice Beam, TM24 — Thunderbolt & TM35 — Flamethrower", move: "Swords Dance", moveType: "Normal", category: "tm", icon: "💿", how: "Prêmios do Veilstone Game Corner ou à venda no Veilstone Department Store (BDSP)!" },
+      { name: "TM36 — Sludge Bomb", move: "Sludge Bomb", moveType: "Veneno", category: "tm", icon: "💿", how: "Subsolo do Galactic Warehouse em Veilstone City!" },
+      { name: "Dusk Stone", category: "stone", icon: "🌑", how: "Interior do Galactic Warehouse em Veilstone City (evolui Murkrow p/ Honchkrow e Misdreavus p/ Mismagius)!" },
+      { name: "Dawn Stone", category: "stone", icon: "🌅", how: "Lamaçal da Rota 212 (use o Dowsing Machine perto de Pastoria) ou no Mt. Coronet 1F (evolui Kirlia macho p/ Gallade e Snorunt fêmea p/ Froslass)!" },
+      { name: "Razor Fang", category: "stone", icon: "🦷", how: "Jardim Sul da Rota 214 (oculto na grama em Platinum) ou no Battle Park (evolui Gligar p/ Gliscor à noite)!" }
+    ]
+  },
+  {
+    id: "sinnoh-canalave-iron-island",
+    name: "Canalave City, Rota 218 & Iron Island",
+    sector: "Setor Sinnoh Porto Oeste",
+    category: "cave",
+    connections: "Jubilife City ⇄ Rota 218 (Surf) ⇄ Canalave City ⇄ Barco p/ Iron Island",
+    levelRange: "Lv. 28 — 35",
+    dominantTypes: "Lutador / Aço / Água",
+    encounters: [
+      { id: 447, name: "Riolu", types: ["Lutador"], method: "static", methodLabel: "🎁 Ovo entregue por Riley no fundo da Iron Island", levels: "Lv. 1", rateRed: 100, rateBlue: 100, highlight: "👑 Evolui p/ Lucario (Aura Sphere + Swords Dance)", recommended: true },
+      { id: 304, name: "Aron", types: ["Aço", "Pedra"], method: "cave", methodLabel: "⛰️ Iron Island (Poké Radar Diamond / Grand Underground)", levels: "Lv. 28 — 32", rateRed: 20, rateBlue: 0 },
+      { id: 95, name: "Onix", types: ["Pedra", "Terra"], method: "cave", methodLabel: "⛰️ Iron Island", levels: "Lv. 30 — 34", rateRed: 30, rateBlue: 30 },
+      { id: 130, name: "Gyarados", types: ["Água", "Voador"], method: "fish", methodLabel: "🎣 Super Rod / Good Rod (Rota 218 & Canalave)", levels: "Lv. 20 — 40", rateRed: 40, rateBlue: 40, recommended: true }
+    ],
+    items: [
+      { name: "TM89 — U-turn", move: "U-turn", moveType: "Inseto", category: "tm", icon: "💿", how: "Pier sul de Canalave City (use Surf ao sul da ponte de Canalave)!" },
+      { name: "TM91 — Flash Cannon", move: "Flash Cannon", moveType: "Aço", category: "tm", icon: "💿", how: "Prêmio do Líder Byron no Ginásio de Canalave City!" },
+      { name: "Shiny Stone", category: "stone", icon: "✨", how: "Sala final da Iron Island (logo antes da saída após ajudar Riley — evolui Togetic p/ Togekiss e Roselia p/ Roserade)!" },
+      { name: "Metal Coat", category: "stone", icon: "🔩", how: "Casa de Byron na Iron Island (após obter a National Dex) ou equipado em Bronzor/Magnemite selvagens (5%)!" }
+    ]
+  },
+  {
+    id: "sinnoh-snowpoint-acuity",
+    name: "Rotas 216–217, Lake Acuity & Snowpoint City",
+    sector: "Setor Gelado Norte",
+    category: "route",
+    connections: "Mt. Coronet ⇄ Rota 216 ⇄ Rota 217 ⇄ Lake Acuity & Snowpoint City",
+    levelRange: "Lv. 32 — 42",
+    dominantTypes: "Gelo / Noturno / Terra / Psíquico",
+    encounters: [
+      { id: 215, name: "Sneasel", types: ["Noturno", "Gelo"], method: "grass", methodLabel: "🌿 Rotas 216, 217 & Lake Acuity", levels: "Lv. 32 — 38", rateRed: 25, rateBlue: 25, highlight: "❄️ Evolui p/ Weavile (Razor Claw)", recommended: true },
+      { id: 220, name: "Swinub", types: ["Gelo", "Terra"], method: "grass", methodLabel: "🌿 Rota 217 & Lake Acuity", levels: "Lv. 32 — 36", rateRed: 35, rateBlue: 35, highlight: "Evolui p/ Mamoswine (Ancient Power)", recommended: true },
+      { id: 361, name: "Snorunt", types: ["Gelo"], method: "grass", methodLabel: "🌿 Rotas 216 & 217 (Noite em Platinum)", levels: "Lv. 32 — 35", rateRed: 20, rateBlue: 20, timeTag: "🌙 Noite", highlight: "Evolui p/ Froslass (Dawn Stone)", recommended: true },
+      { id: 459, name: "Snover", types: ["Planta", "Gelo"], method: "grass", methodLabel: "🌿 Rotas 216 & 217", levels: "Lv. 32 — 36", rateRed: 35, rateBlue: 35 },
+      { id: 480, name: "Uxie", types: ["Psíquico"], method: "static", methodLabel: "🎁 Acuity Cavern no centro do Lake Acuity", levels: "Lv. 50", rateRed: 100, rateBlue: 100, highlight: "Guardião Lendário" }
+    ],
+    items: [
+      { name: "TM13 — Ice Beam", move: "Ice Beam", moveType: "Gelo", category: "tm", icon: "💿", how: "Encosta da Rota 216 (use Rock Climb acima da cabana de descanso na neve)!" },
+      { name: "HM08 — Rock Climb", move: "Rock Climb", moveType: "Normal", category: "tm", icon: "💿", how: "Na neve da Rota 217 atrás da casa do montanhista (noroeste da Rota 217)!" },
+      { name: "TM14 — Blizzard", move: "Blizzard", moveType: "Gelo", category: "tm", icon: "💿", how: "Lake Acuity (use Surf no nordeste do lago) ou no Veilstone Department Store!" },
+      { name: "Icicle Plate & Spell Tag", category: "held", icon: "🧊", how: "Entregue pelo montanhista na cabana da Rota 217 após devolver o HM08 (Icicle Plate) e pela mulher fantasma na cabana nordeste (Spell Tag)." }
+    ]
+  },
+  {
+    id: "sinnoh-sunyshore-league-battlezone",
+    name: "Sunyshore City, Victory Road, Pokémon League & Battle Zone (Stark Mountain)",
+    sector: "Setor Liga Sinnoh & Pós-Game",
+    category: "special",
+    connections: "Rota 222 ⇄ Sunyshore City ⇄ Rota 223 ⇄ Victory Road ⇄ Pokémon League ⇄ Fight Area & Stark Mountain",
+    levelRange: "Lv. 38 — 70",
+    dominantTypes: "Elétrico / Dragão / Aço / Fogo",
+    encounters: [
+      { id: 81, name: "Magnemite", types: ["Elétrico", "Aço"], method: "grass", methodLabel: "🌿 Rota 222 & Fuego Ironworks", levels: "Lv. 38 — 41", rateRed: 30, rateBlue: 30, highlight: "Evolui p/ Magnezone no Mt. Coronet", recommended: true },
+      { id: 239, name: "Elekid", types: ["Elétrico"], method: "grass", methodLabel: "🌿 Rota 222 (Platinum) & Grand Underground (BD)", levels: "Lv. 38 — 40", rateRed: 20, rateBlue: 0, highlight: "Evolui p/ Electivire", recommended: true },
+      { id: 464, name: "Rhyperior", types: ["Terra", "Pedra"], method: "cave", methodLabel: "⛰️ Victory Road & Stark Mountain (Evolui de Rhydon c/ Protector)", levels: "Lv. 42 — 55", rateRed: 25, rateBlue: 25 },
+      { id: 487, name: "Giratina", types: ["Fantasma", "Dragão"], method: "static", methodLabel: "🎁 Distortion World (Platinum) / Turnback Cave (DP/BDSP)", levels: "Lv. 47 — 70", rateRed: 100, rateBlue: 100, highlight: "👻 LENDÁRIO CAPA DE PLATINUM", recommended: true },
+      { id: 485, name: "Heatran", types: ["Fogo", "Aço"], method: "static", methodLabel: "🎁 Câmara Profunda da Stark Mountain (Battle Zone)", levels: "Lv. 50 — 70", rateRed: 100, rateBlue: 100, highlight: "🌋 Lendário Fogo/Aço", recommended: true }
+    ],
+    items: [
+      { name: "HM07 — Waterfall", move: "Waterfall", moveType: "Água", category: "tm", icon: "💿", how: "Entregue por Jasmine na praia norte de Sunyshore City após conquistar a 8ª Insígnia (Beacon Badge)!" },
+      { name: "Leftovers", category: "held", icon: "🍎", how: "Parte pós-game da Victory Road de Sinnoh (sala da neblina perto da Rota 224) ou equipado em Munchlax selvagens!" },
+      { name: "Razor Claw", category: "stone", icon: "爪", how: "Victory Road 1F (use Rock Climb) e no jardim do prédio da Team Galactic em Veilstone City — evolui Sneasel p/ Weavile à noite!" },
+      { name: "Life Orb", category: "held", icon: "🔮", how: "Exterior da Stark Mountain na Rota 227 (use Rock Climb) ou por 48 BP no Battle Park / Battle Frontier!" },
+      { name: "Choice Band & Choice Scarf", category: "held", icon: "🎗️", how: "48 BP na Battle Tower / Battle Frontier (Fight Area)!" },
+      { name: "Dragon Scale & King's Rock", category: "stone", icon: "👑", how: "Victory Road de Sinnoh (Dragon Scale) e equipado em Poliwhirl/Hariyama selvagens." },
+      { name: "Super Rod", category: "key", icon: "🎣", how: "Entregue pelo pescador no píer da Fight Area (Battle Zone)!" }
+    ]
+  }
+];
+
+// ============================================================================
+// 4B. DADOS DE UNOVA (BLACK/WHITE & BLACK 2/WHITE 2 — COM ESTAÇÕES DO ANO)
+// ============================================================================
+const UNOVA_AREAS = [
+  {
+    id: "unova-southeast-nuvema-nacrene",
+    name: "Nuvema Town, Accumula, Striaton, Wellspring Cave & Nacrene (Rotas 1–3)",
+    sector: "Setor Unova Sudeste (Início BW)",
+    category: "route",
+    connections: "Nuvema Town ⇄ Rota 1 ⇄ Accumula Town ⇄ Rota 2 ⇄ Striaton City ⇄ Rota 3 (Wellspring Cave) ⇄ Nacrene City",
+    levelRange: "Lv. 2 — 15",
+    dominantTypes: "Terra / Água / Lutador / Planta",
+    encounters: [
+      { id: 495, name: "Snivy", types: ["Planta"], method: "static", methodLabel: "🎁 Inicial da Prof. Juniper (Nuvema / Aspertia)", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "Inicial de Planta", recommended: true },
+      { id: 498, name: "Tepig", types: ["Fogo"], method: "static", methodLabel: "🎁 Inicial da Prof. Juniper (Nuvema / Aspertia)", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "Inicial de Fogo", recommended: true },
+      { id: 501, name: "Oshawott", types: ["Água"], method: "static", methodLabel: "🎁 Inicial da Prof. Juniper (Nuvema / Aspertia)", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "Inicial de Água", recommended: true },
+      { id: 529, name: "Drilbur", types: ["Terra"], method: "cave", methodLabel: "⛰️ Nuvens de Poeira na Wellspring Cave (Rota 3)", levels: "Lv. 10 — 13", rateRed: 100, rateBlue: 100, highlight: "👑 Evolui p/ Excadrill (Top 1 Unova)", recommended: true },
+      { id: 535, name: "Tympole", types: ["Água"], method: "grass", methodLabel: "🌿 Exterior da Pinwheel Forest (Nacrene City)", levels: "Lv. 12 — 15", rateRed: 40, rateBlue: 40, highlight: "Evolui p/ Seismitoad (Água/Terra)", recommended: true },
+      { id: 532, name: "Timburr", types: ["Lutador"], method: "grass", methodLabel: "🌿 Exterior da Pinwheel Forest", levels: "Lv. 13 — 15", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Conkeldurr" }
+    ],
+    items: [
+      { name: "HM01 — Cut", move: "Cut", moveType: "Normal", category: "tm", icon: "💿", how: "Entregue por Fennel em Striaton City após vencer o 1º Ginásio (BW)!" },
+      { name: "TM94 — Rock Smash", move: "Rock Smash", moveType: "Lutador", category: "tm", icon: "💿", how: "Entregue pela treinadora na entrada externa da Pinwheel Forest (Nacrene City)!" },
+      { name: "Miracle Seed, Charcoal & Mystic Water", category: "held", icon: "🌱", how: "Entregue pelo senhor no 1º andar da Escola de Treinadores de Striaton City (ou em Castelia City) de acordo com o inicial escolhido!" },
+      { name: "Chesto Berry & Lum Berry", category: "held", icon: "🍒", how: "Entregue por Cheren no Ginásio de Nacrene City." }
+    ]
+  },
+  {
+    id: "unova-southwest-aspertia-virbank",
+    name: "Aspertia City, Floccesy Ranch & Virbank Complex (Rotas 19–20 — Início B2W2)",
+    sector: "Setor Unova Sudoeste (Início B2W2)",
+    category: "route",
+    connections: "Aspertia City ⇄ Rota 19 ⇄ Floccesy Town (Floccesy Ranch) ⇄ Rota 20 ⇄ Virbank City (Virbank Complex)",
+    levelRange: "Lv. 2 — 15",
+    dominantTypes: "Lutador / Elétrico / Aço / Fogo",
+    encounters: [
+      { id: 447, name: "Riolu", types: ["Lutador"], method: "grass", methodLabel: "🌿 Floccesy Ranch (B2W2)", levels: "Lv. 5 — 7", rateRed: 10, rateBlue: 10, highlight: "👑 Lucario logo antes do 1º Ginásio!", recommended: true },
+      { id: 179, name: "Mareep", types: ["Elétrico"], method: "grass", methodLabel: "🌿 Floccesy Ranch (B2W2)", levels: "Lv. 5 — 7", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Ampharos", recommended: true },
+      { id: 298, name: "Azurill", types: ["Normal", "Fada"], method: "grass", methodLabel: "🌿 Floccesy Ranch & Rota 20 (B2W2)", levels: "Lv. 4 — 7", rateRed: 20, rateBlue: 20, highlight: "Huge Power Azumarill", recommended: true },
+      { id: 81, name: "Magnemite", types: ["Elétrico", "Aço"], method: "grass", methodLabel: "🌿 Virbank Complex (B2W2)", levels: "Lv. 10 — 13", rateRed: 25, rateBlue: 25, highlight: "🛡️ Imune ao Veneno da Roxie — Evolui p/ Magnezone!", recommended: true },
+      { id: 58, name: "Growlithe", types: ["Fogo"], method: "grass", methodLabel: "🌿 Virbank Complex (B2W2)", levels: "Lv. 10 — 13", rateRed: 15, rateBlue: 15, highlight: "🔥 Evolui p/ Arcanine", recommended: true },
+      { id: 109, name: "Koffing", types: ["Veneno"], method: "grass", methodLabel: "🌿 Virbank Complex (B2W2)", levels: "Lv. 10 — 13", rateRed: 20, rateBlue: 20 }
+    ],
+    items: [
+      { name: "TM21 — Frustration / TM27 — Return", move: "Return", moveType: "Normal", category: "tm", icon: "💿", how: "TM21 no Floccesy Ranch (entregue por Janitor Orville) e TM27 entregue por Bianca em Aspertia City (B2W2)!" },
+      { name: "TM46 — Thief", move: "Thief", moveType: "Noturno", category: "tm", icon: "💿", how: "Interior do Virbank Complex (use Cut ou contorne os contêineres)!" },
+      { name: "Silk Scarf", category: "held", icon: "🧣", how: "Interior do Virbank Complex (após derrotar os 3 operários)." }
+    ]
+  },
+  {
+    id: "unova-castelia-desert-nimbasa",
+    name: "Castelia City, Rota 4, Desert Resort, Relic Castle & Nimbasa City",
+    sector: "Setor Unova Central & Deserto",
+    category: "route",
+    connections: "Pinwheel Forest / Virbank ⇄ Castelia City ⇄ Rota 4 (Desert Resort & Relic Castle) ⇄ Nimbasa City",
+    levelRange: "Lv. 15 — 35",
+    dominantTypes: "Terra / Noturno / Fogo / Psíquico",
+    encounters: [
+      { id: 551, name: "Sandile", types: ["Terra", "Noturno"], method: "grass", methodLabel: "🌿 Rota 4, Desert Resort & Relic Castle", levels: "Lv. 15 — 22", rateRed: 40, rateBlue: 40, highlight: "👑 Evolui p/ Krookodile (Moxie)", recommended: true },
+      { id: 554, name: "Darumaka", types: ["Fogo"], method: "grass", methodLabel: "🌿 Rota 4 & Desert Resort", levels: "Lv. 15 — 22", rateRed: 35, rateBlue: 35, highlight: "🔥 Evolui p/ Darmanitan (Sheer Force)", recommended: true },
+      { id: 559, name: "Scraggy", types: ["Noturno", "Lutador"], method: "grass", methodLabel: "🌿 Rota 4 & Desert Resort", levels: "Lv. 15 — 22", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Scrafty (Moxie)", recommended: true },
+      { id: 561, name: "Sigilyph", types: ["Psíquico", "Voador"], method: "grass", methodLabel: "🌿 Desert Resort", levels: "Lv. 19 — 22", rateRed: 10, rateBlue: 10, highlight: "⭐ Magic Guard Sweeper", recommended: true },
+      { id: 637, name: "Volcarona", types: ["Inseto", "Fogo"], method: "static", methodLabel: "🎁 Câmara Profunda do Relic Castle (Lv. 35 em B2W2 / Lv. 70 em BW)", levels: "Lv. 35 — 70", rateRed: 100, rateBlue: 100, highlight: "☀️ Quiver Dance Sweeper", recommended: true },
+      { id: 214, name: "Heracross", types: ["Inseto", "Lutador"], method: "grass", methodLabel: "🌿 Lostlorn Forest (Rota 16 a leste de Nimbasa)", levels: "Lv. 21 — 25", rateRed: 15, rateBlue: 10, highlight: "Moxie / Guts", recommended: true }
+    ],
+    items: [
+      { name: "Leftovers", category: "held", icon: "🍎", how: "Castelia Sewers (Esgotos de Castelia em B2W2 — acessível na Primavera/Verão quando a água sobe!) ou na Village Bridge (BW)!" },
+      { name: "Eviolite", category: "held", icon: "💎", how: "Prédio comercial na rua norte de Castelia City (após registrar 40 Pokémon na Pokédex)!" },
+      { name: "Exp. Share", category: "held", icon: "🧢", how: "55º andar do prédio da Battle Company em Castelia City!" },
+      { name: "Fire Stone, Water Stone & Leaf Stone", category: "stone", icon: "🔥", how: "Entregue pelo cavalheiro no Píer Oeste de Castelia City (Liberty Pier) — escolha qualquer uma das 3 pedras!" },
+      { name: "TM28 — Dig", move: "Dig", moveType: "Terra", category: "tm", icon: "💿", how: "Casa na entrada da Rota 4 (logo ao norte de Castelia City)!" },
+      { name: "TM39 — Rock Tomb", move: "Rock Tomb", moveType: "Pedra", category: "tm", icon: "💿", how: "Deserto do Desert Resort (oeste da entrada do Relic Castle)!" },
+      { name: "TM26 — Earthquake & TM30 — Shadow Ball", move: "Earthquake", moveType: "Terra", category: "tm", icon: "💿", how: "Subsolo profundo do Relic Castle (TM26 no 1F do castelo pós-game e TM30 nas câmaras inferiores)!" },
+      { name: "TM72 — Volt Switch", move: "Volt Switch", moveType: "Elétrico", category: "tm", icon: "💿", how: "Prêmio da Líder Elesa no Ginásio de Nimbasa City!" }
+    ]
+  },
+  {
+    id: "unova-driftveil-chargestone-mistralton",
+    name: "Driftveil City, Chargestone Cave, Mistralton & Celestial Tower (Rotas 5–7)",
+    sector: "Setor Unova Oeste",
+    category: "cave",
+    connections: "Nimbasa ⇄ Rota 5 ⇄ Driftveil City ⇄ Rota 6 ⇄ Chargestone Cave ⇄ Mistralton City ⇄ Rota 7 (Celestial Tower)",
+    levelRange: "Lv. 22 — 33",
+    dominantTypes: "Elétrico / Aço / Fantasma / Fogo",
+    encounters: [
+      { id: 570, name: "Zorua", types: ["Noturno"], method: "static", methodLabel: "🎁 Entregue por Rood na casa da Equipe Plasma em Driftveil City (B2W2)", levels: "Lv. 25", rateRed: 100, rateBlue: 100, highlight: "🦊 Evolui p/ Zoroark (Illusion)", recommended: true },
+      { id: 595, name: "Joltik", types: ["Inseto", "Elétrico"], method: "cave", methodLabel: "⛰️ Chargestone Cave", levels: "Lv. 24 — 28", rateRed: 30, rateBlue: 30, highlight: "⚡ Compound Eyes Thunder (Galvantula)", recommended: true },
+      { id: 597, name: "Ferroseed", types: ["Planta", "Aço"], method: "cave", methodLabel: "⛰️ Chargestone Cave", levels: "Lv. 24 — 28", rateRed: 20, rateBlue: 20, highlight: "🛡️ Evolui p/ Ferrothorn (Iron Barbs)", recommended: true },
+      { id: 602, name: "Tynamo", types: ["Elétrico"], method: "cave", methodLabel: "⛰️ Chargestone Cave (B2F)", levels: "Lv. 26 — 28", rateRed: 8, rateBlue: 8, highlight: "Evolui p/ Eelektross (Sem Fraquezas!)", recommended: true },
+      { id: 607, name: "Litwick", types: ["Fantasma", "Fogo"], method: "cave", methodLabel: "⛰️ Celestial Tower (Rota 7)", levels: "Lv. 26 — 29", rateRed: 100, rateBlue: 100, highlight: "🕯️ Evolui p/ Chandelure (145 Sp. Atk)", recommended: true },
+      { id: 577, name: "Solosis", types: ["Psíquico"], method: "grass", methodLabel: "🌿 Rota 5 e Rota 16 (Exclusivo White / White 2)", levels: "Lv. 19 — 24", rateRed: 0, rateBlue: 30, versionTag: "⚪ White / White 2", highlight: "Evolui p/ Reuniclus", recommended: true },
+      { id: 574, name: "Gothita", types: ["Psíquico"], method: "grass", methodLabel: "🌿 Rota 5 e Rota 16 (Exclusivo Black / Black 2)", levels: "Lv. 19 — 24", rateRed: 30, rateBlue: 0, versionTag: "⚫ Black / Black 2" }
+    ],
+    items: [
+      { name: "HM02 — Fly", move: "Fly", moveType: "Voador", category: "tm", icon: "💿", how: "Entregue por Bianca em Driftveil City após derrotar o Líder Clay!" },
+      { name: "Lucky Egg", category: "held", icon: "🥚", how: "Entregue pela Prof. Juniper na entrada da Chargestone Cave (BW) ou no topo da Celestial Tower (B2W2)!" },
+      { name: "Thunder Stone", category: "stone", icon: "⚡", how: "Interior da Chargestone Cave (B1F) e na Rota 9!" },
+      { name: "Shiny Stone", category: "stone", icon: "✨", how: "Casa na Rota 6 (ao norte do Pokémon Breeder)!" },
+      { name: "Dusk Stone", category: "stone", icon: "🌑", how: "Interior da Mistralton Cave (Rota 6, use Surf e Strength) ou na Strange House (B2W2) — evolui Lampent p/ Chandelure!" },
+      { name: "TM80 — Rock Slide", move: "Rock Slide", moveType: "Pedra", category: "tm", icon: "💿", how: "Guidance Chamber no fundo da Mistralton Cave (onde também fica Cobalion)!" },
+      { name: "TM61 — Will-O-Wisp", move: "Will-O-Wisp", moveType: "Fogo", category: "tm", icon: "💿", how: "3º andar da Celestial Tower na Rota 7!" },
+      { name: "Choice Band, Choice Specs, Choice Scarf & Life Orb", category: "held", icon: "🎗️", how: "Loja de BP do Pokémon World Tournament (PWT em Driftveil City — B2W2) ou no Battle Subway (Nimbasa City)!" }
+    ]
+  },
+  {
+    id: "unova-icirrus-opelucid-victory",
+    name: "Twist Mountain, Icirrus City, Opelucid City & Victory Road (Rotas 8–10 / 23)",
+    sector: "Setor Unova Norte & Liga",
+    category: "cave",
+    connections: "Mistralton ⇄ Twist Mountain ⇄ Icirrus City ⇄ Rotas 8–9 ⇄ Opelucid City ⇄ Victory Road ⇄ Pokémon League",
+    levelRange: "Lv. 28 — 50",
+    dominantTypes: "Dragão / Noturno / Gelo / Lutador",
+    encounters: [
+      { id: 610, name: "Axew", types: ["Dragão"], method: "cave", methodLabel: "⛰️ Mistralton Cave (Rota 6) & Rota 23", levels: "Lv. 30 — 33", rateRed: 20, rateBlue: 20, highlight: "🐉 Evolui p/ Haxorus (147 Attack + Dragon Dance)", recommended: true },
+      { id: 633, name: "Deino", types: ["Noturno", "Dragão"], method: "cave", methodLabel: "⛰️ Victory Road (1F / 3F)", levels: "Lv. 38 — 42", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Hydreigon", recommended: true },
+      { id: 619, name: "Mienfoo", types: ["Lutador"], method: "grass", methodLabel: "🌿 Dragonspiral Tower & Victory Road", levels: "Lv. 30 — 42", rateRed: 30, rateBlue: 30, seasonTag: "🌸☀️🍂 Exceto Inverno", highlight: "Evolui p/ Mienshao (Regenerator)", recommended: true },
+      { id: 615, name: "Cryogonal", types: ["Gelo"], method: "cave", methodLabel: "⛰️ Twist Mountain (Comum no Inverno!)", levels: "Lv. 28 — 32", rateRed: 15, rateBlue: 15, seasonTag: "❄️ Inverno (15%)" },
+      { id: 639, name: "Terrakion", types: ["Pedra", "Lutador"], method: "static", methodLabel: "🎁 Trial Chamber na Victory Road (BW) / Rota 22 (B2W2)", levels: "Lv. 42 — 45", rateRed: 100, rateBlue: 100, highlight: "⚔️ Espadachim Lendário", recommended: true }
+    ],
+    items: [
+      { name: "TM31 — Brick Break", move: "Brick Break", moveType: "Lutador", category: "tm", icon: "💿", how: "Entregue pela senhora no Pokémon Center de Icirrus City!" },
+      { name: "TM91 — Flash Cannon", move: "Flash Cannon", moveType: "Aço", category: "tm", icon: "💿", how: "Subsolo da Twist Mountain!" },
+      { name: "TM02 — Dragon Claw", move: "Dragon Claw", moveType: "Dragão", category: "tm", icon: "💿", how: "Andar 3F da Victory Road de Unova!" },
+      { name: "TM93 — Wild Charge", move: "Wild Charge", moveType: "Elétrico", category: "tm", icon: "💿", how: "Exterior da Victory Road de Unova!" },
+      { name: "TM71 — Stone Edge", move: "Stone Edge", moveType: "Pedra", category: "tm", icon: "💿", how: "Subsolo da Challenger's Cave na Rota 9 (BW) ou no fundo da Twist Mountain!" }
+    ]
+  },
+  {
+    id: "unova-east-undella-humilau-chasm",
+    name: "Undella Town, Reversal Mountain, Humilau City & Giant Chasm (Rotas 11–15 / 21–22)",
+    sector: "Setor Unova Leste (Campanha B2W2 & Pós-Game BW)",
+    category: "special",
+    connections: "Opelucid ⇄ Village Bridge ⇄ Lacunosa (Giant Chasm) ⇄ Rota 13 ⇄ Undella (Reversal Mtn) ⇄ Humilau City",
+    levelRange: "Lv. 32 — 65",
+    dominantTypes: "Água / Psíquico / Dragão / Gelo",
+    encounters: [
+      { id: 328, name: "Trapinch", types: ["Terra"], method: "cave", methodLabel: "⛰️ Reversal Mountain & Desert Resort (B2W2)", levels: "Lv. 32 — 36", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Flygon", recommended: true },
+      { id: 120, name: "Staryu", types: ["Água"], method: "surf", methodLabel: "🌊 Surf / Rippling Water na Rota 13 & Undella Town", levels: "Lv. 34 — 45", rateRed: 30, rateBlue: 30, highlight: "⭐ Evolui p/ Starmie (Water Stone)", recommended: true },
+      { id: 375, name: "Metang", types: ["Aço", "Psíquico"], method: "grass", methodLabel: "🌿 Planície interna do Giant Chasm", levels: "Lv. 45 — 55", rateRed: 15, rateBlue: 15, highlight: "👑 Evolui p/ Metagross", recommended: true },
+      { id: 131, name: "Lapras", types: ["Água", "Gelo"], method: "surf", methodLabel: "🌊 Rippling Water sob a Village Bridge (5%)", levels: "Lv. 35 — 45", rateRed: 5, rateBlue: 5, recommended: true },
+      { id: 646, name: "Kyurem", types: ["Dragão", "Gelo"], method: "static", methodLabel: "🎁 Caverna interna do Giant Chasm", levels: "Lv. 70 — 75", rateRed: 100, rateBlue: 100, highlight: "❄️ LENDÁRIO DE CAPA (Black/White Kyurem)", recommended: true }
+    ],
+    items: [
+      { name: "TM13 — Ice Beam", move: "Ice Beam", moveType: "Gelo", category: "tm", icon: "💿", how: "Planície interna do Giant Chasm (noroeste do lago congelado)!" },
+      { name: "TM24 — Thunderbolt", move: "Thunderbolt", moveType: "Elétrico", category: "tm", icon: "💿", how: "Atrás do laboratório P2 Laboratory na Rota 17/18 (use Surf a oeste da Rota 1)!" },
+      { name: "TM35 — Flamethrower", move: "Flamethrower", moveType: "Fogo", category: "tm", icon: "💿", how: "Abundant Shrine na Rota 14 (use Surf e Waterfall no santuário)!" },
+      { name: "TM29 — Psychic", move: "Psychic", moveType: "Psíquico", category: "tm", icon: "💿", how: "Penhasco da Rota 13 (use Strength e Cut perto de Giant Chasm)!" },
+      { name: "TM55 — Scald", move: "Scald", moveType: "Água", category: "tm", icon: "💿", how: "Prêmio do Líder Marlon no Ginásio de Humilau City (B2W2) ou na Cold Storage (BW)!" },
+      { name: "TM75 — Swords Dance", move: "Swords Dance", moveType: "Normal", category: "tm", icon: "💿", how: "Dreamyard Subsolo (BW pós-game) ou na loja de BP do PWT (B2W2)!" },
+      { name: "HM03 — Surf & HM05 — Waterfall", move: "Surf", moveType: "Água", category: "tm", icon: "💿", how: "Surf entregue por Alder/Cheren na Twist Mountain/Rota 6; Waterfall na Rota 18 (BW) ou entregue por N na Victory Road (B2W2)!" }
+    ]
+  }
+];
+
+// ============================================================================
+// 4C. DADOS DE KALOS (POKÉMON X & Y — MEGA EVOLUÇÕES & TIPO FADA)
+// ============================================================================
+const KALOS_AREAS = [
+  {
+    id: "kalos-vaniville-santalune",
+    name: "Vaniville Town, Santalune Forest, Santalune City & Rota 22 (Rotas 1–3)",
+    sector: "Setor Kalos Central-Sul",
+    category: "route",
+    connections: "Vaniville Town ⇄ Aquacorde ⇄ Santalune Forest ⇄ Santalune City ⇄ Rota 22 & Rota 3",
+    levelRange: "Lv. 2 — 8",
+    dominantTypes: "Fogo / Voador / Elétrico / Lutador",
+    encounters: [
+      { id: 650, name: "Chespin", types: ["Planta"], method: "static", methodLabel: "🎁 Inicial em Aquacorde Town", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "Inicial de Planta", recommended: true },
+      { id: 653, name: "Fennekin", types: ["Fogo"], method: "static", methodLabel: "🎁 Inicial em Aquacorde Town", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "Inicial de Fogo", recommended: true },
+      { id: 656, name: "Froakie", types: ["Água"], method: "static", methodLabel: "🎁 Inicial em Aquacorde Town", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "⭐ Evolui p/ Greninja (Água/Sombrio)", recommended: true },
+      { id: 661, name: "Fletchling", types: ["Normal", "Voador"], method: "grass", methodLabel: "🌿 Rotas 2 e 3", levels: "Lv. 2 — 5", rateRed: 35, rateBlue: 35, highlight: "🔥 Evolui p/ Talonflame (Fogo/Voador)", recommended: true },
+      { id: 25, name: "Pikachu", types: ["Elétrico"], method: "grass", methodLabel: "🌿 Santalune Forest & Rota 3", levels: "Lv. 3 — 6", rateRed: 12, rateBlue: 12, highlight: "Pode segurar Light Ball!", recommended: true },
+      { id: 447, name: "Riolu", types: ["Lutador"], method: "grass", methodLabel: "🌿 Rota 22 (A leste de Santalune City)", levels: "Lv. 6 — 7", rateRed: 10, rateBlue: 10, highlight: "Evolui p/ Lucario", recommended: true },
+      { id: 183, name: "Marill", types: ["Água", "Fada"], method: "grass", methodLabel: "🌿 Rota 3 (Ou Azurill na Rota 22)", levels: "Lv. 5 — 7", rateRed: 20, rateBlue: 20, highlight: "Novo Tipo Fada!", recommended: true }
+    ],
+    items: [
+      { name: "Exp. Share", category: "key", icon: "🧢", how: "Entregue por Alexa na saída norte de Santalune City (Rota 4) após vencer a Líder Viola!" },
+      { name: "TM27 — Return", move: "Return", moveType: "Normal", category: "tm", icon: "💿", how: "Entregue por Dexio no portão entre a Rota 4 e Lumiose City!" }
+    ]
+  },
+  {
+    id: "kalos-lumiose-central",
+    name: "Lumiose City, Rota 4, Rota 5, Camphrier & Rota 6–7 (Parfum Palace)",
+    sector: "Setor Metropolitano de Lumiose",
+    category: "route",
+    connections: "Rota 4 ⇄ Lumiose City ⇄ Rota 5 ⇄ Camphrier Town ⇄ Rota 6 (Parfum Palace) & Rota 7",
+    levelRange: "Lv. 8 — 16",
+    dominantTypes: "Aço / Fantasma / Fada / Fogo / Planta",
+    encounters: [
+      { id: 1, name: "Bulbasaur", types: ["Planta", "Veneno"], method: "static", methodLabel: "🎁 Laboratório do Prof. Sycamore em Lumiose City (+ Venusaurite!)", levels: "Lv. 10", rateRed: 100, rateBlue: 100, highlight: "🧬 Acompanha Venusaurite", recommended: true },
+      { id: 4, name: "Charmander", types: ["Fogo"], method: "static", methodLabel: "🎁 Laboratório do Prof. Sycamore em Lumiose City (+ Charizardite X/Y!)", levels: "Lv. 10", rateRed: 100, rateBlue: 100, highlight: "🧬 Acompanha Charizardite X ou Y", recommended: true },
+      { id: 7, name: "Squirtle", types: ["Água"], method: "static", methodLabel: "🎁 Laboratório do Prof. Sycamore em Lumiose City (+ Blastoisinite!)", levels: "Lv. 10", rateRed: 100, rateBlue: 100, highlight: "🧬 Acompanha Blastoisinite", recommended: true },
+      { id: 679, name: "Honedge", types: ["Aço", "Fantasma"], method: "grass", methodLabel: "🌿 Rota 6 (Alameda lateral rumo ao Parfum Palace)", levels: "Lv. 11 — 12", rateRed: 15, rateBlue: 15, highlight: "👑 Evolui p/ Aegislash (Stance Change)", recommended: true },
+      { id: 280, name: "Ralts", types: ["Psíquico", "Fada"], method: "grass", methodLabel: "🌿 Rota 4 (+ Troca c/ Diantha no Café Soleil em Lumiose c/ Gardevoirite!)", levels: "Lv. 8", rateRed: 15, rateBlue: 15, highlight: "🧬 Evolui p/ Mega Gardevoir", recommended: true },
+      { id: 143, name: "Snorlax", types: ["Normal"], method: "static", methodLabel: "🎁 Bloqueando a Ponte da Rota 7 (Acorde com a Poké Flute)", levels: "Lv. 15", rateRed: 100, rateBlue: 100, highlight: "Tanque Clássico", recommended: true }
+    ],
+    items: [
+      { name: "Venusaurite, Charizardite X / Y & Blastoisinite", category: "stone", icon: "🧬", how: "Entregue pelo Prof. Sycamore no Laboratório de Lumiose City junto com o Inicial de Kanto (as outras duas podem ser compradas no Stone Emporium em Vernal Avenue)!" },
+      { name: "Gardevoirite", category: "stone", icon: "🧬", how: "Equipada no Ralts trocado pela Campeã Diantha no Café Soleil (South Boulevard em Lumiose City, pós-game)!" },
+      { name: "HM01 — Cut", move: "Cut", moveType: "Normal", category: "tm", icon: "💿", how: "Jardim do Parfum Palace na Rota 6 (labirinto de sebes à esquerda)!" },
+      { name: "TM09 — Venoshock", move: "Venoshock", moveType: "Veneno", category: "tm", icon: "💿", how: "Rota 6 (caminho lateral de grama alta após o Parfum Palace)!" },
+      { name: "Soothe Bell & Amulet Coin", category: "held", icon: "🔔", how: "Amulet Coin na lareira do 2º andar do Parfum Palace; Soothe Bell em Shalour City!" }
+    ]
+  },
+  {
+    id: "kalos-coastal-ambrette-shalour-coumarine",
+    name: "Ambrette Town, Cyllage, Geosenge, Shalour (Tower of Mastery) & Coumarine (Rotas 8–13)",
+    sector: "Setor Kalos Costeiro (Coastal Kalos)",
+    category: "route",
+    connections: "Rota 8 ⇄ Ambrette ⇄ Cyllage ⇄ Rota 10 (Geosenge) ⇄ Reflection Cave ⇄ Shalour City ⇄ Rota 12 ⇄ Coumarine ⇄ Rota 13",
+    levelRange: "Lv. 14 — 32",
+    dominantTypes: "Lutador / Fada / Dragão / Terra",
+    encounters: [
+      { id: 448, name: "Lucario", types: ["Lutador", "Aço"], method: "static", methodLabel: "🎁 Presente da Líder Korrina no topo da Tower of Mastery (Shalour City)", levels: "Lv. 32", rateRed: 100, rateBlue: 100, highlight: "🧬 JÁ VEM COM LUCARIONITE!", recommended: true },
+      { id: 133, name: "Eevee", types: ["Normal"], method: "grass", methodLabel: "🌿 Rota 10 (Grama e Flores Amarelas)", levels: "Lv. 19 — 21", rateRed: 20, rateBlue: 20, highlight: "🎀 Evolui p/ Sylveon (Tipo Fada + golpe Fairy!)", recommended: true },
+      { id: 701, name: "Hawlucha", types: ["Lutador", "Voador"], method: "grass", methodLabel: "🌿 Rota 10", levels: "Lv. 19 — 21", rateRed: 20, rateBlue: 20, highlight: "⚡ Flying Press + Unburden", recommended: true },
+      { id: 371, name: "Bagon", types: ["Dragão"], method: "grass", methodLabel: "🌿 Rota 8 (Penhasco superior próximo à Connecting Cave)", levels: "Lv. 14 — 15", rateRed: 10, rateBlue: 10, highlight: "🐉 Evolui p/ Salamence", recommended: true },
+      { id: 131, name: "Lapras", types: ["Água", "Gelo"], method: "static", methodLabel: "🎁 Entregue pelo treinador logo na entrada da Rota 12 (A leste de Shalour)", levels: "Lv. 30", rateRed: 100, rateBlue: 100, highlight: "Surfista Gratuito Lv. 30!", recommended: true },
+      { id: 443, name: "Gible", types: ["Dragão", "Terra"], method: "grass", methodLabel: "🌿 Rota 13 (Kalos Badlands — Monte de terra que se move)", levels: "Lv. 26 — 28", rateRed: 20, rateBlue: 20, highlight: "👑 Evolui p/ Garchomp", recommended: true }
+    ],
+    items: [
+      { name: "Lucarionite & Mega Ring", category: "stone", icon: "🧬", how: "Entregues por Korrina no topo da Tower of Mastery em Shalour City!" },
+      { name: "HM04 — Strength, HM03 — Surf & HM02 — Fly", move: "Surf", moveType: "Água", category: "tm", icon: "💿", how: "Strength entregue por Grant em Cyllage City; Surf por Calem/Serena em Shalour City; Fly pelo Prof. Sycamore em Coumarine City!" },
+      { name: "Leftovers", category: "held", icon: "🍎", how: "Rota 12 (use Cut nos arbustos da colina leste logo após a fazenda de Skiddo)!" },
+      { name: "Lucky Egg", category: "held", icon: "🥚", how: "Recepção do Coumarine Hotel (mostre um Pokémon com alta amizade para a garota no lobby)!" },
+      { name: "Thunder Stone, Fire Stone & Leaf Stone", category: "stone", icon: "⚡", how: "Thunder Stone na Rota 10 (entre os menires); Fire e Leaf Stone na Rota 13 (Kalos Badlands) ou no Stone Emporium de Lumiose!" },
+      { name: "Aerodactylite", category: "stone", icon: "🧬", how: "Entregue pelo cientista no laboratório de fósseis de Ambrette Town!" }
+    ]
+  },
+  {
+    id: "kalos-mountain-laverre-anistar-league",
+    name: "Laverre City, Dendemille, Anistar, Snowbelle, Victory Road & Kiloude (Rotas 14–21)",
+    sector: "Setor Kalos Montanhoso & Liga",
+    category: "special",
+    connections: "Lumiose ⇄ Rota 14 ⇄ Laverre City ⇄ Dendemille (Frost Cavern) ⇄ Anistar ⇄ Terminus Cave ⇄ Snowbelle ⇄ Pokémon League",
+    levelRange: "Lv. 30 — 70",
+    dominantTypes: "Dragão / Fada / Gelo / Fantasma",
+    encounters: [
+      { id: 704, name: "Goomy", types: ["Dragão"], method: "grass", methodLabel: "🌿 Rota 14 (Laverre Nature Trail)", levels: "Lv. 30 — 32", rateRed: 20, rateBlue: 20, highlight: "🌧️ Evolui p/ Goodra (Na chuva da Rota 14!)", recommended: true },
+      { id: 93, name: "Haunter", types: ["Fantasma", "Veneno"], method: "grass", methodLabel: "🌿 Rota 14, Rota 19 & Victory Road", levels: "Lv. 30 — 57", rateRed: 20, rateBlue: 20, highlight: "🧬 Gengarite em Laverre City!", recommended: true },
+      { id: 215, name: "Sneasel", types: ["Noturno", "Gelo"], method: "grass", methodLabel: "🌿 Rota 17 (Mamoswine Road)", levels: "Lv. 38 — 40", rateRed: 25, rateBlue: 25, recommended: true },
+      { id: 716, name: "Xerneas", types: ["Fada"], method: "static", methodLabel: "🎁 Team Flare Secret HQ (Geosenge Town — Pokémon X)", levels: "Lv. 50", rateRed: 100, rateBlue: 0, versionTag: "🔵 Exclusivo Pokémon X", highlight: "🦌 LENDÁRIO DE CAPA (Geomancy)", recommended: true },
+      { id: 717, name: "Yveltal", types: ["Noturno", "Voador"], method: "static", methodLabel: "🎁 Team Flare Secret HQ (Geosenge Town — Pokémon Y)", levels: "Lv. 50", rateRed: 0, rateBlue: 100, versionTag: "🔴 Exclusivo Pokémon Y", highlight: "🦅 LENDÁRIO DE CAPA (Oblivion Wing)", recommended: true },
+      { id: 718, name: "Zygarde", types: ["Dragão", "Terra"], method: "static", methodLabel: "🎁 Câmara Profunda da Terminus Cave (Rota 18)", levels: "Lv. 70", rateRed: 100, rateBlue: 100, highlight: "🐍 Lendário Lv. 70" },
+      { id: 150, name: "Mewtwo", types: ["Psíquico"], method: "static", methodLabel: "🎁 Unknown Dungeon no Pokémon Village (Rota 20)", levels: "Lv. 70", rateRed: 100, rateBlue: 100, highlight: "🧬 Acompanha Mewtwonite X ou Y!", recommended: true }
+    ],
+    items: [
+      { name: "Gengarite", category: "stone", icon: "🧬", how: "Entregue pela Hex Maniac no noroeste de Laverre City!" },
+      { name: "Dusk Stone & Shiny Stone", category: "stone", icon: "🌑", how: "Dusk Stone no fundo da Terminus Cave (Rota 18 — evolui Doublade p/ Aegislash!); Shiny Stone na Rota 12 (montando Skiddo)!" },
+      { name: "TM30 — Shadow Ball", move: "Shadow Ball", moveType: "Fantasma", category: "tm", icon: "💿", how: "Interior da Terminus Cave (Rota 18)!" },
+      { name: "TM24 — Thunderbolt & TM35 — Flamethrower", move: "Thunderbolt", moveType: "Elétrico", category: "tm", icon: "💿", how: "TM24 é prêmio do Líder Clemont (Ginásio de Lumiose); TM35 é entregue pela Hex Maniac no Pokémon Center de Anistar City (pela manhã)!" },
+      { name: "TM13 — Ice Beam", move: "Ice Beam", moveType: "Gelo", category: "tm", icon: "💿", how: "Prêmio do Líder Wulfric no Ginásio de Snowbelle City!" },
+      { name: "TM26 — Earthquake & TM02 — Dragon Claw", move: "Earthquake", moveType: "Terra", category: "tm", icon: "💿", how: "TM26 na Rota 22 (use Surf e Waterfall); TM02 na Victory Road!" },
+      { name: "TM29 — Psychic & TM36 — Sludge Bomb", move: "Psychic", moveType: "Psíquico", category: "tm", icon: "💿", how: "TM29 no Pokémon Village (Rota 20); TM36 na Rota 19!" },
+      { name: "Garchompite, Gyaradosite & Alakazite", category: "stone", icon: "🧬", how: "Aparecem brilhando entre 20h00 e 21h00 após atualizar o Mega Ring em Anistar City (Garchompite na Victory Road, Gyaradosite em Couriway Town, Alakazite na Reflection Cave)!" }
+    ]
+  }
+];
+
+// ============================================================================
+// 4D. DADOS DE ALOLA (SUN / MOON / ULTRA SUN / ULTRA MOON — 4 ILHAS & Z-MOVES)
+// ============================================================================
+const ALOLA_AREAS = [
+  {
+    id: "alola-melemele",
+    name: "Melemele Island (Iki Town, Hau'oli City, Rotas 1–3, Verdant Cavern & Ten Carat Hill)",
+    sector: "Ilha Melemele (Noroeste)",
+    category: "route",
+    connections: "Iki Town ⇄ Rota 1 ⇄ Hau'oli City ⇄ Rota 2 (Verdant Cavern) ⇄ Rota 3 (Melemele Meadow & Ten Carat Hill)",
+    levelRange: "Lv. 2 — 15",
+    dominantTypes: "Fada / Elétrico / Lutador / Voador",
+    encounters: [
+      { id: 722, name: "Rowlet", types: ["Planta", "Voador"], method: "static", methodLabel: "🎁 Inicial em Iki Town", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "Evolui p/ Decidueye (Planta/Fantasma)", recommended: true },
+      { id: 725, name: "Litten", types: ["Fogo"], method: "static", methodLabel: "🎁 Inicial em Iki Town", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "🔥 Evolui p/ Incineroar (Fogo/Sombrio)", recommended: true },
+      { id: 728, name: "Popplio", types: ["Água"], method: "static", methodLabel: "🎁 Inicial em Iki Town", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "👑 Evolui p/ Primarina (Água/Fada — Top 1 Alola)", recommended: true },
+      { id: 81, name: "Magnemite", types: ["Elétrico", "Aço"], method: "grass", methodLabel: "🌿 Rota 1 (Trainers' School) & Hau'oli City", levels: "Lv. 5 — 8", rateRed: 50, rateBlue: 50, highlight: "🛡️ Melhor tanque inicial (Magnezone)", recommended: true },
+      { id: 742, name: "Cutiefly", types: ["Inseto", "Fada"], method: "grass", methodLabel: "🌿 Rota 2, Rota 3 & Melemele Meadow", levels: "Lv. 9 — 12", rateRed: 30, rateBlue: 30, highlight: "🎀 Evolui p/ Ribombee (Quiver Dance)", recommended: true },
+      { id: 701, name: "Hawlucha", types: ["Lutador", "Voador"], method: "grass", methodLabel: "🌿 Rota 2 (USUM — ou Troca por Spearow no Pokémon Center da Rota 2!)", levels: "Lv. 8 — 10", rateRed: 20, rateBlue: 20, highlight: "⚡ Chauncey (Troca na Rota 2)", recommended: true },
+      { id: 371, name: "Bagon", types: ["Dragão"], method: "grass", methodLabel: "🌿 Rota 3 (Penhasco sul) & Kala'e Bay (SOS Battle pode chamar Salamence Lv. 12!)", levels: "Lv. 9 — 12", rateRed: 10, rateBlue: 10, highlight: "🐉 Evolui p/ Salamence", recommended: true },
+      { id: 570, name: "Zorua", types: ["Noturno"], method: "grass", methodLabel: "🌿 Rota 1 (Trainers' School em USUM)", levels: "Lv. 6 — 8", rateRed: 20, rateBlue: 20, highlight: "👑 Cheese contra Ultra Necrozma!", recommended: true }
+    ],
+    items: [
+      { name: "Normalium Z & Fightinium Z", category: "key", icon: "💎", how: "Normalium Z na Verdant Cavern (Trial de Ilima) e Fightinium Z após vencer o Kahuna Hala em Iki Town!" },
+      { name: "Flyinium Z & Rockium Z (Ten Carat Hill)", category: "key", icon: "💎", how: "Flyinium Z no Farthest Hollow do Ten Carat Hill (use Machamp Shove na pedra)! TM80 Rock Slide também fica na baía do Ten Carat Hill (Surf)." },
+      { name: "Leftovers", category: "held", icon: "🍎", how: "Equipado com 100% de chance em Munchlax selvagens na Rota 1 (abaixo das rochas de Tauros Charge) ou por 48 BP no Battle Royal Dome!" },
+      { name: "TM01 — Work Up & Exp. Share", move: "Work Up", moveType: "Normal", category: "tm", icon: "💿", how: "Entregues pelo Prof. Kukui na Trainers' School da Rota 1!" },
+      { name: "Soothe Bell", category: "held", icon: "🔔", how: "Entregue pelo cavalheiro na Rota 3 (ao sul da ponte)!" }
+    ]
+  },
+  {
+    id: "alola-akala",
+    name: "Akala Island (Heahea, Paniola, Brooklet Hill, Wela Volcano, Lush Jungle & Konikoni)",
+    sector: "Ilha Akala (Nordeste)",
+    category: "route",
+    connections: "Heahea City ⇄ Rota 4 ⇄ Paniola Ranch ⇄ Rota 5 (Brooklet Hill) ⇄ Royal Avenue ⇄ Wela Volcano ⇄ Lush Jungle ⇄ Konikoni City",
+    levelRange: "Lv. 13 — 26",
+    dominantTypes: "Terra / Fogo / Veneno / Água",
+    encounters: [
+      { id: 749, name: "Mudbray", types: ["Terra"], method: "grass", methodLabel: "🌿 Rota 4, Paniola Ranch & Rota 6", levels: "Lv. 12 — 17", rateRed: 30, rateBlue: 30, highlight: "🐴 Evolui p/ Mudsdale (Stamina)", recommended: true },
+      { id: 757, name: "Salandit", types: ["Veneno", "Fogo"], method: "grass", methodLabel: "🌿 Wela Volcano Park & Rota 8", levels: "Lv. 16 — 20", rateRed: 30, rateBlue: 30, highlight: "🔥 Fêmeas evoluem p/ Salazzle!", recommended: true },
+      { id: 747, name: "Mareanie", types: ["Veneno", "Água"], method: "fish", methodLabel: "🎣 SOS Battle de Corsola (Rota 9 & Melemele Sea)", levels: "Lv. 14 — 22", rateRed: 20, rateBlue: 20, highlight: "🛡️ Evolui p/ Toxapex (Regenerator)", recommended: true },
+      { id: 133, name: "Eevee", types: ["Normal"], method: "grass", methodLabel: "🌿 Rota 4 & Rota 6 (+ Ovo na creche do Paniola Ranch!)", levels: "Lv. 11 — 16", rateRed: 100, rateBlue: 100, highlight: "🥚 Ovo gratuito no Paniola Ranch", recommended: true },
+      { id: 246, name: "Larvitar", types: ["Pedra", "Terra"], method: "cave", methodLabel: "⛰️ Diglett's Tunnel (USUM)", levels: "Lv. 20 — 23", rateRed: 10, rateBlue: 10, highlight: "Evolui p/ Tyranitar", recommended: true }
+    ],
+    items: [
+      { name: "Waterium Z, Firium Z, Grassium Z & Rockium Z", category: "key", icon: "💎", how: "Conquistados nos Trials de Lana (Brooklet Hill), Kiawe (Wela Volcano), Mallow (Lush Jungle) e na Grande Prova de Olivia (Ruins of Life)!" },
+      { name: "TM55 — Scald", move: "Scald", moveType: "Água", category: "tm", icon: "💿", how: "Brooklet Hill (no 2º lago, use Lapras Paddle para o canto sul)!" },
+      { name: "TM39 — Rock Tomb & TM43 — Flame Charge", move: "Rock Tomb", moveType: "Pedra", category: "tm", icon: "💿", how: "Encosta do Wela Volcano Park (Rota 7)!" },
+      { name: "Fire Stone, Water Stone, Thunder Stone & Leaf Stone", category: "stone", icon: "🔥", how: "Vendidas na joalheria de Olivia em Konikoni City por ₽3.000 cada (e uma Fire Stone também fica no Diglett's Tunnel)!" },
+      { name: "Eviolite", category: "held", icon: "💎", how: "Farol de Konikoni City (ao lado do restaurante)!" },
+      { name: "Amulet Coin & Mystic Water", category: "held", icon: "🪙", how: "Paniola Ranch (atrás dos caminhões no sul do rancho)!" }
+    ]
+  },
+  {
+    id: "alola-ulaula",
+    name: "Ula'ula Island (Malie City, Mt. Hokulani, Tapu Village, Thrifty Megamart & Mt. Lanakila)",
+    sector: "Ilha Ula'ula (Sudeste & Liga Alola)",
+    category: "special",
+    connections: "Malie City ⇄ Mt. Hokulani ⇄ Rotas 11–13 ⇄ Tapu Village ⇄ Rota 14 (Thrifty Megamart) ⇄ Po Town ⇄ Mt. Lanakila (Pokémon League)",
+    levelRange: "Lv. 26 — 55",
+    dominantTypes: "Fantasma / Fada / Aço / Gelo",
+    encounters: [
+      { id: 778, name: "Mimikyu", types: ["Fantasma", "Fada"], method: "cave", methodLabel: "⛰️ Thrifty Megamart (Abandoned Site na Rota 14)", levels: "Lv. 29 — 32", rateRed: 15, rateBlue: 15, highlight: "👑 Disguise + Swords Dance (Top Tier)", recommended: true },
+      { id: 374, name: "Beldum", types: ["Aço", "Psíquico"], method: "grass", methodLabel: "🌿 Mount Hokulani", levels: "Lv. 25 — 28", rateRed: 10, rateBlue: 10, highlight: "👑 Evolui p/ Metagross", recommended: true },
+      { id: 37, name: "Alolan Vulpix", types: ["Gelo"], method: "grass", methodLabel: "🌿 Tapu Village, Rota 14 & Mount Lanakila (Sun / Ultra Sun)", levels: "Lv. 28 — 45", rateRed: 20, rateBlue: 0, versionTag: "☀️ Sun / Ultra Sun", highlight: "❄️ Evolui p/ Alolan Ninetales (Gelo/Fada + Snow Warning)", recommended: true },
+      { id: 27, name: "Alolan Sandshrew", types: ["Gelo", "Aço"], method: "grass", methodLabel: "🌿 Tapu Village, Rota 14 & Mount Lanakila (Moon / Ultra Moon)", levels: "Lv. 28 — 45", rateRed: 0, rateBlue: 20, versionTag: "🌙 Moon / Ultra Moon", highlight: "❄️ Evolui p/ Alolan Sandslash", recommended: true },
+      { id: 551, name: "Sandile", types: ["Terra", "Noturno"], method: "grass", methodLabel: "🌿 Haina Desert (Rota 13)", levels: "Lv. 28 — 31", rateRed: 30, rateBlue: 30, highlight: "Evolui p/ Krookodile", recommended: true }
+    ],
+    items: [
+      { name: "Electrium Z, Steelium Z, Ghostium Z & Darkinium Z", category: "key", icon: "💎", how: "Conquistados no Trial de Sophocles (Hokulani Observatory), Acerola (Thrifty Megamart) e Nanu (Malie City)!" },
+      { name: "Mimikium Z", category: "key", icon: "💎", how: "Interior do Thrifty Megamart (Abandoned Site) à noite em USUM!" },
+      { name: "Ice Stone", category: "stone", icon: "🧊", how: "Jardim da Shady House em Po Town (a esquerda da piscina — evolui Alolan Vulpix p/ Alolan Ninetales e Alolan Sandshrew p/ Alolan Sandslash)!" },
+      { name: "Dusk Stone", category: "stone", icon: "🌑", how: "Comprada na loja de pulgas do Malie City Community Center (USUM) ou no fundo do Poni Meadow!" },
+      { name: "TM30 — Shadow Ball", move: "Shadow Ball", moveType: "Fantasma", category: "tm", icon: "💿", how: "Praia da Rota 14 (a oeste da entrada do Thrifty Megamart)!" },
+      { name: "TM24 — Thunderbolt & TM36 — Sludge Bomb", move: "Thunderbolt", moveType: "Elétrico", category: "tm", icon: "💿", how: "TM24 nas dunas da Poni Plains / Seafolk; TM36 na Shady House em Po Town!" },
+      { name: "TM13 — Ice Beam", move: "Ice Beam", moveType: "Gelo", category: "tm", icon: "💿", how: "Interior da caverna do Mount Lanakila (a caminho da Liga Pokémon)!" },
+      { name: "Lucky Egg", category: "held", icon: "🥚", how: "Entregue pelo Prof. Kukui no seu laboratório (após registrar 50 Pokémon) ou na recepção do Mount Lanakila (USUM)!" }
+    ]
+  },
+  {
+    id: "alola-poni-aether",
+    name: "Poni Island & Aether Paradise (Seafolk Village, Vast Poni Canyon, Altar & Battle Tree)",
+    sector: "Ilha Poni & Aether Paradise (Sudoeste & Centro)",
+    category: "special",
+    connections: "Aether Paradise ⇄ Seafolk Village ⇄ Poni Wilds ⇄ Vast Poni Canyon ⇄ Altar of the Sunne/Moone ⇄ Battle Tree",
+    levelRange: "Lv. 40 — 65",
+    dominantTypes: "Dragão / Lutador / Psíquico / Fada",
+    encounters: [
+      { id: 782, name: "Jangmo-o", types: ["Dragão"], method: "cave", methodLabel: "⛰️ Vast Poni Canyon (Caverna externa antes da sala do Totem)", levels: "Lv. 41 — 44", rateRed: 15, rateBlue: 15, highlight: "👑 Evolui p/ Kommo-o (Clangorous Soulblaze)", recommended: true },
+      { id: 791, name: "Solgaleo", types: ["Psíquico", "Aço"], method: "static", methodLabel: "🎁 Altar of the Sunne / Mahalo Trail (Sun & Ultra Sun)", levels: "Lv. 55 — 60", rateRed: 100, rateBlue: 0, versionTag: "☀️ Sun / Ultra Sun", highlight: "🦁 LENDÁRIO DE CAPA", recommended: true },
+      { id: 792, name: "Lunala", types: ["Psíquico", "Fantasma"], method: "static", methodLabel: "🎁 Altar of the Moone / Mahalo Trail (Moon & Ultra Moon)", levels: "Lv. 55 — 60", rateRed: 0, rateBlue: 100, versionTag: "🌙 Moon / Ultra Moon", highlight: "🦇 LENDÁRIO DE CAPA", recommended: true },
+      { id: 800, name: "Necrozma", types: ["Psíquico"], method: "static", methodLabel: "🎁 Mount Lanakila (USUM) / Ten Carat Hill (SM)", levels: "Lv. 65 — 75", rateRed: 100, rateBlue: 100, highlight: "🌟 Ultra Necrozma (Ultranecrozium Z)", recommended: true },
+      { id: 785, name: "Tapu Koko", types: ["Elétrico", "Fada"], method: "static", methodLabel: "🎁 Ruins of Conflict (Melemele Island)", levels: "Lv. 60", rateRed: 100, rateBlue: 100, highlight: "⚡ Guardião Elétrico/Fada", recommended: true }
+    ],
+    items: [
+      { name: "Dragonium Z, Fairium Z & Groundium Z", category: "key", icon: "💎", how: "Dragonium Z na sala do Totem Kommo-o (Vast Poni Canyon), Fairium Z entregue por Mina e Groundium Z após vencer a Kahuna Hapu!" },
+      { name: "TM02 — Dragon Claw & TM35 — Flamethrower", move: "Dragon Claw", moveType: "Dragão", category: "tm", icon: "💿", how: "Ambos estão no Vast Poni Canyon (TM02 após a prova de Kommo-o; TM35 na caverna inferior usando Tauros Charge)!" },
+      { name: "TM26 — Earthquake", move: "Earthquake", moveType: "Terra", category: "tm", icon: "💿", how: "Resolution Cave (no fundo do Poni Meadow, usando Lapras Paddle e Machamp Shove)!" },
+      { name: "TM29 — Psychic", move: "Psychic", moveType: "Psíquico", category: "tm", icon: "💿", how: "Entregue por Wicke nas docas do Aether Paradise!" },
+      { name: "Key Stone & Todas as Mega Stones (Alakazite, Salamencite, Metagrossite, Lucarionite, Gengarite)", category: "stone", icon: "🧬", how: "Key Stone entregue por Dexio & Sina no Ancient Poni Path; Mega Stones vendidas por 64 BP na Battle Tree (Poni Gauntlet)!" },
+      { name: "Focus Sash, Assault Vest, Life Orb & Choice Items", category: "held", icon: "🎗️", how: "Focus Sash ao derrotar a dançarina Oricorio no Poni Wilds; Life Orb na Resolution Cave; Choice Band/Specs/Scarf na Battle Tree!" }
+    ]
+  }
+];
+
+// ============================================================================
+// 4E. DADOS DE GALAR (POKÉMON SWORD & SHIELD — WILD AREA & DYNAMAX)
+// ============================================================================
+const GALAR_AREAS = [
+  {
+    id: "galar-postwick-motostoke",
+    name: "Postwick, Slumbering Weald, Wedgehurst & Motostoke (Rotas 1–2)",
+    sector: "Setor Galar Sul",
+    category: "route",
+    connections: "Postwick (Slumbering Weald) ⇄ Rota 1 ⇄ Wedgehurst ⇄ Rota 2 ⇄ Motostoke",
+    levelRange: "Lv. 2 — 14",
+    dominantTypes: "Voador / Aço / Fogo / Planta / Água",
+    encounters: [
+      { id: 810, name: "Grookey", types: ["Planta"], method: "static", methodLabel: "🎁 Inicial em Postwick", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "🥁 Evolui p/ Rillaboom (Grassy Surge)", recommended: true },
+      { id: 813, name: "Scorbunny", types: ["Fogo"], method: "static", methodLabel: "🎁 Inicial em Postwick", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "⚽ Evolui p/ Cinderace (Pyro Ball + Libero)", recommended: true },
+      { id: 816, name: "Sobble", types: ["Água"], method: "static", methodLabel: "🎁 Inicial em Postwick", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "🎯 Evolui p/ Inteleon (Snipe Shot)", recommended: true },
+      { id: 821, name: "Rookidee", types: ["Voador"], method: "grass", methodLabel: "🌿 Rotas 1, 2 e 3", levels: "Lv. 2 — 10", rateRed: 40, rateBlue: 40, highlight: "👑 Evolui p/ Corviknight (Voador/Aço)", recommended: true },
+      { id: 888, name: "Zacian", types: ["Fada", "Aço"], method: "static", methodLabel: "🎁 Energy Plant / Slumbering Weald (Pokémon Sword)", levels: "Lv. 70", rateRed: 100, rateBlue: 0, versionTag: "🔵 Exclusivo Sword", highlight: "🗡️ LENDÁRIO DE CAPA (Behemoth Blade)", recommended: true },
+      { id: 889, name: "Zamazenta", types: ["Lutador", "Aço"], method: "static", methodLabel: "🎁 Energy Plant / Slumbering Weald (Pokémon Shield)", levels: "Lv. 70", rateRed: 0, rateBlue: 100, versionTag: "🔴 Exclusivo Shield", highlight: "盾 LENDÁRIO DE CAPA (Behemoth Bash)", recommended: true }
+    ],
+    items: [
+      { name: "Leftovers", category: "held", icon: "🍎", how: "Árvores de Berry na Wild Area (Rolling Fields / Giant's Seat — sacuda a árvore até cair Leftovers!) ou equipado em Munchlax/Snorlax!" },
+      { name: "Life Orb", category: "held", icon: "🔮", how: "Fundo da Slumbering Weald (atravesse o rio à esquerda do altar das espadas)!" },
+      { name: "Rusted Sword & Rusted Shield", category: "held", icon: "⚔️", how: "Altar da Slumbering Weald no pós-game!" },
+      { name: "Choice Scarf", category: "held", icon: "🧣", how: "Entregue por Frank em Ballonlea após entregar a Old Letter da menina de Hammerlocke!" }
+    ]
+  },
+  {
+    id: "galar-wild-area-south-mines",
+    name: "Wild Area Sul, Galar Mine No. 1, Turffield, Hulbury & Galar Mine No. 2 (Rotas 3–5)",
+    sector: "Setor Galar Central-Sul",
+    category: "route",
+    connections: "Wild Area Sul (Rolling Fields) ⇄ Motostoke ⇄ Rota 3 (Galar Mine No. 1) ⇄ Turffield ⇄ Rota 5 ⇄ Hulbury ⇄ Galar Mine No. 2",
+    levelRange: "Lv. 10 — 28",
+    dominantTypes: "Terra / Aço / Elétrico / Veneno / Fada",
+    encounters: [
+      { id: 529, name: "Drilbur", types: ["Terra"], method: "cave", methodLabel: "⛰️ Galar Mine No. 1 (Montes de poeira)", levels: "Lv. 12 — 15", rateRed: 35, rateBlue: 35, highlight: "👑 Evolui p/ Excadrill (Terra/Aço)", recommended: true },
+      { id: 848, name: "Toxel", types: ["Elétrico", "Veneno"], method: "static", methodLabel: "🎁 Presente da cuidadora dentro da Pokémon Nursery na Rota 5!", levels: "Lv. 1", rateRed: 100, rateBlue: 100, highlight: "🎸 Evolui p/ Toxtricity no Lv. 30 (Punk Rock)", recommended: true },
+      { id: 280, name: "Ralts", types: ["Psíquico", "Fada"], method: "grass", methodLabel: "🌿 Wild Area (Rolling Fields e Dappled Grove com Neblina/Nublado)", levels: "Lv. 10 — 26", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Gardevoir ou Gallade", recommended: true },
+      { id: 130, name: "Gyarados", types: ["Água", "Voador"], method: "surf", methodLabel: "🌊 East Lake Axewell & Rota 2 (Ou Magikarp em qualquer rio)", levels: "Lv. 20 — 60", rateRed: 45, rateBlue: 45, highlight: "Moxie + Max Airstream!", recommended: true },
+      { id: 597, name: "Ferroseed", types: ["Planta", "Aço"], method: "grass", methodLabel: "🌿 Rota 4", levels: "Lv. 14 — 17", rateRed: 15, rateBlue: 15, highlight: "Evolui p/ Ferrothorn", recommended: true }
+    ],
+    items: [
+      { name: "Expert Belt", category: "held", icon: "🥋", how: "Resolva o enigma dos 3 pilares de pedra em Turffield (Água -> Planta -> Fogo)!" },
+      { name: "Charcoal, Mystic Water & Miracle Seed", category: "held", icon: "🔥", how: "Barraca de incensos e itens no mercado de rua de Hulbury!" },
+      { name: "Heavy-Duty Boots", category: "held", icon: "🥾", how: "Interior da Galar Mine No. 2 (caminho ao norte dos trilhos após derrotar Kabu)!" },
+      { name: "TM49 — Sand Tomb & TM54 — Rock Blast", move: "Sand Tomb", moveType: "Terra", category: "tm", icon: "💿", how: "Interior da Galar Mine No. 1 (TM54) e Galar Mine No. 2 (TM49)!" },
+      { name: "Dawn Stone, Dusk Stone, Shiny Stone, Fire/Water/Thunder/Leaf/Ice Stones", category: "stone", icon: "💎", how: "Todas as 10 Pedras de Evolução respawam diariamente atrás dos pilares do círculo de pedras de Lake of Outrage (Wild Area) e com os Digging Duo (Bridge Field)!" }
+    ]
+  },
+  {
+    id: "galar-hammerlocke-wild-north",
+    name: "Wild Area Norte (Lake of Outrage), Hammerlocke, Stow-on-Side & Ballonlea (Rota 6 & Glimwood Tangle)",
+    sector: "Setor Galar Central & Fada",
+    category: "special",
+    connections: "Wild Area Norte (Lake of Outrage) ⇄ Hammerlocke ⇄ Rota 6 ⇄ Stow-on-Side ⇄ Glimwood Tangle ⇄ Ballonlea",
+    levelRange: "Lv. 28 — 60",
+    dominantTypes: "Dragão / Fantasma / Fada / Sombrio",
+    encounters: [
+      { id: 885, name: "Dreepy", types: ["Dragão", "Fantasma"], method: "grass", methodLabel: "🌿 Lake of Outrage na Wild Area (Ou Drakloak nadando com Surf!)", levels: "Lv. 50 — 60", rateRed: 15, rateBlue: 15, highlight: "👑 Evolui p/ Dragapult (600 BST Pseudo-Lendário)", recommended: true },
+      { id: 859, name: "Impidimp", types: ["Noturno", "Fada"], method: "grass", methodLabel: "🌿 Glimwood Tangle (Toca nos cogumelos brilhantes!)", levels: "Lv. 32 — 36", rateRed: 100, rateBlue: 100, highlight: "👹 Evolui p/ Grimmsnarl (Prankster Screens)", recommended: true },
+      { id: 882, name: "Dracovish", types: ["Água", "Dragão"], method: "static", methodLabel: "🎁 Combine Fossilized Fish + Fossilized Drake com Cara Liss na Rota 6!", levels: "Lv. 10", rateRed: 100, rateBlue: 100, highlight: "🦖 Fishious Rend (85x2 Base Power!)", recommended: true },
+      { id: 176, name: "Togetic", types: ["Fada", "Voador"], method: "static", methodLabel: "🎁 Troque Toxel por Togepi em Hammerlocke (Ou capture Togekiss em Dusty Bowl!)", levels: "Lv. 25 — 60", rateRed: 100, rateBlue: 100, highlight: "⭐ Max Airstream + Serene Grace", recommended: true },
+      { id: 246, name: "Larvitar", types: ["Pedra", "Terra"], method: "grass", methodLabel: "🌿 Lake of Outrage & Dusty Bowl (Shield)", levels: "Lv. 50 — 55", rateRed: 0, rateBlue: 20, versionTag: "🔴 Exclusivo Shield", highlight: "Evolui p/ Tyranitar", recommended: true }
+    ],
+    items: [
+      { name: "Assault Vest", category: "held", icon: "🦺", how: "Colina nordeste do Lake of Outrage (Wild Area Norte, logo após atravessar a água com a Rotom Bike)!" },
+      { name: "Choice Specs & Choice Band", category: "held", icon: "👓", how: "Choice Specs na colina atrás dos pilares de pedra do Lake of Outrage; Choice Band na Rota 2 (usando a Rotom Bike aquática a oeste da casa da Professora)!" },
+      { name: "Focus Sash", category: "held", icon: "🎗️", how: "Giant's Cap na Wild Area (ou por 15 BP na Battle Tower de Wyndon)!" },
+      { name: "Eviolite", category: "held", icon: "💎", how: "Derrote a treinadora dentro da casa à direita do Pokémon Center de Ballonlea!" },
+      { name: "Cracked Pot & Sweet/Tart Apple", category: "stone", icon: "🫖", how: "Cracked Pot no telhado ao lado do Ginásio de Stow-on-Side (evolui Sinistea); Sweet/Tart Apple com o garoto no oeste de Hammerlocke (evolui Applin)!" },
+      { name: "TR24 — Outrage, TR10 — Earthquake, TR02 — Flamethrower, TR05 — Ice Beam, TR08 — Thunderbolt & TR11 — Psychic", move: "Earthquake", moveType: "Terra", category: "tm", icon: "💿", how: "Vendidos pelos Watt Traders espalhados pela Wild Area (em troca de Watts) ou garantidos em Max Raid Battles de 4–5 estrelas!" }
+    ]
+  },
+  {
+    id: "galar-circhester-spikemuth-wyndon-dlc",
+    name: "Circhester, Spikemuth, Wyndon & DLCs (Isle of Armor & Crown Tundra — Rotas 7–10)",
+    sector: "Setor Galar Norte, Liga & DLCs",
+    category: "special",
+    connections: "Hammerlocke ⇄ Rotas 7–8 ⇄ Circhester ⇄ Rota 9 ⇄ Spikemuth ⇄ Rota 10 ⇄ Wyndon ⇄ Isle of Armor & Crown Tundra",
+    levelRange: "Lv. 38 — 70",
+    dominantTypes: "Gelo / Lutador / Dragão / Veneno",
+    encounters: [
+      { id: 554, name: "Galarian Darumaka", types: ["Gelo"], method: "grass", methodLabel: "🌿 Rota 8 (Steamdrift Way) e Rota 10 (Pokémon Sword)", levels: "Lv. 38 — 46", rateRed: 20, rateBlue: 0, versionTag: "🔵 Exclusivo Sword", highlight: "❄️ Gorilla Tactics Galarian Darmanitan (Ice Stone)", recommended: true },
+      { id: 447, name: "Riolu", types: ["Lutador"], method: "grass", methodLabel: "🌿 Giant's Cap na Wild Area (Nevasca) & Roaring-Sea Caves (Crown Tundra)", levels: "Lv. 32 — 60", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Lucario", recommended: true },
+      { id: 891, name: "Kubfu", types: ["Lutador"], method: "static", methodLabel: "🎁 Presente de Mustard no Master Dojo (Isle of Armor)", levels: "Lv. 10", rateRed: 100, rateBlue: 100, highlight: "🥋 Evolui p/ Urshifu (Single Strike ou Rapid Strike)", recommended: true },
+      { id: 890, name: "Eternatus", types: ["Veneno", "Dragão"], method: "static", methodLabel: "🎁 Topo da Energy Plant em Hammerlocke (Campanha Principal)", levels: "Lv. 60", rateRed: 100, rateBlue: 100, highlight: "☄️ Dynamax Cannon (160 Sp. Atk)", recommended: true }
+    ],
+    items: [
+      { name: "TM76 — Round, TM19 — Safeguard, TM27 — Icy Wind & TM99 — Breaking Swipe", move: "Icy Wind", moveType: "Gelo", category: "tm", icon: "💿", how: "Vendidos nos centros Pokémon de Circhester, Hammerlocke e Wyndon!" },
+      { name: "Lucky Egg", category: "held", icon: "🥚", how: "Entregue pelo chef do restaurante Seafood em Hulbury após completar as 3 entregas de ingredientes!" },
+      { name: "Bottle Cap, Ability Capsule, Ability Patch & Nature Mints", category: "key", icon: "🌿", how: "Loja de BP na Battle Tower de Wyndon e na Dyna Tree Hill (Crown Tundra)!" }
+    ]
+  }
+];
+
+// ============================================================================
+// 4F. DADOS DE HISUI (POKÉMON LEGENDS: ARCEUS — 5 GRANDES SETORES & FORMAS DE HISUI)
+// ============================================================================
+const HISUI_AREAS = [
+  {
+    id: "hisui-jubilife-obsidian",
+    name: "Jubilife Village & Obsidian Fieldlands (Campo Obsidiana / Lake Verity)",
+    sector: "Setor Hisui 01 — Campo Obsidiana",
+    category: "route",
+    connections: "Jubilife Village ⇄ Aspiration Hill ⇄ Deertrack Heights ⇄ Grandtree Arena ⇄ Lake Verity & Ramanas Island",
+    levelRange: "Lv. 2 — 60",
+    dominantTypes: "Inseto / Pedra / Normal / Lutador",
+    encounters: [
+      { id: 722, name: "Rowlet", types: ["Planta", "Voador"], method: "static", methodLabel: "🎁 Inicial do Prof. Laventon em Jubilife Village", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "🍂 Evolui p/ Hisuian Decidueye (Planta/Lutador)", recommended: true },
+      { id: 155, name: "Cyndaquil", types: ["Fogo"], method: "static", methodLabel: "🎁 Inicial do Prof. Laventon em Jubilife Village", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "👻 Evolui p/ Hisuian Typhlosion (Fogo/Fantasma)", recommended: true },
+      { id: 501, name: "Oshawott", types: ["Água"], method: "static", methodLabel: "🎁 Inicial do Prof. Laventon em Jubilife Village", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "🗡️ Evolui p/ Hisuian Samurott (Água/Sombrio)", recommended: true },
+      { id: 123, name: "Scyther", types: ["Inseto", "Voador"], method: "grass", methodLabel: "🌿 Grandtree Arena (Obsidian Fieldlands)", levels: "Lv. 18 — 22", rateRed: 35, rateBlue: 35, highlight: "🪓 Evolui p/ Kleavor (Black Augurite) ou Scizor!", recommended: true },
+      { id: 396, name: "Starly", types: ["Normal", "Voador"], method: "grass", methodLabel: "🌿 Aspiration Hill & Horseshoe Plains", levels: "Lv. 2 — 10", rateRed: 50, rateBlue: 50, highlight: "Evolui p/ Staraptor", recommended: true },
+      { id: 403, name: "Shinx", types: ["Elétrico"], method: "grass", methodLabel: "🌿 Aspiration Hill & Floaro Gardens", levels: "Lv. 3 — 10", rateRed: 40, rateBlue: 40, recommended: true },
+      { id: 392, name: "Alpha Infernape", types: ["Fogo", "Lutador"], method: "static", methodLabel: "🎁 Alpha Estático em Ramanas Island (Obsidian Fieldlands)", levels: "Lv. 65", rateRed: 100, rateBlue: 100, highlight: "🔥 ALPHA LV. 65", recommended: true }
+    ],
+    items: [
+      { name: "Black Augurite (Evolui Scyther p/ Kleavor)", category: "stone", icon: "🪨", how: "Drop de Graveler selvagens, escavando com Ursaluna no Crimson Mirelands ou em Space-Time Distortions!" },
+      { name: "Linking Cord, Metal Coat, Razor Claw & Razor Fang", category: "stone", icon: "🪢", how: "Vendidos por Simona na barraquinha de Merit Points (Trading Post) em Jubilife Village ou encontrados em Space-Time Distortions!" },
+      { name: "Move Tutor (Zisu — Flamethrower, Thunderbolt, Ice Beam, Earth Power, Close Combat, Calm Mind, Swords Dance)", move: "Earth Power", moveType: "Terra", category: "tm", icon: "🥋", how: "Dojo de Treinamento (Training Grounds) em Jubilife Village falando com a Capitã Zisu!" }
+    ]
+  },
+  {
+    id: "hisui-crimson-mirelands",
+    name: "Crimson Mirelands (Pantanal Carmesim, Solaceon Ruins & Lake Valor)",
+    sector: "Setor Hisui 02 — Pantanal Carmesim",
+    category: "route",
+    connections: "Jubilife Village ⇄ Golden Lowlands ⇄ Ursa's Ring ⇄ Solaceon Ruins ⇄ Holm of Trials ⇄ Lake Valor",
+    levelRange: "Lv. 15 — 55",
+    dominantTypes: "Terra / Normal / Dragão / Aço",
+    encounters: [
+      { id: 216, name: "Teddiursa", types: ["Normal"], method: "grass", methodLabel: "🌿 Ursa's Ring (+ Alpha Ursaring Lv. 30 no Ursa's Ring!)", levels: "Lv. 18 — 30", rateRed: 45, rateBlue: 45, highlight: "👑 Evolui p/ Ursaluna (Peat Block na Lua Cheia — Top 1 Hisui!)", recommended: true },
+      { id: 704, name: "Goomy", types: ["Dragão"], method: "grass", methodLabel: "🌿 Holm of Trials (+ Alpha Hisuian Sliggoo Lv. 50!)", levels: "Lv. 26 — 50", rateRed: 40, rateBlue: 40, highlight: "🛡️ Evolui p/ Hisuian Goodra (Dragão/Aço)", recommended: true },
+      { id: 280, name: "Ralts", types: ["Psíquico", "Fada"], method: "grass", methodLabel: "🌿 Gapejaw Bog & Shrouded Ruins", levels: "Lv. 16 — 22", rateRed: 30, rateBlue: 30, highlight: "Evolui p/ Gardevoir ou Gallade", recommended: true },
+      { id: 175, name: "Togepi", types: ["Fada"], method: "grass", methodLabel: "🌿 Cottonsedge Prairie (Crimson Mirelands)", levels: "Lv. 22 — 25", rateRed: 15, rateBlue: 15, highlight: "Evolui p/ Togekiss", recommended: true }
+    ],
+    items: [
+      { name: "Peat Block (Evolui Ursaring p/ Ursaluna na Lua Cheia)", category: "stone", icon: "🌕", how: "Escavando tesouros no chão do Crimson Mirelands montado em Ursaluna (ou recompensa da Request 86: Gone Astray... in the Icelands)!" },
+      { name: "Shiny Stone, Dawn Stone & Dusk Stone", category: "stone", icon: "✨", how: "Depósitos de minério que se mexem, Space-Time Distortions e barraca de Merit Points de Jubilife Village!" }
+    ]
+  },
+  {
+    id: "hisui-cobalt-coastlands",
+    name: "Cobalt Coastlands (Costa Cobalto, Windbreak Stand & Firespit Island)",
+    sector: "Setor Hisui 03 — Costa Cobalto",
+    category: "route",
+    connections: "Jubilife Village ⇄ Crossing Slope ⇄ Windbreak Stand ⇄ Veilstone Cape ⇄ Tranquility Cove ⇄ Firespit Island",
+    levelRange: "Lv. 26 — 55",
+    dominantTypes: "Fogo / Pedra / Água / Fantasma",
+    encounters: [
+      { id: 58, name: "Hisuian Growlithe", types: ["Fogo", "Pedra"], method: "grass", methodLabel: "🌿 Windbreak Stand & Veilstone Cape", levels: "Lv. 28 — 34", rateRed: 35, rateBlue: 35, highlight: "🔥 Evolui p/ Hisuian Arcanine (Fire Stone)", recommended: true },
+      { id: 550, name: "White-Striped Basculin", types: ["Água"], method: "surf", methodLabel: "🌊 Islespy Shore & Tranquility Cove", levels: "Lv. 32 — 38", rateRed: 40, rateBlue: 40, highlight: "👻 Evolui p/ Basculegion (Água/Fantasma)", recommended: true },
+      { id: 395, name: "Alpha Empoleon", types: ["Água", "Aço"], method: "static", methodLabel: "🎁 Alpha Estático em Islespy Shore", levels: "Lv. 69", rateRed: 100, rateBlue: 100, highlight: "👑 ALPHA LV. 69", recommended: true },
+      { id: 485, name: "Heatran", types: ["Fogo", "Aço"], method: "static", methodLabel: "🎁 Lava Dome Sanctum em Firespit Island", levels: "Lv. 70", rateRed: 100, rateBlue: 100, highlight: "🌋 Lendário Lv. 70", recommended: true }
+    ],
+    items: [
+      { name: "Fire Stone, Water Stone, Thunder Stone & Leaf Stone", category: "stone", icon: "🔥", how: "Cristais vermelhos/azuis de minério na Cobalt Coastlands (ou compradas no Trading Post de Jubilife Village)!" }
+    ]
+  },
+  {
+    id: "hisui-coronet-alabaster",
+    name: "Coronet Highlands & Alabaster Icelands (Mount Coronet, Snowpoint Temple & Spear Pillar)",
+    sector: "Setor Hisui 04 & 05 — Terras Altas & Tundra",
+    category: "special",
+    connections: "Coronet Highlands (Ancient Quarry / Spear Pillar) ⇄ Alabaster Icelands (Bonechill Wastes / Lake Acuity / Snowpoint Temple)",
+    levelRange: "Lv. 38 — 85",
+    dominantTypes: "Dragão / Normal / Fantasma / Lutador",
+    encounters: [
+      { id: 570, name: "Hisuian Zorua", types: ["Normal", "Fantasma"], method: "cave", methodLabel: "⛰️ túneis de gelo de Bonechill Wastes (Alabaster Icelands)", levels: "Lv. 26 — 30", rateRed: 40, rateBlue: 40, highlight: "👑 Evolui p/ Hisuian Zoroark (3 Imunidades: Normal, Lutador e Fantasma!)", recommended: true },
+      { id: 443, name: "Gible", types: ["Dragão", "Terra"], method: "grass", methodLabel: "🌿 Wayward Wood (Coronet Highlands) & Avalanche Slopes (+ Alpha Garchomp Lv. 85!)", levels: "Lv. 38 — 85", rateRed: 35, rateBlue: 35, highlight: "🐉 Alpha Garchomp Lv. 85 em Avalanche Slopes!", recommended: true },
+      { id: 447, name: "Riolu", types: ["Lutador"], method: "grass", methodLabel: "🌿 Icebound Falls (Alabaster Icelands — + Alpha Lucario Lv. 70!)", levels: "Lv. 42 — 70", rateRed: 25, rateBlue: 25, highlight: "🥋 Alpha Lucario Lv. 70!", recommended: true },
+      { id: 215, name: "Hisuian Sneasel", types: ["Lutador", "Veneno"], method: "grass", methodLabel: "🌿 Celestica Trail (Coronet Highlands)", levels: "Lv. 38 — 42", rateRed: 35, rateBlue: 35, highlight: "Evolui p/ Sneasler (Razor Claw de Dia)", recommended: true },
+      { id: 483, name: "Dialga (Origin Forme)", types: ["Aço", "Dragão"], method: "static", methodLabel: "🎁 Temple of Sinnoh / Spear Pillar", levels: "Lv. 65", rateRed: 100, rateBlue: 100, highlight: "⏳ Roar of Time", recommended: true },
+      { id: 484, name: "Palkia (Origin Forme)", types: ["Água", "Dragão"], method: "static", methodLabel: "🎁 Temple of Sinnoh / Spear Pillar", levels: "Lv. 65", rateRed: 100, rateBlue: 100, highlight: "🌌 Spacial Rend", recommended: true },
+      { id: 493, name: "Arceus", types: ["Normal"], method: "static", methodLabel: "🎁 Temple of Sinnoh (Toque a Azure Flute com a Pokédex completa)", levels: "Lv. 75", rateRed: 100, rateBlue: 100, highlight: "✨ DEUS POKÉMON (Legend Plate)", recommended: true }
+    ],
+    items: [
+      { name: "Adamant Crystal, Lustrous Globe & Griseous Core", category: "held", icon: "💎", how: "Transformam Dialga, Palkia e Giratina em suas Origin Formes (obtidos nas Missões pós-game de Adaman, Irida e Turnback Cave)!" },
+      { name: "Ice Stone & Dawn Stone", category: "stone", icon: "🧊", how: "Cristais azuis de gelo na Alabaster Icelands e no Snowpoint Temple!" }
+    ]
+  }
+];
+
+// ============================================================================
+// 4G. DADOS DE BORRIUS (POKÉMON UNBOUND — BASEADO NA DOCUMENTAÇÃO OFICIAL)
+// ============================================================================
+const BORRIUS_AREAS = [
+  {
+    id: "borrius-frozen-heights-bellin",
+    name: "Frozen Heights, Rota 1, Bellin Town, Icicle Cave & Icy Hole",
+    sector: "Setor Borrius Norte — Início",
+    category: "route",
+    connections: "Frozen Heights ⇄ Rota 1 (Icicle Cave Superior) ⇄ Bellin Town (Icy Hole) ⇄ Rota 2",
+    levelRange: "Lv. 2 — 15",
+    dominantTypes: "Aço / Pedra / Dragão / Gelo / Terra",
+    encounters: [
+      { id: 374, name: "Beldum", types: ["Aço", "Psíquico"], method: "static", methodLabel: "🎁 Inicial Pseudo-Lendário na Base da Equipe Shadow (Frozen Heights)", levels: "Lv. 10", rateRed: 100, rateBlue: 100, highlight: "👑 Evolui p/ Mega Metagross!", recommended: true },
+      { id: 246, name: "Larvitar", types: ["Pedra", "Terra"], method: "static", methodLabel: "🎁 Inicial Pseudo-Lendário na Base da Equipe Shadow (Frozen Heights)", levels: "Lv. 10", rateRed: 100, rateBlue: 100, highlight: "👑 Evolui p/ Mega Tyranitar!", recommended: true },
+      { id: 443, name: "Gible", types: ["Dragão", "Terra"], method: "static", methodLabel: "🎁 Inicial Pseudo-Lendário na Base da Equipe Shadow (Frozen Heights)", levels: "Lv. 10", rateRed: 100, rateBlue: 100, highlight: "👑 Evolui p/ Mega Garchomp!", recommended: true },
+      { id: 529, name: "Drilbur", types: ["Terra"], method: "cave", methodLabel: "⛰️ Icicle Cave (Andares 1F–3F)", levels: "Lv. 8 — 13", rateRed: 20, rateBlue: 20, highlight: "⭐ Evolui p/ Excadrill (Top Tier Borrius)", recommended: true },
+      { id: 220, name: "Swinub", types: ["Gelo", "Terra"], method: "cave", methodLabel: "⛰️ Icicle Cave", levels: "Lv. 8 — 13", rateRed: 20, rateBlue: 20, highlight: "❄️ Evolui p/ Mamoswine", recommended: true },
+      { id: 361, name: "Snorunt", types: ["Gelo"], method: "grass", methodLabel: "🌿 Rota 1 & Icicle Cave", levels: "Lv. 3 — 12", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Froslass ou Mega Glalie", recommended: true },
+      { id: 396, name: "Starly", types: ["Normal", "Voador"], method: "grass", methodLabel: "🌿 Rota 1 (Dia)", levels: "Lv. 3 — 6", rateRed: 30, rateBlue: 30, timeTag: "☀️ Dia", highlight: "Evolui p/ Staraptor", recommended: true },
+      { id: 731, name: "Pikipek", types: ["Normal", "Voador"], method: "grass", methodLabel: "🌿 Rota 1", levels: "Lv. 3 — 6", rateRed: 30, rateBlue: 30, highlight: "Evolui p/ Toucannon" }
+    ],
+    items: [
+      { name: "TM13 — Ice Beam", move: "Ice Beam", moveType: "Gelo", category: "tm", icon: "💿", how: "4º Andar (4F) da Icicle Cave — use Surf na parte superior da caverna, suba a escada oculta e derrote a dupla de Ace Trainers!" },
+      { name: "Metagrossite, Tyranitarite & Garchompite (Mega Stone do Inicial)", category: "stone", icon: "🧬", how: "Na sua própria casa em Frozen Heights ou na Base da Equipe Shadow (após desbloquear a Mega Evolução em Tarmigan Mansion / missão Portal Purge)!" },
+      { name: "Never-Melt Ice & Ice Stone", category: "stone", icon: "🧊", how: "Interior da Icicle Cave e Icy Hole (quebrando pedras de minério na Icicle Cave também caem Ice Stone e Everstone)!" },
+      { name: "Stat Scanner", category: "key", icon: "📟", how: "Entregue pelo assistente do Prof. Log no Laboratório de Frozen Heights após registrar 50 Pokémon!" }
+    ]
+  },
+  {
+    id: "borrius-dresco-route2-flower",
+    name: "Dresco Town, Rota 2, Rota 3 & Flower Paradise",
+    sector: "Setor Borrius Norte-Central (1º Ginásio)",
+    category: "route",
+    connections: "Bellin Town ⇄ Rota 2 ⇄ Dresco Town ⇄ Rota 3 (Flower Paradise) ⇄ Grim Woods",
+    levelRange: "Lv. 7 — 16",
+    dominantTypes: "Lutador / Fada / Inseto / Planta",
+    encounters: [
+      { id: 447, name: "Riolu", types: ["Lutador"], method: "grass", methodLabel: "🌿 Rota 2 (Grama alta a oeste da ponte rumo a Dresco Town!)", levels: "Lv. 7 — 9", rateRed: 15, rateBlue: 15, highlight: "👑 Evolui p/ Mega Lucario logo no início!", recommended: true },
+      { id: 742, name: "Cutiefly", types: ["Inseto", "Fada"], method: "grass", methodLabel: "🌿 Flores do Flower Paradise (Ao norte da Rota 3)", levels: "Lv. 9 — 13", rateRed: 30, rateBlue: 30, highlight: "🎀 Evolui p/ Ribombee (Sticky Web + Quiver Dance)", recommended: true },
+      { id: 298, name: "Azurill", types: ["Normal", "Fada"], method: "grass", methodLabel: "🌿 Rota 2", levels: "Lv. 6 — 9", rateRed: 20, rateBlue: 20, highlight: "Huge Power Azumarill", recommended: true },
+      { id: 179, name: "Mareep", types: ["Elétrico"], method: "grass", methodLabel: "🌿 Rota 2 & Dresco Town", levels: "Lv. 7 — 10", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Mega Ampharos", recommended: true },
+      { id: 406, name: "Budew", types: ["Planta", "Veneno"], method: "grass", methodLabel: "🌿 Rota 2 & Flower Paradise", levels: "Lv. 7 — 11", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Roserade", recommended: true },
+      { id: 669, name: "Flabébé", types: ["Fada"], method: "grass", methodLabel: "🌿 Flower Paradise", levels: "Lv. 9 — 12", rateRed: 35, rateBlue: 35 }
+    ],
+    items: [
+      { name: "TM86 — Grass Knot", move: "Grass Knot", moveType: "Planta", category: "tm", icon: "💿", how: "Prêmio do Líder Mirskle no Ginásio de Dresco Town (1ª Insígnia)!" },
+      { name: "HM01 — Cut", move: "Cut", moveType: "Normal", category: "tm", icon: "💿", how: "Entregue no Flower Paradise (ao norte da Rota 3) após derrotar a Equipe Shadow!" },
+      { name: "Soothe Bell", category: "held", icon: "🔔", how: "Entregue pela senhora em Dresco Town (essencial para evoluir Riolu, Budew e Azurill rapidamente no início)!" },
+      { name: "Miracle Seed & Honey", category: "held", icon: "🌱", how: "Interior do Flower Paradise!" }
+    ]
+  },
+  {
+    id: "borrius-grim-volcano-crater",
+    name: "Grim Woods, Rota 4, Cinder Volcano, Rota 5 (Daycare) & Crater Town",
+    sector: "Setor Vulcânico Oeste (2º Ginásio)",
+    category: "cave",
+    connections: "Dresco Town ⇄ Grim Woods ⇄ Rota 4 (Cinder Volcano) ⇄ Rota 5 (Pokémon Daycare) ⇄ Crater Town",
+    levelRange: "Lv. 12 — 24",
+    dominantTypes: "Psíquico / Fada / Fogo / Veneno / Fantasma",
+    encounters: [
+      { id: 280, name: "Ralts", types: ["Psíquico", "Fada"], method: "grass", methodLabel: "🌿 Rota 4 (Grama antes da entrada do Cinder Volcano)", levels: "Lv. 13 — 16", rateRed: 12, rateBlue: 12, highlight: "👑 Evolui p/ Mega Gardevoir ou Mega Gallade!", recommended: true },
+      { id: 757, name: "Salandit", types: ["Veneno", "Fogo"], method: "cave", methodLabel: "⛰️ Cinder Volcano (Andares internos)", levels: "Lv. 15 — 19", rateRed: 25, rateBlue: 25, highlight: "🔥 Fêmeas evoluem p/ Salazzle!", recommended: true },
+      { id: 92, name: "Gastly", types: ["Fantasma", "Veneno"], method: "grass", methodLabel: "🌿 Grim Woods", levels: "Lv. 11 — 14", rateRed: 25, rateBlue: 25, highlight: "👻 Evolui p/ Gengar (Link Stone em Fallshore)", recommended: true },
+      { id: 495, name: "Snivy", types: ["Planta"], method: "static", methodLabel: "🎁 Casa na Rota 5 (Escolha entre Snivy, Tepig ou Oshawott!)", levels: "Lv. 15", rateRed: 100, rateBlue: 100, highlight: "🐍 Contrary Serperior!", recommended: true },
+      { id: 58, name: "Growlithe", types: ["Fogo"], method: "cave", methodLabel: "⛰️ Cinder Volcano & Rota 5", levels: "Lv. 14 — 18", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Arcanine", recommended: true },
+      { id: 198, name: "Murkrow", types: ["Noturno", "Voador"], method: "grass", methodLabel: "🌿 Grim Woods", levels: "Lv. 11 — 14", rateRed: 20, rateBlue: 20 }
+    ],
+    items: [
+      { name: "TM35 — Flamethrower", move: "Flamethrower", moveType: "Fogo", category: "tm", icon: "💿", how: "Andar 1F do Cinder Volcano — entre pelo lado de Grim Woods, use Surf na primeira piscina de lava com um Pokémon de Fogo na equipe!" },
+      { name: "TM46 — Thief", move: "Thief", moveType: "Noturno", category: "tm", icon: "💿", how: "Prêmio do Líder Véga no Ginásio de Crater Town (2ª Insígnia)!" },
+      { name: "Fire Stone, Water Stone, Thunder Stone, Leaf Stone, Dusk Stone, Dawn Stone & Shiny Stone", category: "stone", icon: "💎", how: "Mineração nas paredes da KBT Expressway (ao norte de Crater Town — fale com o minerador para cavar pedras de evolução infinitas)!" },
+      { name: "Banettite & Houndoominite", category: "stone", icon: "🧬", how: "Banettite resolvendo o enigma das tabuletas em Grim Woods (Missão #007); Houndoominite entregue por Véga após revê-lo!" }
+    ]
+  },
+  {
+    id: "borrius-blizzard-route8-frost",
+    name: "Blizzard City, Frozen Forest, Rota 8, Frozen Mtn., Rota 6 (Valley Cave), Rota 7 & Rota 9",
+    sector: "Setor Alpino Extremo Oeste (3º Ginásio)",
+    category: "route",
+    connections: "Crater Town ⇄ Rota 6 (Valley Cave) ⇄ Rota 7 ⇄ Rota 8 (Frozen Mtn.) ⇄ Blizzard City (Frozen Forest) & Rota 9 (Underground Pass)",
+    levelRange: "Lv. 18 — 28",
+    dominantTypes: "Gelo / Noturno / Voador / Terra",
+    encounters: [
+      { id: 215, name: "Sneasel", types: ["Noturno", "Gelo"], method: "grass", methodLabel: "🌿 Rota 8 & Frozen Forest (Noite) / Frozen Mountain", levels: "Lv. 22 — 26", rateRed: 25, rateBlue: 25, timeTag: "🌙 Noite / Caverna", highlight: "❄️ Evolui p/ Weavile (Razor Claw)", recommended: true },
+      { id: 207, name: "Gligar", types: ["Terra", "Voador"], method: "cave", methodLabel: "⛰️ Valley Cave (Rota 6) & Rota 9", levels: "Lv. 18 — 24", rateRed: 25, rateBlue: 25, highlight: "🦇 Evolui p/ Gliscor (Razor Fang)", recommended: true },
+      { id: 133, name: "Eevee", types: ["Normal"], method: "grass", methodLabel: "🌿 Rota 7 / Prêmio no Cassino de Dehara City", levels: "Lv. 20 — 24", rateRed: 15, rateBlue: 15, highlight: "Evolui p/ Sylveon, Espeon, Umbreon, Glaceon...", recommended: true },
+      { id: 37, name: "Alolan Vulpix", types: ["Gelo"], method: "static", methodLabel: "🎁 Recompensa de Missão em Blizzard City (Nine Tails of Snow)", levels: "Lv. 1", rateRed: 100, rateBlue: 100, highlight: "❄️ Snow Warning + Aurora Veil", recommended: true },
+      { id: 304, name: "Aron", types: ["Aço", "Pedra"], method: "cave", methodLabel: "⛰️ Valley Cave & Underground Pass (Rota 9)", levels: "Lv. 18 — 25", rateRed: 30, rateBlue: 30, highlight: "Evolui p/ Mega Aggron" }
+    ],
+    items: [
+      { name: "TM40 — Aerial Ace", move: "Aerial Ace", moveType: "Voador", category: "tm", icon: "💿", how: "Prêmio da Líder Alice no Ginásio de Blizzard City (3ª Insígnia)!" },
+      { name: "HM04 — Strength & HM06 — Rock Smash", move: "Strength", moveType: "Normal", category: "tm", icon: "💿", how: "Rock Smash na Valley Cave (Rota 6); Strength em Blizzard City / KBT Expressway!" },
+      { name: "Abomasite & Glalitite", category: "stone", icon: "🧬", how: "Abomasite na Frozen Forest (acima do covil de Crabominable); Glalitite na Frozen Mountain!" },
+      { name: "Leftovers", category: "held", icon: "🍎", how: "Checando as lixeiras dentro das casas de Blizzard City e Tehl Town (ou equipado em Munchlax selvagens)!" }
+    ]
+  },
+  {
+    id: "borrius-tehl-fallshore-epidimy",
+    name: "Tehl Town, Auburn Waterway, Rota 10 (Cave of Being), Fallshore City, Rota 11 & Epidimy (Thundercap Mtn.)",
+    sector: "Setor Costeiro Sul (4º Ginásio & Thundercap Mtn.)",
+    category: "route",
+    connections: "Tehl Town ⇄ Auburn Waterway / Rota 10 (Cave of Being) ⇄ Fallshore City ⇄ Rota 11 ⇄ Epidimy Town (Thundercap Mtn.)",
+    levelRange: "Lv. 26 — 38",
+    dominantTypes: "Fada / Voador / Água / Elétrico / Aço",
+    encounters: [
+      { id: 175, name: "Togepi", types: ["Fada"], method: "static", methodLabel: "🎁 Ovo entregue pela senhora na casa a leste do Pokémon Center de Fallshore City!", levels: "Lv. 1", rateRed: 100, rateBlue: 100, highlight: "👑 Evolui p/ Togekiss (Shiny Stone — Top Tier Borrius!)", recommended: true },
+      { id: 130, name: "Gyarados", types: ["Água", "Voador"], method: "fish", methodLabel: "🎣 Auburn Waterway, Rota 10 & Fallshore City", levels: "Lv. 25 — 35", rateRed: 45, rateBlue: 45, highlight: "🧬 Evolui p/ Mega Gyarados!", recommended: true },
+      { id: 81, name: "Magnemite", types: ["Elétrico", "Aço"], method: "cave", methodLabel: "⛰️ Thundercap Mountain (Epidimy Town)", levels: "Lv. 30 — 36", rateRed: 35, rateBlue: 35, highlight: "⚡ Evolui p/ Magnezone ali mesmo na Thundercap Mtn.!", recommended: true },
+      { id: 597, name: "Ferroseed", types: ["Planta", "Aço"], method: "cave", methodLabel: "⛰️ Thundercap Mountain", levels: "Lv. 30 — 35", rateRed: 25, rateBlue: 25, highlight: "🛡️ Evolui p/ Ferrothorn (Iron Barbs)", recommended: true },
+      { id: 498, name: "Tepig / Oshawott (Iniciais de Unova)", types: ["Fogo", "Água"], method: "static", methodLabel: "🎁 Casa a noroeste de Epidimy Town (Mais um Inicial de Unova!)", levels: "Lv. 25", rateRed: 100, rateBlue: 100, recommended: true }
+    ],
+    items: [
+      { name: "TM24 — Thunderbolt", move: "Thunderbolt", moveType: "Elétrico", category: "tm", icon: "💿", how: "Interior da Thundercap Mountain (logo após a entrada de Epidimy Town, usando Surf à direita)!" },
+      { name: "TM42 — Facade & HM02 — Fly", move: "Facade", moveType: "Normal", category: "tm", icon: "💿", how: "Prêmios ao derrotar o Líder Mel no Ginásio Inverse Battle de Fallshore City (4ª Insígnia)!" },
+      { name: "Link Stone (Evolui Haunter, Kadabra, Machoke, Graveler sem troca!)", category: "stone", icon: "🔗", how: "Vendida no mercado de rua de Fallshore City e encontrada na KBT Expressway!" },
+      { name: "Ampharosite & Manectite", category: "stone", icon: "🧬", how: "Interior da Thundercap Mountain!" }
+    ]
+  },
+  {
+    id: "borrius-tarmigan-dehara-routes12-14",
+    name: "Tarmigan Town (Tarmigan Mansion), Rota 12, Rota 13, Rota 14 (Ruins of Void) & Dehara City",
+    sector: "Setor Borrius Central (Mega Ring & 5º Ginásio)",
+    category: "special",
+    connections: "Rota 11 ⇄ Tarmigan Town (Tarmigan Mansion) ⇄ Rota 12 ⇄ Rota 13 & Rota 14 (Ruins of Void) ⇄ Dehara City",
+    levelRange: "Lv. 32 — 45",
+    dominantTypes: "Elétrico / Aço / Água / Fada",
+    encounters: [
+      { id: 650, name: "Chespin / Fennekin / Froakie (Iniciais de Kalos)", types: ["Água", "Fogo", "Planta"], method: "static", methodLabel: "🎁 Casa a nordeste de Dehara City (Escolha um Inicial de Kalos!)", levels: "Lv. 30", rateRed: 100, rateBlue: 100, highlight: "🐸 Battle Bond / Protean Greninja!", recommended: true },
+      { id: 137, name: "Porygon", types: ["Normal"], method: "static", methodLabel: "🎁 Dehara Game Corner (Prêmio de Fichas)", levels: "Lv. 25", rateRed: 100, rateBlue: 100, highlight: "Evolui p/ Porygon2 / Porygon-Z", recommended: true },
+      { id: 120, name: "Staryu", types: ["Água"], method: "surf", methodLabel: "🌊 Surf / Pesca nas Rotas 13 e 14", levels: "Lv. 32 — 38", rateRed: 30, rateBlue: 30, highlight: "Evolui p/ Starmie", recommended: true },
+      { id: 278, name: "Pelipper", types: ["Água", "Voador"], method: "surf", methodLabel: "🌊 Rotas 13 e 14", levels: "Lv. 32 — 38", rateRed: 35, rateBlue: 35, highlight: "🌧️ Drizzle Setter" }
+    ],
+    items: [
+      { name: "Mega Ring / Mega Cuff (Desbloqueia Mega Evolução!)", category: "key", icon: "🧬", how: "Entregue pela Successor Maxima após derrotá-la na Tarmigan Mansion (Tarmigan Town)!" },
+      { name: "TM75 — Swords Dance, TM13 — Ice Beam, TM24 — Thunderbolt & TM35 — Flamethrower", move: "Swords Dance", moveType: "Normal", category: "tm", icon: "💿", how: "Comprados no Dehara Game Corner (TM75 Swords Dance custa 4.000 moedas!) e itens evolutivos no Dehara Department Store!" },
+      { name: "TM92 — Volt Switch", move: "Volt Switch", moveType: "Elétrico", category: "tm", icon: "💿", how: "Prêmio do Líder Galavan no Ginásio de Dehara City (5ª Insígnia)!" },
+      { name: "TM83 — Scald", move: "Scald", moveType: "Água", category: "tm", icon: "💿", how: "Ilha norte da Rota 14 (próxima à Rota 6, subindo com Rock Climb acima da entrada da KBT Expressway)!" },
+      { name: "HM03 — Surf", move: "Surf", moveType: "Água", category: "tm", icon: "💿", how: "Entregue pelo Rival em Dehara City após vencer o Ginásio de Galavan!" },
+      { name: "Gardevoirite & Galladite", category: "stone", icon: "🧬", how: "Tarmigan Mansion / Missões de Tarmigan Town e Dehara City!" }
+    ]
+  },
+  {
+    id: "borrius-desert-vivill-gurun",
+    name: "The Great Desert (Tomb of Borrius), Rota 15, Vivill Town, Vivill Woods & Gurun Town",
+    sector: "Setor Grande Deserto & Vivill",
+    category: "route",
+    connections: "Dehara City ⇄ The Great Desert (Tomb of Borrius) ⇄ Gurun Town ⇄ Vivill Woods ⇄ Vivill Town ⇄ Rota 15",
+    levelRange: "Lv. 36 — 48",
+    dominantTypes: "Terra / Fogo / Inseto / Fantasma",
+    encounters: [
+      { id: 636, name: "Larvesta", types: ["Inseto", "Fogo"], method: "cave", methodLabel: "⛰️ Tomb of Borrius (The Great Desert — ou Ovo de Missão em Gurun Town!)", levels: "Lv. 35 — 42", rateRed: 20, rateBlue: 20, highlight: "☀️ Evolui p/ Volcarona (Quiver Dance)", recommended: true },
+      { id: 551, name: "Sandile", types: ["Terra", "Noturno"], method: "grass", methodLabel: "🌿 The Great Desert", levels: "Lv. 36 — 40", rateRed: 35, rateBlue: 35, highlight: "Evolui p/ Krookodile (Moxie)", recommended: true },
+      { id: 554, name: "Darumaka", types: ["Fogo"], method: "grass", methodLabel: "🌿 The Great Desert", levels: "Lv. 36 — 40", rateRed: 30, rateBlue: 30, highlight: "Evolui p/ Darmanitan", recommended: true },
+      { id: 607, name: "Litwick", types: ["Fantasma", "Fogo"], method: "cave", methodLabel: "⛰️ Tomb of Borrius / Derrubando paredes na KBT", levels: "Lv. 35 — 40", rateRed: 25, rateBlue: 25, highlight: "🕯️ Evolui p/ Chandelure", recommended: true },
+      { id: 546, name: "Cottonee", types: ["Planta", "Fada"], method: "grass", methodLabel: "🌿 Vivill Woods", levels: "Lv. 36 — 40", rateRed: 30, rateBlue: 30, highlight: "Prankster Whimsicott", recommended: true }
+    ],
+    items: [
+      { name: "TM26 — Earthquake", move: "Earthquake", moveType: "Terra", category: "tm", icon: "💿", how: "The Great Desert — na encosta diretamente acima da entrada da Tomb of Borrius (use Rock Climb na parede externa)!" },
+      { name: "TM30 — Shadow Ball", move: "Shadow Ball", moveType: "Fantasma", category: "tm", icon: "💿", how: "Interior da Tomb of Borrius no Great Desert!" },
+      { name: "Lucarionite", category: "stone", icon: "🧬", how: "Recompensa da missão 'A Hero's Journey' no Great Desert (derrote 2.000 Pokémon ou conte histórias para o viajante no deserto)!" },
+      { name: "Gyaradosite", category: "stone", icon: "🧬", how: "Rota 15 / Vivill Warehouse (após derrotar os pescadores na Rota 15)!" }
+    ]
+  },
+  {
+    id: "borrius-antisis-seaport-league",
+    name: "Rota 16, Antisis City (Sewers), Rota 17, Seaport City (Battle Frontier), Rota 18 & Pokémon League",
+    sector: "Setor Sudeste, Porto & Liga Borrius (6º Ginásio & Elite Four)",
+    category: "special",
+    connections: "Gurun Town ⇄ Rota 16 ⇄ Antisis City (Antisis Sewers) | Rota 17 ⇄ Seaport City (Battle Frontier) | Rota 18 ⇄ Victory Rd. ⇄ Pokémon League",
+    levelRange: "Lv. 42 — 75",
+    dominantTypes: "Lutador / Veneno / Dragão / Aço",
+    encounters: [
+      { id: 821, name: "Rookidee / Corvisquire", types: ["Voador", "Aço"], method: "grass", methodLabel: "🌿 Rota 17 & Rota 18 (Encostas rumo à Victory Road)", levels: "Lv. 42 — 52", rateRed: 30, rateBlue: 30, highlight: "👑 Evolui p/ Corviknight", recommended: true },
+      { id: 885, name: "Dreepy / Drakloak", types: ["Dragão", "Fantasma"], method: "cave", methodLabel: "⛰️ Victory Road / Special Encounter com DexNav", levels: "Lv. 48 — 55", rateRed: 15, rateBlue: 15, highlight: "👻 Evolui p/ Dragapult", recommended: true },
+      { id: 109, name: "Koffing & Grimer", types: ["Veneno"], method: "cave", methodLabel: "⛰️ Antisis Sewers", levels: "Lv. 40 — 45", rateRed: 40, rateBlue: 40 },
+      { id: 491, name: "Darkrai & Cresselia", types: ["Noturno", "Psíquico"], method: "static", methodLabel: "🎁 Newmoon Island & Fullmoon Island (Barco a partir de Seaport City)", levels: "Lv. 65 — 70", rateRed: 100, rateBlue: 100, highlight: "🌙 Lendários das Ilhas Lua", recommended: true }
+    ],
+    items: [
+      { name: "TM60 — Drain Punch", move: "Drain Punch", moveType: "Lutador", category: "tm", icon: "💿", how: "Prêmio do Líder Big Mo no Ginásio de Antisis City (6ª Insígnia)!" },
+      { name: "TM36 — Sludge Bomb", move: "Sludge Bomb", moveType: "Veneno", category: "tm", icon: "💿", how: "Interior dos esgotos Antisis Sewers!" },
+      { name: "TM02 — Dragon Claw & TM80 — Rock Slide", move: "Dragon Claw", moveType: "Dragão", category: "tm", icon: "💿", how: "Interior da Victory Road de Borrius (Rota 18)!" },
+      { name: "Gengarite", category: "stone", icon: "🧬", how: "Victory Road de Borrius (caverna externa de neve na subida para a Liga Pokémon)!" },
+      { name: "Choice Band, Choice Specs, Choice Scarf, Life Orb, Assault Vest & Focus Sash", category: "held", icon: "🎗️", how: "Loja de BP da Battle Frontier (ao sul de Seaport City) ou recompensas de Raid Dens 5–6 estrelas!" }
+    ]
+  },
+  {
+    id: "borrius-east-polder-redwood-cube",
+    name: "Polder Town, Cootes Bog, Crystal Peak, Magnolia Town, Redwood Village & Cube Corp.",
+    sector: "Setor Leste de Borrius (7º e 8º Ginásios & Cube Corp.)",
+    category: "special",
+    connections: "Polder Town ⇄ Cootes Bog (Crystal Peak) ⇄ Magnolia Town ⇄ Magnolia Fields ⇄ Redwood Village ⇄ Redwood Forest ⇄ Cube Corp.",
+    levelRange: "Lv. 45 — 75",
+    dominantTypes: "Água / Fantasma / Aço / Inseto / Terra",
+    encounters: [
+      { id: 679, name: "Honedge / Doublade", types: ["Aço", "Fantasma"], method: "grass", methodLabel: "🌿 Polder Town Safari Zone (Dificuldade Insane do minigame Safari!)", levels: "Lv. 45 — 50", rateRed: 25, rateBlue: 25, highlight: "👑 Evolui p/ Aegislash (Dusk Stone)", recommended: true },
+      { id: 656, name: "Froakie & Iniciais de Todas as Regiões", types: ["Água"], method: "static", methodLabel: "🎁 Senhora de Ovos em frente ao Magnolia Café (Magnolia Town)", levels: "Lv. 1", rateRed: 100, rateBlue: 100, highlight: "🥚 Ovos de Iniciais no Magnolia Café", recommended: true },
+      { id: 216, name: "Teddiursa / Ursaring (Ursaluna)", types: ["Normal", "Terra"], method: "grass", methodLabel: "🌿 Redwood Forest & Cube Corp. (Evolui p/ Ursaluna com Peat Block!)", levels: "Lv. 48 — 55", rateRed: 30, rateBlue: 30, highlight: "🐻 Evolui p/ Ursaluna & Kleavor!", recommended: true },
+      { id: 704, name: "Goomy / Sliggoo", types: ["Dragão"], method: "grass", methodLabel: "🌿 Cootes Bog (Chuva Constante!)", levels: "Lv. 45 — 50", rateRed: 30, rateBlue: 30, highlight: "Evolui p/ Goodra ali mesmo na chuva", recommended: true },
+      { id: 123, name: "Scyther", types: ["Inseto", "Voador"], method: "grass", methodLabel: "🌿 Redwood Forest (Headbutt nas árvores!)", levels: "Lv. 46 — 52", rateRed: 25, rateBlue: 25, highlight: "Evolui p/ Mega Scizor ou Kleavor", recommended: true }
+    ],
+    items: [
+      { name: "HM07 — Waterfall & HM08 — Rock Climb", move: "Waterfall", moveType: "Água", category: "tm", icon: "💿", how: "Waterfall é prêmio da Líder Tessy no Ginásio de Polder Town (7ª Insígnia); Rock Climb na Rota 17 / Crystal Peak!" },
+      { name: "TM49 — Leech Life", move: "Leech Life", moveType: "Inseto", category: "tm", icon: "💿", how: "Prêmio do Líder Benjamin no Ginásio de Redwood Village (8ª Insígnia)!" },
+      { name: "TM29 — Psychic", move: "Psychic", moveType: "Psíquico", category: "tm", icon: "💿", how: "Interior do Crystal Peak (acessível pelo Cootes Bog)!" },
+      { name: "Blazikenite, Sceptilite, Swampertite, Salamencite, Mawilite & Mega Stone Maker", category: "stone", icon: "🧬", how: "Forjadas no Mega Stone Maker dentro da Cube Corp. (trocando 5 Gems do tipo correspondente) e nas trocas do Magnolia Café!" },
+      { name: "Venusaurite, Charizardite X/Y & Blastoisinite", category: "stone", icon: "🧬", how: "Entregues pelos treinadores visitantes no Magnolia Café (Magnolia Town) em dias específicos da semana!" },
+      { name: "Peat Block & Black Augurite (Ursaluna & Kleavor)", category: "stone", icon: "🪨", how: "Raid Dens de Redwood Forest / Cube Corp. para evoluir Ursaring em Ursaluna e Scyther em Kleavor!" }
+    ]
+  }
+];
+
+// ============================================================================
 // 4. GEOMETRIA CLÁSSICA DO TOWN MAP (KANTO, JOHTO & HOENN) NO TEMA RADAR
 // ============================================================================
 const REGION_MAP_LAYOUTS = {
@@ -1333,6 +2461,376 @@ const REGION_MAP_LAYOUTS = {
       { name: "Sky Pillar", areaId: "hoenn-sootopolis-sky", x: 555, y: 520, lx: 555, ly: 492, anchor: "middle" },
       { name: "Victory Road", areaId: "hoenn-ever-grande", x: 812, y: 472, lx: 812, ly: 504, anchor: "middle" }
     ]
+  },
+
+  Sinnoh: {
+    terrainSvg: ``,
+    routes: [
+      { num: "201", areaId: "sinnoh-twinleaf-jubilife", path: "M 160 660 L 160 595 L 230 595", lx: 192, ly: 595, marine: false },
+      { num: "202", areaId: "sinnoh-twinleaf-jubilife", path: "M 230 595 L 230 505", lx: 230, ly: 550, marine: false },
+      { num: "218", areaId: "sinnoh-canalave-iron-island", path: "M 230 505 L 105 505", lx: 168, ly: 505, marine: true },
+      { num: "Iron", areaId: "sinnoh-canalave-iron-island", path: "M 105 505 L 105 345", lx: 105, ly: 425, marine: true },
+      { num: "203", areaId: "sinnoh-twinleaf-jubilife", path: "M 230 505 L 355 505", lx: 292, ly: 505, marine: false },
+      { num: "204", areaId: "sinnoh-oreburgh-floaroma-eterna", path: "M 230 505 L 230 375", lx: 230, ly: 440, marine: false },
+      { num: "205", areaId: "sinnoh-oreburgh-floaroma-eterna", path: "M 230 375 L 230 265 L 335 265", lx: 280, ly: 265, marine: false },
+      { num: "206", areaId: "sinnoh-eterna-wayward-coronet", path: "M 335 265 L 335 435 L 355 505", lx: 335, ly: 350, marine: false },
+      { num: "207", areaId: "sinnoh-eterna-wayward-coronet", path: "M 355 505 L 355 435 L 495 435", lx: 400, ly: 435, marine: false },
+      { num: "211", areaId: "sinnoh-hearthome-solaceon-celestic", path: "M 335 265 L 505 265", lx: 420, ly: 265, marine: false },
+      { num: "216", areaId: "sinnoh-snowpoint-acuity", path: "M 435 265 L 435 165", lx: 435, ly: 215, marine: false },
+      { num: "217", areaId: "sinnoh-snowpoint-acuity", path: "M 435 165 L 435 80", lx: 435, ly: 122, marine: false },
+      { num: "209", areaId: "sinnoh-hearthome-solaceon-celestic", path: "M 495 435 L 585 435 L 585 365", lx: 545, ly: 435, marine: false },
+      { num: "210", areaId: "sinnoh-hearthome-solaceon-celestic", path: "M 585 365 L 585 265 L 505 265", lx: 585, ly: 315, marine: false },
+      { num: "215", areaId: "sinnoh-veilstone-pastoria-valor", path: "M 585 365 L 705 365", lx: 645, ly: 365, marine: false },
+      { num: "214", areaId: "sinnoh-veilstone-pastoria-valor", path: "M 705 365 L 705 585", lx: 705, ly: 465, marine: false },
+      { num: "213", areaId: "sinnoh-veilstone-pastoria-valor", path: "M 705 585 L 595 585", lx: 650, ly: 585, marine: false },
+      { num: "212", areaId: "sinnoh-veilstone-pastoria-valor", path: "M 495 435 L 495 585 L 595 585", lx: 495, ly: 515, marine: false },
+      { num: "222", areaId: "sinnoh-sunyshore-league-battlezone", path: "M 705 585 L 820 585", lx: 762, ly: 585, marine: false },
+      { num: "223", areaId: "sinnoh-sunyshore-league-battlezone", path: "M 820 585 L 820 265", lx: 820, ly: 420, marine: true },
+      { num: "225", areaId: "sinnoh-sunyshore-league-battlezone", path: "M 665 185 L 665 105 L 745 105", lx: 665, ly: 145, marine: false },
+      { num: "227", areaId: "sinnoh-sunyshore-league-battlezone", path: "M 745 105 L 745 65", lx: 745, ly: 84, marine: false }
+    ],
+    cities: [
+      { name: "Twinleaf Town", areaId: "sinnoh-twinleaf-jubilife", x: 160, y: 660, lx: 160, ly: 698, anchor: "middle" },
+      { name: "Sandgem Town", areaId: "sinnoh-twinleaf-jubilife", x: 230, y: 595, lx: 268, ly: 600, anchor: "start" },
+      { name: "Jubilife City", areaId: "sinnoh-twinleaf-jubilife", x: 230, y: 505, lx: 195, ly: 482, anchor: "end" },
+      { name: "Canalave City", areaId: "sinnoh-canalave-iron-island", x: 105, y: 505, lx: 105, ly: 545, anchor: "middle" },
+      { name: "Oreburgh City", areaId: "sinnoh-oreburgh-floaroma-eterna", x: 355, y: 505, lx: 355, ly: 545, anchor: "middle" },
+      { name: "Floaroma Town", areaId: "sinnoh-oreburgh-floaroma-eterna", x: 230, y: 375, lx: 192, ly: 380, anchor: "end" },
+      { name: "Eterna City", areaId: "sinnoh-eterna-wayward-coronet", x: 335, y: 265, lx: 335, ly: 230, anchor: "middle" },
+      { name: "Hearthome City", areaId: "sinnoh-hearthome-solaceon-celestic", x: 495, y: 435, lx: 495, ly: 400, anchor: "middle" },
+      { name: "Solaceon Town", areaId: "sinnoh-hearthome-solaceon-celestic", x: 585, y: 365, lx: 548, ly: 368, anchor: "end" },
+      { name: "Celestic Town", areaId: "sinnoh-hearthome-solaceon-celestic", x: 505, y: 265, lx: 505, ly: 230, anchor: "middle" },
+      { name: "Snowpoint City", areaId: "sinnoh-snowpoint-acuity", x: 435, y: 80, lx: 435, ly: 46, anchor: "middle" },
+      { name: "Veilstone City", areaId: "sinnoh-veilstone-pastoria-valor", x: 705, y: 365, lx: 742, ly: 370, anchor: "start" },
+      { name: "Pastoria City", areaId: "sinnoh-veilstone-pastoria-valor", x: 595, y: 585, lx: 595, ly: 625, anchor: "middle" },
+      { name: "Sunyshore City", areaId: "sinnoh-sunyshore-league-battlezone", x: 820, y: 585, lx: 820, ly: 625, anchor: "middle" },
+      { name: "Pokémon League", areaId: "sinnoh-sunyshore-league-battlezone", x: 820, y: 200, lx: 820, ly: 165, anchor: "middle" },
+      { name: "Fight Area", areaId: "sinnoh-sunyshore-league-battlezone", x: 665, y: 185, lx: 665, ly: 222, anchor: "middle" }
+    ],
+    sites: [
+      { name: "Lake Verity", areaId: "sinnoh-twinleaf-jubilife", x: 110, y: 595, lx: 110, ly: 628, anchor: "middle" },
+      { name: "Iron Island", areaId: "sinnoh-canalave-iron-island", x: 105, y: 345, lx: 105, ly: 315, anchor: "middle" },
+      { name: "Valley Windworks", areaId: "sinnoh-oreburgh-floaroma-eterna", x: 278, y: 375, lx: 278, ly: 405, anchor: "middle" },
+      { name: "Eterna Forest", areaId: "sinnoh-oreburgh-floaroma-eterna", x: 230, y: 295, lx: 198, ly: 298, anchor: "end" },
+      { name: "Wayward Cave", areaId: "sinnoh-eterna-wayward-coronet", x: 335, y: 318, lx: 364, ly: 322, anchor: "start" },
+      { name: "Mt. Coronet / Spear Pillar", areaId: "sinnoh-eterna-wayward-coronet", x: 435, y: 355, lx: 435, ly: 325, anchor: "middle" },
+      { name: "Lake Acuity", areaId: "sinnoh-snowpoint-acuity", x: 375, y: 95, lx: 345, ly: 98, anchor: "end" },
+      { name: "Great Marsh", areaId: "sinnoh-veilstone-pastoria-valor", x: 595, y: 540, lx: 595, ly: 512, anchor: "middle" },
+      { name: "Lake Valor", areaId: "sinnoh-veilstone-pastoria-valor", x: 665, y: 515, lx: 665, ly: 488, anchor: "middle" },
+      { name: "Victory Road", areaId: "sinnoh-sunyshore-league-battlezone", x: 820, y: 265, lx: 788, ly: 268, anchor: "end" },
+      { name: "Stark Mountain", areaId: "sinnoh-sunyshore-league-battlezone", x: 745, y: 65, lx: 745, ly: 38, anchor: "middle" }
+    ]
+  },
+
+  Unova: {
+    terrainSvg: ``,
+    routes: [
+      { num: "1", areaId: "unova-southeast-nuvema-nacrene", path: "M 745 645 L 745 535", lx: 745, ly: 590, marine: false },
+      { num: "2", areaId: "unova-southeast-nuvema-nacrene", path: "M 745 535 L 745 415", lx: 745, ly: 475, marine: false },
+      { num: "3", areaId: "unova-southeast-nuvema-nacrene", path: "M 745 415 L 595 415", lx: 670, ly: 415, marine: false },
+      { num: "Sky", areaId: "unova-castelia-desert-nimbasa", path: "M 595 415 L 535 465 L 445 545", lx: 505, ly: 495, marine: false },
+      { num: "19", areaId: "unova-southwest-aspertia-virbank", path: "M 135 645 L 135 555 L 205 555", lx: 135, ly: 600, marine: false },
+      { num: "20", areaId: "unova-southwest-aspertia-virbank", path: "M 205 555 L 295 555", lx: 250, ly: 555, marine: false },
+      { num: "Boat", areaId: "unova-southwest-aspertia-virbank", path: "M 295 555 L 445 545", lx: 370, ly: 550, marine: true },
+      { num: "4", areaId: "unova-castelia-desert-nimbasa", path: "M 445 545 L 445 355", lx: 445, ly: 455, marine: false },
+      { num: "5", areaId: "unova-driftveil-chargestone-mistralton", path: "M 445 355 L 255 355", lx: 350, ly: 355, marine: false },
+      { num: "6", areaId: "unova-driftveil-chargestone-mistralton", path: "M 255 355 L 175 280 L 175 195", lx: 175, ly: 280, marine: false },
+      { num: "7", areaId: "unova-driftveil-chargestone-mistralton", path: "M 175 195 L 255 155 L 335 155", lx: 245, ly: 155, marine: false },
+      { num: "8", areaId: "unova-icirrus-opelucid-victory", path: "M 335 155 L 435 155", lx: 385, ly: 155, marine: false },
+      { num: "9", areaId: "unova-icirrus-opelucid-victory", path: "M 435 155 L 535 155", lx: 485, ly: 155, marine: false },
+      { num: "10", areaId: "unova-icirrus-opelucid-victory", path: "M 535 155 L 535 75 L 465 75", lx: 535, ly: 112, marine: false },
+      { num: "11", areaId: "unova-east-undella-humilau-chasm", path: "M 535 155 L 655 155", lx: 595, ly: 155, marine: false },
+      { num: "12", areaId: "unova-east-undella-humilau-chasm", path: "M 655 155 L 755 155", lx: 705, ly: 155, marine: false },
+      { num: "13", areaId: "unova-east-undella-humilau-chasm", path: "M 755 155 L 815 215 L 815 275", lx: 815, ly: 215, marine: false },
+      { num: "21", areaId: "unova-east-undella-humilau-chasm", path: "M 815 275 L 855 135", lx: 838, ly: 205, marine: true },
+      { num: "14", areaId: "unova-east-undella-humilau-chasm", path: "M 815 275 L 715 355", lx: 765, ly: 315, marine: false },
+      { num: "15", areaId: "unova-castelia-desert-nimbasa", path: "M 715 355 L 445 355", lx: 580, ly: 355, marine: false }
+    ],
+    cities: [
+      { name: "Nuvema Town", areaId: "unova-southeast-nuvema-nacrene", x: 745, y: 645, lx: 745, ly: 682, anchor: "middle" },
+      { name: "Accumula Town", areaId: "unova-southeast-nuvema-nacrene", x: 745, y: 535, lx: 785, ly: 540, anchor: "start" },
+      { name: "Striaton City", areaId: "unova-southeast-nuvema-nacrene", x: 745, y: 415, lx: 785, ly: 420, anchor: "start" },
+      { name: "Nacrene City", areaId: "unova-southeast-nuvema-nacrene", x: 595, y: 415, lx: 595, ly: 452, anchor: "middle" },
+      { name: "Aspertia City", areaId: "unova-southwest-aspertia-virbank", x: 135, y: 645, lx: 135, ly: 682, anchor: "middle" },
+      { name: "Floccesy Town", areaId: "unova-southwest-aspertia-virbank", x: 205, y: 555, lx: 205, ly: 592, anchor: "middle" },
+      { name: "Virbank City", areaId: "unova-southwest-aspertia-virbank", x: 295, y: 555, lx: 295, ly: 520, anchor: "middle" },
+      { name: "Castelia City", areaId: "unova-castelia-desert-nimbasa", x: 445, y: 545, lx: 445, ly: 585, anchor: "middle" },
+      { name: "Nimbasa City", areaId: "unova-castelia-desert-nimbasa", x: 445, y: 355, lx: 445, ly: 320, anchor: "middle" },
+      { name: "Driftveil City", areaId: "unova-driftveil-chargestone-mistralton", x: 255, y: 355, lx: 255, ly: 392, anchor: "middle" },
+      { name: "Mistralton City", areaId: "unova-driftveil-chargestone-mistralton", x: 175, y: 195, lx: 135, ly: 200, anchor: "end" },
+      { name: "Icirrus City", areaId: "unova-icirrus-opelucid-victory", x: 335, y: 155, lx: 335, ly: 192, anchor: "middle" },
+      { name: "Opelucid City", areaId: "unova-icirrus-opelucid-victory", x: 535, y: 155, lx: 535, ly: 192, anchor: "middle" },
+      { name: "Pokémon League", areaId: "unova-icirrus-opelucid-victory", x: 465, y: 75, lx: 465, ly: 42, anchor: "middle" },
+      { name: "Lacunosa Town", areaId: "unova-east-undella-humilau-chasm", x: 755, y: 155, lx: 755, ly: 192, anchor: "middle" },
+      { name: "Undella Town", areaId: "unova-east-undella-humilau-chasm", x: 815, y: 275, lx: 775, ly: 280, anchor: "end" },
+      { name: "Humilau City", areaId: "unova-east-undella-humilau-chasm", x: 855, y: 135, lx: 855, ly: 100, anchor: "middle" }
+    ],
+    sites: [
+      { name: "Wellspring Cave", areaId: "unova-southeast-nuvema-nacrene", x: 675, y: 385, lx: 675, ly: 358, anchor: "middle" },
+      { name: "Pinwheel Forest", areaId: "unova-southeast-nuvema-nacrene", x: 535, y: 465, lx: 535, ly: 495, anchor: "middle" },
+      { name: "Floccesy Ranch", areaId: "unova-southwest-aspertia-virbank", x: 205, y: 505, lx: 205, ly: 478, anchor: "middle" },
+      { name: "Virbank Complex", areaId: "unova-southwest-aspertia-virbank", x: 295, y: 605, lx: 295, ly: 635, anchor: "middle" },
+      { name: "Relic Castle / Desert", areaId: "unova-castelia-desert-nimbasa", x: 390, y: 445, lx: 358, ly: 450, anchor: "end" },
+      { name: "Chargestone Cave", areaId: "unova-driftveil-chargestone-mistralton", x: 175, y: 245, lx: 142, ly: 248, anchor: "end" },
+      { name: "Celestial Tower", areaId: "unova-driftveil-chargestone-mistralton", x: 215, y: 135, lx: 215, ly: 105, anchor: "middle" },
+      { name: "Twist Mountain", areaId: "unova-icirrus-opelucid-victory", x: 285, y: 155, lx: 285, ly: 126, anchor: "middle" },
+      { name: "Victory Road", areaId: "unova-icirrus-opelucid-victory", x: 535, y: 75, lx: 565, ly: 78, anchor: "start" },
+      { name: "Giant Chasm", areaId: "unova-east-undella-humilau-chasm", x: 755, y: 100, lx: 755, ly: 72, anchor: "middle" },
+      { name: "Reversal Mountain", areaId: "unova-east-undella-humilau-chasm", x: 855, y: 275, lx: 855, ly: 308, anchor: "middle" }
+    ]
+  },
+
+  Kalos: {
+    terrainSvg: ``,
+    routes: [
+      { num: "1", areaId: "kalos-vaniville-santalune", path: "M 455 660 L 455 595", lx: 455, ly: 628, marine: false },
+      { num: "2", areaId: "kalos-vaniville-santalune", path: "M 455 595 L 455 480", lx: 455, ly: 540, marine: false },
+      { num: "3", areaId: "kalos-vaniville-santalune", path: "M 455 480 L 455 345", lx: 455, ly: 415, marine: false },
+      { num: "22", areaId: "kalos-vaniville-santalune", path: "M 455 480 L 585 480", lx: 520, ly: 480, marine: false },
+      { num: "5", areaId: "kalos-lumiose-central", path: "M 455 345 L 305 425", lx: 380, ly: 385, marine: false },
+      { num: "6", areaId: "kalos-lumiose-central", path: "M 305 425 L 305 345", lx: 305, ly: 385, marine: false },
+      { num: "7", areaId: "kalos-lumiose-central", path: "M 305 425 L 155 425", lx: 230, ly: 425, marine: false },
+      { num: "8", areaId: "kalos-coastal-ambrette-shalour-coumarine", path: "M 155 425 L 155 535", lx: 155, ly: 480, marine: false },
+      { num: "9", areaId: "kalos-coastal-ambrette-shalour-coumarine", path: "M 155 535 L 255 535", lx: 205, ly: 535, marine: false },
+      { num: "10", areaId: "kalos-coastal-ambrette-shalour-coumarine", path: "M 155 355 L 155 235", lx: 155, ly: 295, marine: false },
+      { num: "11", areaId: "kalos-coastal-ambrette-shalour-coumarine", path: "M 155 235 L 265 175", lx: 210, ly: 205, marine: false },
+      { num: "12", areaId: "kalos-coastal-ambrette-shalour-coumarine", path: "M 265 175 L 375 195", lx: 320, ly: 185, marine: true },
+      { num: "13", areaId: "kalos-coastal-ambrette-shalour-coumarine", path: "M 375 195 L 455 345", lx: 415, ly: 270, marine: false },
+      { num: "14", areaId: "kalos-mountain-laverre-anistar-league", path: "M 455 345 L 455 155", lx: 455, ly: 250, marine: false },
+      { num: "15", areaId: "kalos-mountain-laverre-anistar-league", path: "M 455 155 L 615 195", lx: 535, ly: 175, marine: false },
+      { num: "17", areaId: "kalos-mountain-laverre-anistar-league", path: "M 615 195 L 755 235", lx: 685, ly: 215, marine: false },
+      { num: "18", areaId: "kalos-mountain-laverre-anistar-league", path: "M 755 235 L 755 395", lx: 755, ly: 315, marine: false },
+      { num: "19", areaId: "kalos-mountain-laverre-anistar-league", path: "M 755 395 L 655 535", lx: 705, ly: 465, marine: false },
+      { num: "21", areaId: "kalos-mountain-laverre-anistar-league", path: "M 655 535 L 615 445", lx: 635, ly: 490, marine: false }
+    ],
+    cities: [
+      { name: "Vaniville Town", areaId: "kalos-vaniville-santalune", x: 455, y: 660, lx: 455, ly: 698, anchor: "middle" },
+      { name: "Santalune City", areaId: "kalos-vaniville-santalune", x: 455, y: 480, lx: 415, ly: 485, anchor: "end" },
+      { name: "Lumiose City", areaId: "kalos-lumiose-central", x: 455, y: 345, lx: 495, ly: 350, anchor: "start" },
+      { name: "Camphrier Town", areaId: "kalos-lumiose-central", x: 305, y: 425, lx: 305, ly: 462, anchor: "middle" },
+      { name: "Ambrette Town", areaId: "kalos-coastal-ambrette-shalour-coumarine", x: 155, y: 535, lx: 155, ly: 572, anchor: "middle" },
+      { name: "Cyllage City", areaId: "kalos-coastal-ambrette-shalour-coumarine", x: 155, y: 355, lx: 115, ly: 360, anchor: "end" },
+      { name: "Geosenge Town", areaId: "kalos-coastal-ambrette-shalour-coumarine", x: 155, y: 235, lx: 115, ly: 240, anchor: "end" },
+      { name: "Shalour City", areaId: "kalos-coastal-ambrette-shalour-coumarine", x: 265, y: 175, lx: 265, ly: 138, anchor: "middle" },
+      { name: "Coumarine City", areaId: "kalos-coastal-ambrette-shalour-coumarine", x: 375, y: 195, lx: 375, ly: 158, anchor: "middle" },
+      { name: "Laverre City", areaId: "kalos-mountain-laverre-anistar-league", x: 455, y: 155, lx: 455, ly: 118, anchor: "middle" },
+      { name: "Dendemille Town", areaId: "kalos-mountain-laverre-anistar-league", x: 615, y: 195, lx: 615, ly: 232, anchor: "middle" },
+      { name: "Anistar City", areaId: "kalos-mountain-laverre-anistar-league", x: 755, y: 235, lx: 795, ly: 240, anchor: "start" },
+      { name: "Couriway Town", areaId: "kalos-mountain-laverre-anistar-league", x: 755, y: 395, lx: 795, ly: 400, anchor: "start" },
+      { name: "Snowbelle City", areaId: "kalos-mountain-laverre-anistar-league", x: 655, y: 535, lx: 655, ly: 572, anchor: "middle" },
+      { name: "Pokémon League", areaId: "kalos-mountain-laverre-anistar-league", x: 615, y: 415, lx: 615, ly: 380, anchor: "middle" },
+      { name: "Kiloude City", areaId: "kalos-mountain-laverre-anistar-league", x: 755, y: 635, lx: 755, ly: 672, anchor: "middle" }
+    ],
+    sites: [
+      { name: "Santalune Forest", areaId: "kalos-vaniville-santalune", x: 455, y: 550, lx: 418, ly: 554, anchor: "end" },
+      { name: "Parfum Palace", areaId: "kalos-lumiose-central", x: 305, y: 345, lx: 305, ly: 318, anchor: "middle" },
+      { name: "Glittering Cave", areaId: "kalos-coastal-ambrette-shalour-coumarine", x: 255, y: 535, lx: 255, ly: 568, anchor: "middle" },
+      { name: "Reflection Cave", areaId: "kalos-coastal-ambrette-shalour-coumarine", x: 210, y: 205, lx: 180, ly: 190, anchor: "end" },
+      { name: "Tower of Mastery", areaId: "kalos-coastal-ambrette-shalour-coumarine", x: 265, y: 120, lx: 265, ly: 92, anchor: "middle" },
+      { name: "Frost Cavern", areaId: "kalos-mountain-laverre-anistar-league", x: 615, y: 125, lx: 615, ly: 98, anchor: "middle" },
+      { name: "Terminus Cave", areaId: "kalos-mountain-laverre-anistar-league", x: 805, y: 315, lx: 805, ly: 288, anchor: "middle" },
+      { name: "Pokémon Village", areaId: "kalos-mountain-laverre-anistar-league", x: 605, y: 595, lx: 605, ly: 625, anchor: "middle" },
+      { name: "Victory Road", areaId: "kalos-mountain-laverre-anistar-league", x: 585, y: 480, lx: 585, ly: 510, anchor: "middle" }
+    ]
+  },
+
+  Alola: {
+    terrainSvg: ``,
+    routes: [
+      // Melemele Island
+      { num: "1", areaId: "alola-melemele", path: "M 185 165 L 185 265 L 135 265", lx: 185, ly: 215, marine: false },
+      { num: "2", areaId: "alola-melemele", path: "M 135 265 L 255 215", lx: 195, ly: 245, marine: false },
+      { num: "3", areaId: "alola-melemele", path: "M 255 215 L 255 155 L 185 165", lx: 255, ly: 185, marine: false },
+      // Marine Ferry Links via Aether Paradise (Center)
+      { num: "Sea", areaId: "alola-melemele", path: "M 255 265 L 425 365", lx: 335, ly: 315, marine: true },
+      { num: "Sea", areaId: "alola-akala", path: "M 425 365 L 545 275", lx: 485, ly: 320, marine: true },
+      { num: "Sea", areaId: "alola-ulaula", path: "M 425 365 L 625 465", lx: 525, ly: 415, marine: true },
+      { num: "Sea", areaId: "alola-poni-aether", path: "M 425 365 L 245 505", lx: 335, ly: 435, marine: true },
+      // Akala Island
+      { num: "4", areaId: "alola-akala", path: "M 545 275 L 615 225", lx: 580, ly: 250, marine: false },
+      { num: "5", areaId: "alola-akala", path: "M 615 225 L 615 145 L 545 145", lx: 615, ly: 185, marine: false },
+      { num: "7", areaId: "alola-akala", path: "M 615 225 L 705 195 L 705 135", lx: 665, ly: 210, marine: false },
+      { num: "9", areaId: "alola-akala", path: "M 545 275 L 545 345", lx: 545, ly: 310, marine: false },
+      // Ula'ula Island
+      { num: "10", areaId: "alola-ulaula", path: "M 695 455 L 605 455", lx: 650, ly: 455, marine: false },
+      { num: "12", areaId: "alola-ulaula", path: "M 695 455 L 755 535 L 665 605", lx: 735, ly: 515, marine: false },
+      { num: "15", areaId: "alola-ulaula", path: "M 665 605 L 565 555 L 565 415", lx: 565, ly: 495, marine: false },
+      // Poni Island
+      { num: "Poni", areaId: "alola-poni-aether", path: "M 185 575 L 185 505 L 265 505 L 265 425", lx: 225, ly: 505, marine: false }
+    ],
+    cities: [
+      { name: "Iki Town", areaId: "alola-melemele", x: 185, y: 165, lx: 185, ly: 130, anchor: "middle" },
+      { name: "Hau'oli City", areaId: "alola-melemele", x: 135, y: 265, lx: 135, ly: 305, anchor: "middle" },
+      { name: "Aether Paradise", areaId: "alola-poni-aether", x: 425, y: 365, lx: 425, ly: 330, anchor: "middle" },
+      { name: "Heahea City", areaId: "alola-akala", x: 545, y: 275, lx: 508, ly: 278, anchor: "end" },
+      { name: "Paniola Town", areaId: "alola-akala", x: 615, y: 225, lx: 652, ly: 230, anchor: "start" },
+      { name: "Konikoni City", areaId: "alola-akala", x: 545, y: 345, lx: 545, ly: 382, anchor: "middle" },
+      { name: "Malie City", areaId: "alola-ulaula", x: 695, y: 455, lx: 732, ly: 458, anchor: "start" },
+      { name: "Tapu Village", areaId: "alola-ulaula", x: 665, y: 605, lx: 665, ly: 642, anchor: "middle" },
+      { name: "Po Town", areaId: "alola-ulaula", x: 565, y: 415, lx: 565, ly: 380, anchor: "middle" },
+      { name: "Pokémon League", areaId: "alola-ulaula", x: 625, y: 515, lx: 625, ly: 482, anchor: "middle" },
+      { name: "Seafolk Village", areaId: "alola-poni-aether", x: 185, y: 575, lx: 185, ly: 615, anchor: "middle" },
+      { name: "Battle Tree", areaId: "alola-poni-aether", x: 265, y: 405, lx: 265, ly: 372, anchor: "middle" }
+    ],
+    sites: [
+      { name: "Verdant Cavern", areaId: "alola-melemele", x: 255, y: 155, lx: 285, ly: 158, anchor: "start" },
+      { name: "Ten Carat Hill", areaId: "alola-melemele", x: 225, y: 285, lx: 225, ly: 315, anchor: "middle" },
+      { name: "Brooklet Hill", areaId: "alola-akala", x: 545, y: 145, lx: 545, ly: 118, anchor: "middle" },
+      { name: "Wela Volcano", areaId: "alola-akala", x: 705, y: 195, lx: 735, ly: 198, anchor: "start" },
+      { name: "Lush Jungle", areaId: "alola-akala", x: 705, y: 135, lx: 705, ly: 108, anchor: "middle" },
+      { name: "Mt. Hokulani", areaId: "alola-ulaula", x: 605, y: 455, lx: 605, ly: 428, anchor: "middle" },
+      { name: "Thrifty Megamart", areaId: "alola-ulaula", x: 725, y: 615, lx: 755, ly: 618, anchor: "start" },
+      { name: "Mt. Lanakila", areaId: "alola-ulaula", x: 625, y: 555, lx: 625, ly: 582, anchor: "middle" },
+      { name: "Vast Poni Canyon", areaId: "alola-poni-aether", x: 265, y: 465, lx: 295, ly: 468, anchor: "start" },
+      { name: "Altar of Sunne/Moone", areaId: "alola-poni-aether", x: 315, y: 425, lx: 345, ly: 428, anchor: "start" }
+    ]
+  },
+
+  Galar: {
+    terrainSvg: ``,
+    routes: [
+      { num: "1", areaId: "galar-postwick-motostoke", path: "M 455 665 L 455 595", lx: 455, ly: 630, marine: false },
+      { num: "2", areaId: "galar-postwick-motostoke", path: "M 455 595 L 535 595", lx: 495, ly: 595, marine: false },
+      { num: "Wild S", areaId: "galar-wild-area-south-mines", path: "M 455 595 L 455 465", lx: 455, ly: 530, marine: false },
+      { num: "3", areaId: "galar-wild-area-south-mines", path: "M 455 465 L 305 465", lx: 380, ly: 465, marine: false },
+      { num: "4", areaId: "galar-wild-area-south-mines", path: "M 305 465 L 305 365", lx: 305, ly: 415, marine: false },
+      { num: "5", areaId: "galar-wild-area-south-mines", path: "M 305 365 L 555 365", lx: 430, ly: 365, marine: false },
+      { num: "Mine 2", areaId: "galar-wild-area-south-mines", path: "M 555 365 L 555 465 L 455 465", lx: 555, ly: 415, marine: false },
+      { num: "Wild N", areaId: "galar-hammerlocke-wild-north", path: "M 455 465 L 455 265", lx: 455, ly: 315, marine: false },
+      { num: "6", areaId: "galar-hammerlocke-wild-north", path: "M 455 265 L 265 265", lx: 360, ly: 265, marine: false },
+      { num: "Tangle", areaId: "galar-hammerlocke-wild-north", path: "M 265 265 L 215 165", lx: 240, ly: 215, marine: false },
+      { num: "7", areaId: "galar-circhester-spikemuth-wyndon-dlc", path: "M 455 265 L 575 265", lx: 515, ly: 265, marine: false },
+      { num: "8", areaId: "galar-circhester-spikemuth-wyndon-dlc", path: "M 575 265 L 645 165", lx: 610, ly: 215, marine: false },
+      { num: "9", areaId: "galar-circhester-spikemuth-wyndon-dlc", path: "M 645 165 L 725 245 L 725 325", lx: 725, ly: 245, marine: true },
+      { num: "10", areaId: "galar-circhester-spikemuth-wyndon-dlc", path: "M 455 265 L 455 95", lx: 455, ly: 180, marine: false }
+    ],
+    cities: [
+      { name: "Postwick", areaId: "galar-postwick-motostoke", x: 455, y: 665, lx: 455, ly: 702, anchor: "middle" },
+      { name: "Wedgehurst", areaId: "galar-postwick-motostoke", x: 455, y: 595, lx: 415, ly: 600, anchor: "end" },
+      { name: "Motostoke", areaId: "galar-postwick-motostoke", x: 455, y: 465, lx: 495, ly: 445, anchor: "start" },
+      { name: "Turffield", areaId: "galar-wild-area-south-mines", x: 305, y: 365, lx: 265, ly: 370, anchor: "end" },
+      { name: "Hulbury", areaId: "galar-wild-area-south-mines", x: 555, y: 365, lx: 595, ly: 370, anchor: "start" },
+      { name: "Hammerlocke", areaId: "galar-hammerlocke-wild-north", x: 455, y: 265, lx: 495, ly: 242, anchor: "start" },
+      { name: "Stow-on-Side", areaId: "galar-hammerlocke-wild-north", x: 265, y: 265, lx: 265, ly: 302, anchor: "middle" },
+      { name: "Ballonlea", areaId: "galar-hammerlocke-wild-north", x: 215, y: 165, lx: 215, ly: 128, anchor: "middle" },
+      { name: "Circhester", areaId: "galar-circhester-spikemuth-wyndon-dlc", x: 645, y: 165, lx: 645, ly: 128, anchor: "middle" },
+      { name: "Spikemuth", areaId: "galar-circhester-spikemuth-wyndon-dlc", x: 725, y: 325, lx: 725, ly: 362, anchor: "middle" },
+      { name: "Wyndon", areaId: "galar-circhester-spikemuth-wyndon-dlc", x: 455, y: 95, lx: 455, ly: 58, anchor: "middle" }
+    ],
+    sites: [
+      { name: "Slumbering Weald", areaId: "galar-postwick-motostoke", x: 385, y: 665, lx: 355, ly: 668, anchor: "end" },
+      { name: "Wild Area (Sul)", areaId: "galar-wild-area-south-mines", x: 455, y: 530, lx: 425, ly: 534, anchor: "end" },
+      { name: "Galar Mine No. 1", areaId: "galar-wild-area-south-mines", x: 305, y: 465, lx: 305, ly: 498, anchor: "middle" },
+      { name: "Galar Mine No. 2", areaId: "galar-wild-area-south-mines", x: 555, y: 435, lx: 585, ly: 438, anchor: "start" },
+      { name: "Lake of Outrage", areaId: "galar-hammerlocke-wild-north", x: 415, y: 315, lx: 385, ly: 318, anchor: "end" },
+      { name: "Glimwood Tangle", areaId: "galar-hammerlocke-wild-north", x: 240, y: 215, lx: 210, ly: 218, anchor: "end" },
+      { name: "Isle of Armor", areaId: "galar-circhester-spikemuth-wyndon-dlc", x: 765, y: 505, lx: 765, ly: 538, anchor: "middle" },
+      { name: "Crown Tundra", areaId: "galar-circhester-spikemuth-wyndon-dlc", x: 225, y: 625, lx: 225, ly: 658, anchor: "middle" }
+    ]
+  },
+
+  Hisui: {
+    terrainSvg: ``,
+    routes: [
+      { num: "01", areaId: "hisui-jubilife-obsidian", path: "M 225 465 L 305 565", lx: 265, ly: 515, marine: false },
+      { num: "02", areaId: "hisui-crimson-mirelands", path: "M 225 465 L 575 565", lx: 400, ly: 515, marine: false },
+      { num: "03", areaId: "hisui-cobalt-coastlands", path: "M 575 565 L 745 365", lx: 660, ly: 465, marine: true },
+      { num: "04", areaId: "hisui-coronet-alabaster", path: "M 225 465 L 455 355", lx: 340, ly: 410, marine: false },
+      { num: "05", areaId: "hisui-coronet-alabaster", path: "M 455 355 L 425 135", lx: 440, ly: 245, marine: false }
+    ],
+    cities: [
+      { name: "Jubilife Village", areaId: "hisui-jubilife-obsidian", x: 225, y: 465, lx: 185, ly: 470, anchor: "end" },
+      { name: "Obsidian Fieldlands", areaId: "hisui-jubilife-obsidian", x: 305, y: 565, lx: 305, ly: 605, anchor: "middle" },
+      { name: "Crimson Mirelands", areaId: "hisui-crimson-mirelands", x: 575, y: 565, lx: 575, ly: 605, anchor: "middle" },
+      { name: "Cobalt Coastlands", areaId: "hisui-cobalt-coastlands", x: 745, y: 365, lx: 745, ly: 405, anchor: "middle" },
+      { name: "Coronet Highlands", areaId: "hisui-coronet-alabaster", x: 455, y: 355, lx: 495, ly: 360, anchor: "start" },
+      { name: "Alabaster Icelands", areaId: "hisui-coronet-alabaster", x: 425, y: 135, lx: 465, ly: 140, anchor: "start" }
+    ],
+    sites: [
+      { name: "Grandtree Arena", areaId: "hisui-jubilife-obsidian", x: 355, y: 615, lx: 355, ly: 645, anchor: "middle" },
+      { name: "Lake Verity", areaId: "hisui-jubilife-obsidian", x: 185, y: 585, lx: 185, ly: 615, anchor: "middle" },
+      { name: "Solaceon Ruins", areaId: "hisui-crimson-mirelands", x: 645, y: 515, lx: 675, ly: 518, anchor: "start" },
+      { name: "Firespit Island", areaId: "hisui-cobalt-coastlands", x: 785, y: 265, lx: 785, ly: 238, anchor: "middle" },
+      { name: "Temple of Sinnoh", areaId: "hisui-coronet-alabaster", x: 455, y: 295, lx: 455, ly: 268, anchor: "middle" },
+      { name: "Snowpoint Temple", areaId: "hisui-coronet-alabaster", x: 425, y: 75, lx: 425, ly: 46, anchor: "middle" }
+    ]
+  },
+
+  // ==========================================================================
+  // GEOMETRIA EXATA DE BORRIUS (POKÉMON UNBOUND — BASEADO NA IMAGEM ENVIADA)
+  // ==========================================================================
+  Borrius: {
+    terrainSvg: ``,
+    routes: [
+      { num: "1", areaId: "borrius-frozen-heights-bellin", path: "M 430 95 L 430 195", lx: 430, ly: 145, marine: false },
+      { num: "2", areaId: "borrius-dresco-route2-flower", path: "M 430 195 L 430 275 L 355 275", lx: 398, ly: 275, marine: false },
+      { num: "3", areaId: "borrius-dresco-route2-flower", path: "M 355 275 L 355 185", lx: 355, ly: 185, marine: false },
+      { num: "4", areaId: "borrius-grim-volcano-crater", path: "M 355 275 L 245 275", lx: 272, ly: 275, marine: false },
+      { num: "5", areaId: "borrius-grim-volcano-crater", path: "M 245 275 L 245 315 L 175 315 L 175 395", lx: 175, ly: 315, marine: false },
+      { num: "6", areaId: "borrius-blizzard-route8-frost", path: "M 175 395 L 130 395 L 130 475", lx: 130, ly: 435, marine: false },
+      { num: "7", areaId: "borrius-blizzard-route8-frost", path: "M 65 475 L 130 475", lx: 95, ly: 475, marine: false },
+      { num: "8", areaId: "borrius-blizzard-route8-frost", path: "M 65 225 L 65 475", lx: 65, ly: 295, marine: false },
+      { num: "9", areaId: "borrius-blizzard-route8-frost", path: "M 65 475 L 65 635 L 130 635", lx: 65, ly: 575, marine: false },
+      { num: "Waterway", areaId: "borrius-tehl-fallshore-epidimy", path: "M 115 475 L 115 555 L 195 555 L 195 635", lx: 162, ly: 555, marine: true },
+      { num: "10", areaId: "borrius-tehl-fallshore-epidimy", path: "M 130 635 L 285 635", lx: 185, ly: 635, marine: false },
+      { num: "11", areaId: "borrius-tehl-fallshore-epidimy", path: "M 285 635 L 405 635", lx: 345, ly: 635, marine: false },
+      { num: "12", areaId: "borrius-tarmigan-dehara-routes12-14", path: "M 355 275 L 355 635", lx: 355, ly: 465, marine: false },
+      { num: "13", areaId: "borrius-tarmigan-dehara-routes12-14", path: "M 285 275 L 285 475 M 285 365 L 355 365", lx: 285, ly: 365, marine: true },
+      { num: "14", areaId: "borrius-tarmigan-dehara-routes12-14", path: "M 130 475 L 355 475", lx: 242, ly: 475, marine: true },
+      { num: "15", areaId: "borrius-desert-vivill-gurun", path: "M 430 275 L 510 275", lx: 472, ly: 275, marine: true },
+      { num: "Desert", areaId: "borrius-desert-vivill-gurun", path: "M 355 365 L 510 365", lx: 448, ly: 365, marine: false },
+      { num: "16", areaId: "borrius-antisis-seaport-league", path: "M 510 475 L 510 635", lx: 510, ly: 552, marine: true },
+      { num: "17", areaId: "borrius-antisis-seaport-league", path: "M 510 365 L 510 475 L 620 475", lx: 565, ly: 475, marine: false },
+      { num: "18", areaId: "borrius-antisis-seaport-league", path: "M 510 365 L 620 365 L 620 275", lx: 572, ly: 365, marine: true },
+      { num: "Bog", areaId: "borrius-east-polder-redwood-cube", path: "M 735 195 L 735 365 M 735 275 L 780 275", lx: 735, ly: 275, marine: false },
+      { num: "Fields", areaId: "borrius-east-polder-redwood-cube", path: "M 735 195 L 840 195", lx: 788, ly: 195, marine: true },
+      { num: "Forest", areaId: "borrius-east-polder-redwood-cube", path: "M 840 195 L 840 345", lx: 840, ly: 270, marine: false }
+    ],
+    cities: [
+      { name: "Frozen Heights", areaId: "borrius-frozen-heights-bellin", x: 430, y: 95, lx: 430, ly: 60, anchor: "middle" },
+      { name: "Bellin Town", areaId: "borrius-frozen-heights-bellin", x: 430, y: 195, lx: 430, ly: 162, anchor: "middle" },
+      { name: "Dresco Town", areaId: "borrius-dresco-route2-flower", x: 355, y: 275, lx: 355, ly: 242, anchor: "middle" },
+      { name: "Blizzard City", areaId: "borrius-blizzard-route8-frost", x: 65, y: 225, lx: 65, ly: 190, anchor: "middle" },
+      { name: "Crater Town", areaId: "borrius-grim-volcano-crater", x: 175, y: 395, lx: 175, ly: 362, anchor: "middle" },
+      { name: "Tehl Town", areaId: "borrius-tehl-fallshore-epidimy", x: 130, y: 635, lx: 130, ly: 600, anchor: "middle" },
+      { name: "Fallshore City", areaId: "borrius-tehl-fallshore-epidimy", x: 285, y: 635, lx: 285, ly: 600, anchor: "middle" },
+      { name: "Epidimy Town", areaId: "borrius-tehl-fallshore-epidimy", x: 405, y: 635, lx: 405, ly: 598, anchor: "middle" },
+      { name: "Tarmigan Town", areaId: "borrius-tarmigan-dehara-routes12-14", x: 355, y: 540, lx: 355, ly: 506, anchor: "middle" },
+      { name: "Dehara City", areaId: "borrius-tarmigan-dehara-routes12-14", x: 355, y: 365, lx: 355, ly: 332, anchor: "middle" },
+      { name: "Vivill Town", areaId: "borrius-desert-vivill-gurun", x: 510, y: 275, lx: 510, ly: 242, anchor: "middle" },
+      { name: "Gurun Town", areaId: "borrius-desert-vivill-gurun", x: 510, y: 365, lx: 510, ly: 332, anchor: "middle" },
+      { name: "Pokémon League", areaId: "borrius-antisis-seaport-league", x: 620, y: 275, lx: 620, ly: 242, anchor: "middle" },
+      { name: "Seaport City", areaId: "borrius-antisis-seaport-league", x: 620, y: 475, lx: 620, ly: 440, anchor: "middle" },
+      { name: "Antisis City", areaId: "borrius-antisis-seaport-league", x: 510, y: 635, lx: 510, ly: 600, anchor: "middle" },
+      { name: "Magnolia Town", areaId: "borrius-east-polder-redwood-cube", x: 735, y: 195, lx: 735, ly: 158, anchor: "middle" },
+      { name: "Polder Town", areaId: "borrius-east-polder-redwood-cube", x: 735, y: 365, lx: 735, ly: 405, anchor: "middle" },
+      { name: "Redwood Village", areaId: "borrius-east-polder-redwood-cube", x: 840, y: 195, lx: 840, ly: 158, anchor: "middle" },
+      { name: "Cube Corp.", areaId: "borrius-east-polder-redwood-cube", x: 840, y: 345, lx: 840, ly: 385, anchor: "middle" }
+    ],
+    sites: [
+      { name: "Icicle Cave", areaId: "borrius-frozen-heights-bellin", x: 455, y: 145, lx: 482, ly: 148, anchor: "start" },
+      { name: "Icy Hole", areaId: "borrius-frozen-heights-bellin", x: 448, y: 215, lx: 475, ly: 218, anchor: "start" },
+      { name: "Flower Paradise", areaId: "borrius-dresco-route2-flower", x: 368, y: 210, lx: 395, ly: 214, anchor: "start" },
+      { name: "Grim Woods", areaId: "borrius-grim-volcano-crater", x: 315, y: 275, lx: 315, ly: 248, anchor: "middle" },
+      { name: "Cinder Volcano", areaId: "borrius-grim-volcano-crater", x: 245, y: 235, lx: 245, ly: 208, anchor: "middle" },
+      { name: "Pokémon Daycare", areaId: "borrius-grim-volcano-crater", x: 198, y: 332, lx: 225, ly: 335, anchor: "start" },
+      { name: "Frozen Forest", areaId: "borrius-blizzard-route8-frost", x: 82, y: 248, lx: 108, ly: 252, anchor: "start" },
+      { name: "Frozen Mtn.", areaId: "borrius-blizzard-route8-frost", x: 65, y: 365, lx: 92, ly: 368, anchor: "start" },
+      { name: "Valley Cave", areaId: "borrius-blizzard-route8-frost", x: 142, y: 395, lx: 112, ly: 392, anchor: "end" },
+      { name: "Underground Pass", areaId: "borrius-blizzard-route8-frost", x: 65, y: 525, lx: 92, ly: 528, anchor: "start" },
+      { name: "Ruins of Void", areaId: "borrius-tarmigan-dehara-routes12-14", x: 215, y: 432, lx: 215, ly: 405, anchor: "middle" },
+      { name: "Cave of Being", areaId: "borrius-tehl-fallshore-epidimy", x: 225, y: 635, lx: 225, ly: 668, anchor: "middle" },
+      { name: "Tarmigan Mansion", areaId: "borrius-tarmigan-dehara-routes12-14", x: 375, y: 558, lx: 402, ly: 562, anchor: "start" },
+      { name: "Thundercap Mtn.", areaId: "borrius-tehl-fallshore-epidimy", x: 425, y: 652, lx: 425, ly: 682, anchor: "middle" },
+      { name: "Tomb of Borrius", areaId: "borrius-desert-vivill-gurun", x: 405, y: 382, lx: 405, ly: 412, anchor: "middle" },
+      { name: "Vivill Woods", areaId: "borrius-desert-vivill-gurun", x: 510, y: 318, lx: 538, ly: 322, anchor: "start" },
+      { name: "Antisis Sewers", areaId: "borrius-antisis-seaport-league", x: 532, y: 652, lx: 532, ly: 682, anchor: "middle" },
+      { name: "Victory Rd.", areaId: "borrius-antisis-seaport-league", x: 620, y: 322, lx: 648, ly: 325, anchor: "start" },
+      { name: "Battle Frontier", areaId: "borrius-antisis-seaport-league", x: 642, y: 492, lx: 642, ly: 522, anchor: "middle" },
+      { name: "Fullmoon / Newmoon Island", areaId: "borrius-antisis-seaport-league", x: 685, y: 635, lx: 685, ly: 668, anchor: "middle" },
+      { name: "Crystal Peak", areaId: "borrius-east-polder-redwood-cube", x: 780, y: 275, lx: 780, ly: 305, anchor: "middle" },
+      { name: "Redwood Forest", areaId: "borrius-east-polder-redwood-cube", x: 840, y: 270, lx: 812, ly: 274, anchor: "end" }
+    ]
   }
 };
 
@@ -1340,7 +2838,7 @@ const REGION_MAP_LAYOUTS = {
 // 5. ESTADO GLOBAL & FUNÇÕES UTILITÁRIAS
 // ============================================================================
 let gpsState = {
-  gameId: "rb",
+  gameId: "gen1-rb",
   mode: "pokemon", // "pokemon" | "items"
   selectedAreaId: null, // Só destaca após o usuário clicar em uma rota/cidade ou pesquisar
   methodFilter: "all",
@@ -1356,9 +2854,16 @@ function getSpriteUrl(pokemonId) {
 }
 
 function getAreasForCurrentGame() {
-  const cfg = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG.rb;
+  const cfg = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG["gen1-rb"];
   if (cfg.region === "Johto") return JOHTO_AREAS;
   if (cfg.region === "Hoenn") return HOENN_AREAS;
+  if (cfg.region === "Sinnoh") return SINNOH_AREAS;
+  if (cfg.region === "Unova") return UNOVA_AREAS;
+  if (cfg.region === "Kalos") return KALOS_AREAS;
+  if (cfg.region === "Alola") return ALOLA_AREAS;
+  if (cfg.region === "Galar") return GALAR_AREAS;
+  if (cfg.region === "Hisui") return HISUI_AREAS;
+  if (cfg.region === "Borrius") return BORRIUS_AREAS;
   return KANTO_AREAS;
 }
 
@@ -1463,8 +2968,8 @@ function syncModeSidebarUI() {
 function renderVersionFilterBar() {
   const bar = document.getElementById("version-filter-bar");
   if (!bar) return;
-  const cfg = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG.rb;
-  const versions = cfg.versions || GAME_GPS_CONFIG.rb.versions;
+  const cfg = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG["gen1-rb"];
+  const versions = cfg.versions || GAME_GPS_CONFIG["gen1-rb"].versions;
 
   if (!versions.some(v => v.key === gpsState.versionFilter)) {
     gpsState.versionFilter = "both";
@@ -1495,7 +3000,7 @@ function renderInteractiveMapNodes() {
   const terrainGroup = document.getElementById("region-terrain-layer");
   if (!nodesGroup) return;
 
-  const cfg = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG.rb;
+  const cfg = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG["gen1-rb"];
   const layout = REGION_MAP_LAYOUTS[cfg.region] || REGION_MAP_LAYOUTS.Kanto;
   const areas = getAreasForCurrentGame();
   const query = gpsState.searchQuery.trim().toLowerCase();
@@ -1675,7 +3180,7 @@ function renderSelectedAreaDetails() {
     ? areas.find(a => a.id === gpsState.selectedAreaId)
     : null;
 
-  const gameConfig = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG.rb;
+  const gameConfig = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG["gen1-rb"];
 
   const regionTitleEl = document.getElementById("map-region-title");
   if (regionTitleEl) {

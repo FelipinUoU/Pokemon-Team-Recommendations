@@ -39,7 +39,7 @@ O **Pokémon Team Recommendations** foi pensado exatamente para resolver esse pr
   - Os dados ficam salvos localmente no navegador da sua própria máquina (`localStorage`) **e** você também pode clicar em **⬇️ Baixar Backup no PC (`.json`)** e **⬆️ Carregar do PC (`.json`)** para guardar os arquivos das suas equipes diretamente em qualquer pasta do seu computador.
 - 🧭 **GPS Pokémon (`gps.html`) — Mapa Interativo de Rotas, Encontros, Itens & TMs**:
   - Página integrada ao ecossistema do site (acessível pelo seletor **PTR | GPS Pokémon** no topo da tela).
-  - **Jogos Suportados até Hoenn (Gen 1 a Gen 3)**: suporte completo com mapas interativos de **Kanto**, **Johto** e **Hoenn** para *Pokémon Red & Blue*, *Pokémon Yellow*, *Pokémon Gold, Silver & Crystal*, *Pokémon Ruby, Sapphire & Emerald* e *Pokémon FireRed & LeafGreen*.
+  - **Jogos Suportados (Gen 1 a Gen 8 + Pokémon Unbound)**: suporte completo com mapas interativos de **Kanto**, **Johto**, **Hoenn**, **Sinnoh**, **Unova**, **Kalos**, **Alola**, **Galar**, **Hisui** e **Borrius (Pokémon Unbound)**, organizados exatamente no mesmo esquema e ordem de gerações do PTR.
   - **Menu Lateral "Modos do GPS"**: sidebar recolhida por padrão (igual ao PTR) com alternância entre dois modos:
     - **Pesquisa de Pokémon**: inspecione rotas, cavernas e taxas de aparição (`%`), faixa de nível (`Lv.`), métodos de captura (*🌿 Grama Alta, ⛰️ Caverna, 🎣 Pesca, 🌊 Surf, 🎁 Estático / Troca*) e exclusividades de versão.
     - **Pesquisa de Itens & TMs**: localize **TMs, HMs, Held Items (Itens Segurados), Pedras de Evolução e Itens Chave** em cada rota ou cidade do jogo, com instruções detalhadas de como obtê-los.
