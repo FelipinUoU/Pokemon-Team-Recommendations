@@ -440,60 +440,181 @@ function getSpriteUrl(pokemonId) {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`;
 }
 
+/**
+ * Geometria Clássica do Town Map de Kanto (no visual Radar):
+ * 1) Rotas ortogonais numeradas (1 a 25) — terrestres e marítimas
+ * 2) Cidades (Quadrados vermelhos chanfrados)
+ * 3) Locais / Cavernas (Círculos verdes esmeralda)
+ */
+const KANTO_MAP_ROUTES = [
+  { num: "1", areaId: "route-1", path: "M 240 415 L 240 560", lx: 240, ly: 492, marine: false },
+  { num: "2", areaId: "route-2", path: "M 240 175 L 240 415", lx: 240, ly: 362, marine: false },
+  { num: "3", areaId: "route-3", path: "M 240 175 L 400 175", lx: 320, ly: 175, marine: false },
+  { num: "4", areaId: "route-4", path: "M 400 175 L 560 175", lx: 480, ly: 175, marine: false },
+  { num: "5", areaId: "route-5-6", path: "M 560 175 L 560 315", lx: 560, ly: 245, marine: false },
+  { num: "6", areaId: "route-5-6", path: "M 560 315 L 560 445", lx: 560, ly: 380, marine: false },
+  { num: "7", areaId: "route-7-8", path: "M 420 315 L 560 315", lx: 490, ly: 315, marine: false },
+  { num: "8", areaId: "route-7-8", path: "M 560 315 L 760 315", lx: 660, ly: 315, marine: false },
+  { num: "9", areaId: "rock-tunnel", path: "M 560 175 L 760 175", lx: 660, ly: 175, marine: false },
+  { num: "10", areaId: "rock-tunnel", path: "M 760 175 L 760 315", lx: 760, ly: 255, marine: false },
+  { num: "11", areaId: "digletts-cave", path: "M 560 445 L 760 445", lx: 695, ly: 445, marine: false },
+  { num: "12", areaId: "route-12-15", path: "M 760 315 L 760 520", lx: 760, ly: 482, marine: false },
+  { num: "13", areaId: "route-12-15", path: "M 760 520 L 650 520", lx: 705, ly: 520, marine: false },
+  { num: "14", areaId: "route-12-15", path: "M 650 520 L 650 620", lx: 650, ly: 572, marine: false },
+  { num: "15", areaId: "route-12-15", path: "M 650 620 L 515 620", lx: 582, ly: 620, marine: false },
+  { num: "16", areaId: "route-16-18", path: "M 420 315 L 345 315", lx: 378, ly: 315, marine: false },
+  { num: "17", areaId: "route-16-18", path: "M 345 315 L 345 620", lx: 345, ly: 475, marine: false },
+  { num: "18", areaId: "route-16-18", path: "M 345 620 L 515 620", lx: 430, ly: 620, marine: false },
+  { num: "19", areaId: "seafoam-islands", path: "M 515 620 L 515 690 L 380 690", lx: 455, ly: 690, marine: true },
+  { num: "20", areaId: "seafoam-islands", path: "M 380 690 L 240 690", lx: 310, ly: 690, marine: true },
+  { num: "21", areaId: "pokemon-mansion", path: "M 240 560 L 240 690", lx: 240, ly: 625, marine: true },
+  { num: "22", areaId: "route-22", path: "M 240 415 L 85 415", lx: 162, ly: 415, marine: false },
+  { num: "23", areaId: "victory-road", path: "M 85 415 L 85 125", lx: 85, ly: 335, marine: false },
+  { num: "24", areaId: "route-24-25", path: "M 560 175 L 560 55", lx: 560, ly: 112, marine: false },
+  { num: "25", areaId: "route-24-25", path: "M 560 55 L 705 55", lx: 632, ly: 55, marine: false }
+];
+
+const KANTO_MAP_CITIES = [
+  { name: "Indigo Plateau", areaId: "victory-road", x: 85, y: 125, lx: 85, ly: 86, anchor: "middle" },
+  { name: "Pewter City", areaId: "route-3", x: 240, y: 175, lx: 240, ly: 140, anchor: "middle" },
+  { name: "Viridian City", areaId: "route-22", x: 240, y: 415, lx: 274, ly: 420, anchor: "start" },
+  { name: "Pallet Town", areaId: "route-1", x: 240, y: 560, lx: 205, ly: 564, anchor: "end" },
+  { name: "Cinnabar Island", areaId: "pokemon-mansion", x: 240, y: 690, lx: 204, ly: 694, anchor: "end" },
+  { name: "Cerulean City", areaId: "route-24-25", x: 560, y: 175, lx: 594, ly: 152, anchor: "start" },
+  { name: "Celadon City", areaId: "route-7-8", x: 420, y: 315, lx: 420, ly: 280, anchor: "middle" },
+  { name: "Saffron City", areaId: "route-7-8", x: 560, y: 315, lx: 595, ly: 292, anchor: "start" },
+  { name: "Vermilion City", areaId: "digletts-cave", x: 560, y: 445, lx: 525, ly: 449, anchor: "end" },
+  { name: "Lavender Town", areaId: "pokemon-tower", x: 760, y: 315, lx: 760, ly: 356, anchor: "middle" },
+  { name: "Fuchsia City", areaId: "safari-zone", x: 515, y: 620, lx: 515, ly: 660, anchor: "middle" }
+];
+
+const KANTO_MAP_SITES = [
+  { name: "Victory Road", areaId: "victory-road", x: 85, y: 240, lx: 112, ly: 244, anchor: "start" },
+  { name: "Diglett's Cave", areaId: "digletts-cave", x: 240, y: 240, lx: 214, ly: 244, anchor: "end", hideLabel: true },
+  { name: "Viridian Forest", areaId: "viridian-forest", x: 240, y: 305, lx: 212, ly: 308, anchor: "end" },
+  { name: "Mt. Moon", areaId: "mt-moon", x: 400, y: 175, lx: 400, ly: 142, anchor: "middle" },
+  { name: "Cerulean Cave", areaId: "cerulean-cave", x: 510, y: 108, lx: 510, ly: 76, anchor: "middle" },
+  { name: "Rock Tunnel", areaId: "rock-tunnel", x: 760, y: 175, lx: 786, ly: 179, anchor: "start" },
+  { name: "Power Plant", areaId: "power-plant", x: 786, y: 228, lx: 760, ly: 224, anchor: "end" },
+  { name: "Pokémon Tower", areaId: "pokemon-tower", x: 786, y: 284, lx: 758, ly: 282, anchor: "end" },
+  { name: "Diglett's Cave", areaId: "digletts-cave", x: 620, y: 445, lx: 620, ly: 482, anchor: "middle" },
+  { name: "Safari Zone", areaId: "safari-zone", x: 515, y: 565, lx: 515, ly: 534, anchor: "middle" },
+  { name: "Seafoam Islands", areaId: "seafoam-islands", x: 380, y: 690, lx: 380, ly: 728, anchor: "middle" }
+];
+
 function renderInteractiveMapNodes() {
   const nodesGroup = document.getElementById("kanto-interactive-nodes");
   if (!nodesGroup) return;
 
   const query = gpsState.searchQuery.trim().toLowerCase();
 
-  nodesGroup.innerHTML = KANTO_GEN1_AREAS.map(area => {
-    const isSelected = area.id === gpsState.selectedAreaId;
-    const matchesSearch = query.length > 0 && (
+  const isAreaMatched = areaId => {
+    const area = KANTO_GEN1_AREAS.find(a => a.id === areaId);
+    if (!area || !query) return false;
+    return (
       area.name.toLowerCase().includes(query) ||
       area.encounters.some(e => e.name.toLowerCase().includes(query))
     );
-    const hasMethod = gpsState.methodFilter === "all" || area.encounters.some(e => e.method === gpsState.methodFilter);
-    const opacityClass = !hasMethod ? "opacity-35" : "opacity-100";
+  };
 
-    const w = area.labelWidth || 88;
-    const halfW = w / 2;
-    const shortLabel = area.name.length > 17 ? area.name.slice(0, 16) + "…" : area.name;
+  const isAreaMethodActive = areaId => {
+    if (gpsState.methodFilter === "all") return true;
+    const area = KANTO_GEN1_AREAS.find(a => a.id === areaId);
+    return area ? area.encounters.some(e => e.method === gpsState.methodFilter) : true;
+  };
 
-    if (isSelected) {
-      return `
-        <g class="cursor-pointer transition-all" data-area-id="${area.id}" transform="translate(${area.coords.x}, ${area.coords.y})">
-          <circle class="animate-target-pulse" cx="0" cy="0" fill="#38bdf8" opacity="0.18" r="28"></circle>
-          <circle cx="0" cy="0" fill="none" r="20" stroke="#38bdf8" stroke-dasharray="3 2" stroke-width="1.5"></circle>
-          <rect fill="#080e1d" filter="url(#glow-cyan)" height="24" rx="4" stroke="#38bdf8" stroke-width="2" width="${w + 18}" x="${-(w + 18) / 2}" y="-12"></rect>
-          <text fill="#8ed5ff" font-family="JetBrains Mono" font-size="9.5" font-weight="800" text-anchor="middle" x="0" y="3.5">🎯 ${shortLabel.toUpperCase()}</text>
-        </g>
-      `;
-    }
+  // 1. Render Orthogonal Route Strips (Border + Fill + Route Number)
+  const routesSvg = KANTO_MAP_ROUTES.map(r => {
+    const isSelected = r.areaId === gpsState.selectedAreaId;
+    const matched = isAreaMatched(r.areaId);
+    const hasMethod = isAreaMethodActive(r.areaId);
+    const opacity = !hasMethod ? "0.35" : "1";
 
-    const strokeColor = matchesSearch
-      ? "#f59e0b"
-      : area.category === "special"
-        ? "#10b981"
-        : area.category === "cave"
-          ? "#ffb95f"
-          : "#3e484f";
+    const outerStroke = isSelected
+      ? "#38bdf8"
+      : matched
+        ? "#f59e0b"
+        : r.marine
+          ? "#0284c7"
+          : "#475569";
 
-    const textColor = matchesSearch
-      ? "#fde047"
-      : area.category === "special"
-        ? "#56e5a9"
-        : area.category === "cave"
-          ? "#ffb95f"
+    const innerStroke = isSelected
+      ? "#0c4a6e"
+      : r.marine
+        ? "#0369a1"
+        : "#1e293b";
+
+    const numFill = isSelected
+      ? "#8ed5ff"
+      : matched
+        ? "#fde047"
+        : r.marine
+          ? "#7dd3fc"
           : "#dde2f7";
 
     return `
-      <g class="cursor-pointer group ${opacityClass}" data-area-id="${area.id}" transform="translate(${area.coords.x}, ${area.coords.y})">
-        ${matchesSearch ? `<circle class="animate-target-pulse" cx="0" cy="0" fill="#f59e0b" opacity="0.22" r="22"></circle>` : ""}
-        <rect class="group-hover:stroke-primary transition-colors" fill="#131929" height="21" rx="3.5" stroke="${strokeColor}" stroke-width="${matchesSearch ? "2" : "1.3"}" width="${w}" x="${-halfW}" y="-10.5"></rect>
-        <text fill="${textColor}" font-family="JetBrains Mono" font-size="9" font-weight="600" text-anchor="middle" x="0" y="3">${shortLabel}</text>
+      <g class="cursor-pointer group" data-area-id="${r.areaId}" opacity="${opacity}">
+        <path d="${r.path}" stroke="${outerStroke}" stroke-width="26" stroke-linecap="square" stroke-linejoin="miter" ${isSelected ? 'filter="url(#glow-cyan)"' : ""}></path>
+        <path d="${r.path}" stroke="${innerStroke}" stroke-width="19" stroke-linecap="square" stroke-linejoin="miter" class="group-hover:stroke-[#1e3a5f] transition-colors"></path>
+        <text x="${r.lx}" y="${r.ly + 4}" fill="${numFill}" font-family="JetBrains Mono" font-size="12" font-weight="800" text-anchor="middle">${r.num}</text>
       </g>
     `;
   }).join("");
+
+  // 2. Render Beveled Red Square Cities (Ville)
+  const citiesSvg = KANTO_MAP_CITIES.map(c => {
+    const isSelected = c.areaId === gpsState.selectedAreaId;
+    return `
+      <g class="cursor-pointer group" data-area-id="${c.areaId}" transform="translate(${c.x}, ${c.y})">
+        <!-- Beveled Outer Frame -->
+        <rect x="-17" y="-17" width="34" height="34" fill="#475569" stroke="${isSelected ? "#38bdf8" : "#94a3b8"}" stroke-width="${isSelected ? "2.5" : "1.5"}" />
+        <polygon points="-17,-17 17,-17 11,-11 -11,-11" fill="#94a3b8" opacity="0.55" />
+        <polygon points="-17,17 17,17 11,11 -11,11" fill="#1e293b" opacity="0.8" />
+        <!-- Inner Red City Core -->
+        <rect x="-11" y="-11" width="22" height="22" fill="#ef4444" class="group-hover:fill-[#f87171] transition-colors" filter="url(#glow-red)" />
+      </g>
+      <text x="${c.lx}" y="${c.ly}" fill="#dde2f7" font-family="Plus Jakarta Sans" font-size="12.5" font-weight="800" text-anchor="${c.anchor}" style="paint-order: stroke; stroke: #060c1a; stroke-width: 4px; stroke-linejoin: round;">${c.name}</text>
+    `;
+  }).join("");
+
+  // 3. Render Green Circular Sites / Dungeons (Site)
+  const sitesSvg = KANTO_MAP_SITES.map(s => {
+    const isSelected = s.areaId === gpsState.selectedAreaId;
+    const matched = isAreaMatched(s.areaId);
+    const hasMethod = isAreaMethodActive(s.areaId);
+    const opacity = !hasMethod ? "0.35" : "1";
+
+    return `
+      <g class="cursor-pointer group" data-area-id="${s.areaId}" opacity="${opacity}">
+        ${isSelected ? `<circle class="animate-target-pulse" cx="${s.x}" cy="${s.y}" r="24" fill="#38bdf8" opacity="0.25"></circle>` : ""}
+        <circle
+          cx="${s.x}"
+          cy="${s.y}"
+          r="14"
+          fill="${isSelected ? "#38bdf8" : matched ? "#f59e0b" : "#10b981"}"
+          stroke="${isSelected ? "#e0f2fe" : "#64748b"}"
+          stroke-width="3.5"
+          filter="${isSelected ? "url(#glow-cyan)" : "url(#glow-emerald)"}"
+          class="group-hover:scale-110 transition-transform"
+          style="transform-origin: ${s.x}px ${s.y}px;"
+        ></circle>
+        ${!s.hideLabel ? `
+          <text
+            x="${s.lx}"
+            y="${s.ly}"
+            fill="${isSelected ? "#8ed5ff" : "#56e5a9"}"
+            font-family="Plus Jakarta Sans"
+            font-size="11.5"
+            font-weight="700"
+            text-anchor="${s.anchor}"
+            style="paint-order: stroke; stroke: #060c1a; stroke-width: 4px; stroke-linejoin: round;"
+          >${s.name}</text>
+        ` : ""}
+      </g>
+    `;
+  }).join("");
+
+  nodesGroup.innerHTML = routesSvg + citiesSvg + sitesSvg;
 
   nodesGroup.querySelectorAll("[data-area-id]").forEach(node => {
     node.addEventListener("click", () => {
