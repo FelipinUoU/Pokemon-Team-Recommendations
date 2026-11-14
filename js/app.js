@@ -554,7 +554,12 @@
         return `
           <div data-slot-index="${idx}" data-edit-tab="moves" data-move-idx="${mIdx}" class="bg-surface-container-lowest px-2.5 py-1.5 rounded flex items-center justify-between gap-1 hover:brightness-125 transition-all" style="border-left: 3px solid ${t.color}">
             <span class="text-xs font-semibold text-on-surface truncate">${mv.name}</span>
-            <span class="font-mono text-[10px] shrink-0" style="color:${t.color}">${t.icon}${mv.power || 'ST'}</span>
+            <div class="flex items-center gap-1 shrink-0">
+              <span class="font-mono text-[10px]" style="color:${t.color}">${t.icon}${mv.power || 'ST'}</span>
+              <a href="gps.html?game=${encodeURIComponent(state.selectedGameId)}&mode=items&q=${encodeURIComponent(mv.name)}" data-gps-locate="true" class="inline-flex items-center justify-center w-4 h-4 rounded bg-surface-container-high/80 hover:bg-primary-container hover:text-on-primary-container text-primary transition-colors" title="Localizar TM/HM de ${mv.name} no GPS Pokémon (${game.name})">
+                <span class="material-symbols-outlined text-[12px]">search</span>
+              </a>
+            </div>
           </div>
         `;
       }).join('');
@@ -621,6 +626,11 @@
                     <button data-slot-index="${idx}" data-edit-tab="item" class="text-secondary hover:underline font-semibold truncate cursor-pointer">
                       ${itemObj ? `${itemObj.icon} ${itemObj.name}` : '+ Escolher Item'}
                     </button>
+                    ${itemObj ? `
+                      <a href="gps.html?game=${encodeURIComponent(state.selectedGameId)}&mode=items&q=${encodeURIComponent(itemObj.name)}" data-gps-locate="true" class="inline-flex items-center justify-center w-4 h-4 rounded bg-surface-container-lowest hover:bg-primary-container hover:text-on-primary-container text-primary border border-primary/30 shrink-0 transition-colors" title="Localizar ${itemObj.name} no GPS Pokémon (${game.name})">
+                        <span class="material-symbols-outlined text-[12px]">search</span>
+                      </a>
+                    ` : ''}
                   </div>
                 ` : ''}
               </div>
@@ -940,10 +950,16 @@
               </div>
               <div class="flex flex-col items-end gap-1.5 shrink-0">
                 ${renderTypeBadge(mv.type, 'xs')}
-                <button type="button" data-remove-move-slot="${idx}" class="px-2 py-0.5 rounded bg-error-container/25 hover:bg-error-container/50 text-error border border-error/35 font-mono text-[10px] font-bold flex items-center gap-0.5 transition-colors cursor-pointer" title="Tirar este ataque escolhido">
-                  <span class="material-symbols-outlined text-[12px]">close</span>
-                  Tirar
-                </button>
+                <div class="flex items-center gap-1">
+                  <a href="gps.html?game=${encodeURIComponent(state.selectedGameId)}&mode=items&q=${encodeURIComponent(mv.name)}" data-gps-locate="true" class="px-1.5 py-0.5 rounded bg-primary-container/20 hover:bg-primary-container text-primary hover:text-on-primary-container border border-primary/35 font-mono text-[10px] font-bold flex items-center gap-0.5 transition-colors cursor-pointer" title="Localizar TM/HM de ${mv.name} no GPS Pokémon (${game.name})">
+                    <span class="material-symbols-outlined text-[12px]">search</span>
+                    GPS
+                  </a>
+                  <button type="button" data-remove-move-slot="${idx}" class="px-2 py-0.5 rounded bg-error-container/25 hover:bg-error-container/50 text-error border border-error/35 font-mono text-[10px] font-bold flex items-center gap-0.5 transition-colors cursor-pointer" title="Tirar este ataque escolhido">
+                    <span class="material-symbols-outlined text-[12px]">close</span>
+                    Tirar
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -971,11 +987,14 @@
               <p class="text-xs text-on-surface-variant">${m.reason} — <em class="text-on-surface/80">${m.desc}</em></p>
             </div>
 
-            <div class="flex items-center gap-3 shrink-0 self-end sm:self-center">
-              <div class="text-right font-mono text-xs text-on-surface-variant">
+            <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+              <div class="text-right font-mono text-xs text-on-surface-variant mr-1">
                 <div>PWR: <strong class="text-on-surface">${m.power || '—'}</strong></div>
                 <div>ACC: <strong class="text-on-surface">${m.acc}%</strong></div>
               </div>
+              <a href="gps.html?game=${encodeURIComponent(state.selectedGameId)}&mode=items&q=${encodeURIComponent(m.name)}" data-gps-locate="true" class="p-1.5 rounded-lg bg-surface-container-highest hover:bg-primary-container text-primary hover:text-on-primary-container border border-primary/30 flex items-center justify-center transition-colors cursor-pointer" title="Onde encontrar TM/HM de ${m.name} no GPS Pokémon (${game.name})">
+                <span class="material-symbols-outlined text-[16px]">search</span>
+              </a>
               <button class="px-3 py-1.5 rounded-lg font-headline font-bold text-xs cursor-pointer ${
                 isEquipped
                   ? 'bg-tertiary-container text-on-tertiary-fixed'
@@ -1042,13 +1061,18 @@
                   <p class="text-xs text-on-surface-variant mt-0.5">${it.reason}</p>
                 </div>
               </div>
-              <button class="px-3 py-1.5 rounded-lg font-headline font-bold text-xs shrink-0 cursor-pointer ${
-                isEquipped
-                  ? 'bg-tertiary-container text-on-tertiary-fixed'
-                  : 'bg-surface-container-highest hover:bg-primary-container text-on-surface hover:text-on-primary-container'
-              }">
-                ${isEquipped ? '✓ Equipado' : 'Equipar'}
-              </button>
+              <div class="flex items-center gap-2 shrink-0">
+                <a href="gps.html?game=${encodeURIComponent(state.selectedGameId)}&mode=items&q=${encodeURIComponent(it.name)}" data-gps-locate="true" class="p-1.5 rounded-lg bg-surface-container-highest hover:bg-primary-container text-primary hover:text-on-primary-container border border-primary/30 flex items-center justify-center transition-colors cursor-pointer" title="Onde encontrar ${it.name} no GPS Pokémon (${game.name})">
+                  <span class="material-symbols-outlined text-[16px]">search</span>
+                </a>
+                <button class="px-3 py-1.5 rounded-lg font-headline font-bold text-xs shrink-0 cursor-pointer ${
+                  isEquipped
+                    ? 'bg-tertiary-container text-on-tertiary-fixed'
+                    : 'bg-surface-container-highest hover:bg-primary-container text-on-surface hover:text-on-primary-container'
+                }">
+                  ${isEquipped ? '✓ Equipado' : 'Equipar'}
+                </button>
+              </div>
             </div>
           `;
         }).join('');
@@ -1344,6 +1368,10 @@
                 <span class="material-symbols-outlined text-[14px]">swap_horiz</span>
                 Trocar Pokémon
               </button>
+              <a href="gps.html?game=${encodeURIComponent(state.selectedGameId)}&mode=pokemon&q=${encodeURIComponent(slot.pokemon.name)}" data-gps-locate="true" class="px-2.5 py-1 rounded-lg bg-surface-container-lowest hover:bg-primary-container text-primary hover:text-on-primary-container border border-primary/30 font-mono text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer" title="Localizar ${slot.pokemon.name} no GPS Pokémon (${game.name})">
+                <span class="material-symbols-outlined text-[14px]">search</span>
+                Onde Capturar (GPS)
+              </a>
             </div>
             <div class="flex flex-wrap items-center gap-2 mt-1">
               <h2 class="font-headline text-headline-md text-on-surface">${eff.name}</h2>
@@ -2100,6 +2128,12 @@
       const loadSavedBtn = e.target.closest('[data-load-saved]');
       if (loadSavedBtn) {
         loadSavedTeamById(loadSavedBtn.dataset.loadSaved);
+        return;
+      }
+
+      // Link de busca direta no GPS Pokémon (para localizar Item ou TM/Ataque)
+      if (e.target.closest('[data-gps-locate]')) {
+        e.stopPropagation();
         return;
       }
 

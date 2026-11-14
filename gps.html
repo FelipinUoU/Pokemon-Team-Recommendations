@@ -239,7 +239,7 @@
 
       <!-- Lista de Modos do GPS -->
       <div class="space-y-space-sm">
-        <!-- Modo 1: Pesquisa de Pokémon (Ativo) -->
+        <!-- Modo 1: Pesquisa de Pokémon -->
         <button type="button" id="btn-gps-mode-pokemon" class="w-full text-left p-space-md rounded-xl bg-surface-container-high border border-primary/50 shadow-md transition-all cursor-pointer flex items-start gap-3">
           <div class="w-9 h-9 rounded-lg bg-primary/15 border border-primary/40 flex items-center justify-center text-primary shrink-0 mt-0.5">
             <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -252,7 +252,7 @@
           <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between gap-2">
               <span class="font-headline font-bold text-body-md text-on-surface">Pesquisa de Pokémon</span>
-              <span class="px-2 py-0.5 rounded-full bg-primary text-on-primary font-label-sm text-[10px] font-bold">Ativo</span>
+              <span id="badge-mode-pokemon" class="px-2 py-0.5 rounded-full bg-primary text-on-primary font-label-sm text-[10px] font-bold">Ativo</span>
             </div>
             <p class="text-xs text-on-surface-variant mt-1 leading-relaxed">
               Inspecione rotas, cavernas e taxas de aparição de Pokémon pelo mapa.
@@ -260,18 +260,18 @@
           </div>
         </button>
 
-        <!-- Modo 2: Pesquisa de Itens (Em breve / Inativo por enquanto) -->
-        <button type="button" id="btn-gps-mode-items" class="w-full text-left p-space-md rounded-xl bg-surface-container hover:bg-surface-container-high/60 border border-outline-variant/30 transition-all cursor-pointer flex items-start gap-3 opacity-75">
-          <div class="w-9 h-9 rounded-lg bg-surface-container-highest border border-outline-variant/40 flex items-center justify-center text-secondary shrink-0 mt-0.5">
+        <!-- Modo 2: Pesquisa de Itens & TMs -->
+        <button type="button" id="btn-gps-mode-items" class="w-full text-left p-space-md rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/40 transition-all cursor-pointer flex items-start gap-3">
+          <div class="w-9 h-9 rounded-lg bg-secondary/15 border border-secondary/40 flex items-center justify-center text-secondary shrink-0 mt-0.5">
             <span class="material-symbols-outlined text-[18px]">inventory_2</span>
           </div>
           <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between gap-2">
-              <span class="font-headline font-bold text-body-md text-on-surface">Pesquisa de Itens</span>
-              <span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-secondary border border-secondary/30 font-label-sm text-[10px]">Em breve</span>
+              <span class="font-headline font-bold text-body-md text-on-surface">Pesquisa de Itens &amp; TMs</span>
+              <span id="badge-mode-items" class="px-2 py-0.5 rounded-full bg-surface-container-highest text-secondary border border-secondary/30 font-label-sm text-[10px]">Disponível</span>
             </div>
             <p class="text-xs text-on-surface-variant mt-1 leading-relaxed">
-              Localização de TMs, HMs, Pokébolas e itens ocultos nas rotas do jogo.
+              Localização de TMs, HMs, Held Items, Pedras de Evolução e itens raros em cada jogo.
             </p>
           </div>
         </button>
@@ -289,13 +289,17 @@
   <!-- ========================================================================= -->
   <section class="w-full bg-surface-container-low border-b border-outline-variant px-margin py-space-sm">
     <div class="max-w-[1920px] mx-auto flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-sm">
-      <!-- Esquerda: Seleção de Game -->
-      <div class="relative md:w-[270px] shrink-0">
+      <!-- Esquerda: Seleção de Game (Até Hoenn) -->
+      <div class="relative md:w-[310px] shrink-0">
         <label for="gps-game-select" class="sr-only">Selecionar Jogo</label>
         <div class="flex items-center bg-surface-container border border-outline-variant rounded-lg px-space-sm py-1.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
           <span class="material-symbols-outlined text-primary text-base mr-1.5">videogame_asset</span>
           <select id="gps-game-select" class="w-full bg-transparent border-0 text-on-surface font-label-md text-label-md focus:outline-none focus:ring-0 cursor-pointer py-0">
             <option class="bg-surface-container-highest text-on-surface" selected value="rb">Pokémon Red &amp; Blue (Gen 1 - Kanto)</option>
+            <option class="bg-surface-container-highest text-on-surface" value="yellow">Pokémon Yellow (Gen 1 - Kanto)</option>
+            <option class="bg-surface-container-highest text-on-surface" value="gsc">Pokémon Gold, Silver &amp; Crystal (Gen 2 - Johto)</option>
+            <option class="bg-surface-container-highest text-on-surface" value="rse">Pokémon Ruby, Sapphire &amp; Emerald (Gen 3 - Hoenn)</option>
+            <option class="bg-surface-container-highest text-on-surface" value="frlg">Pokémon FireRed &amp; LeafGreen (Gen 3 - Kanto)</option>
           </select>
         </div>
       </div>
@@ -397,34 +401,32 @@
           </defs>
 
           <!-- ================================================================= -->
-          <!-- 1. CAMADA OCEANO & RELEVO CARTOGRÁFICO DE KANTO (ESTILO RADAR)    -->
+          <!-- 1. CAMADA OCEANO & RELEVO CARTOGRÁFICO DA REGIÃO (ESTILO RADAR)   -->
           <!-- ================================================================= -->
           <!-- Oceano / Baía (Fundo Azul Abissal) -->
           <rect x="0" y="0" width="880" height="760" fill="#060c1a" />
 
-          <!-- Contorno da Massa Continental de Kanto (Planícies Verdes Táticas) -->
-          <path
-            d="M 0 0 L 660 0 C 690 35, 740 55, 740 90 C 660 110, 560 135, 515 170 L 820 120 C 845 180, 845 270, 815 330 L 810 475 L 845 450 C 835 510, 800 545, 750 545 L 685 555 C 675 615, 620 665, 560 670 C 495 675, 455 645, 455 585 C 455 510, 560 475, 585 455 C 530 430, 520 380, 445 365 C 365 350, 320 420, 315 510 C 310 570, 275 595, 225 585 C 185 575, 195 455, 130 440 C 75 430, 95 540, 0 555 Z"
-            fill="#0d1b24"
-            stroke="#38bdf8"
-            stroke-opacity="0.35"
-            stroke-width="2"
-          />
-
-          <!-- Relevo Montanhoso (Noroeste / Nordeste de Kanto em tom tático escuro) -->
-          <path
-            d="M 0 0 L 650 0 C 670 30, 620 90, 510 155 C 470 190, 445 250, 360 245 C 295 240, 270 195, 210 215 C 145 235, 150 380, 120 420 C 70 420, 60 490, 0 505 Z"
-            fill="#131926"
-            opacity="0.85"
-          />
-          <path
-            d="M 620 135 L 820 120 C 845 200, 835 310, 795 365 L 675 365 C 640 310, 635 220, 620 135 Z"
-            fill="#131926"
-            opacity="0.85"
-          />
-
-          <!-- Ilha de Cinnabar (Cramois'île) Contorno Costeiro -->
-          <rect x="208" y="658" width="64" height="64" rx="14" fill="#0d1b24" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="1.5" />
+          <g id="region-terrain-layer">
+            <!-- Contorno da Massa Continental de Kanto (Planícies Verdes Táticas) -->
+            <path
+              d="M 0 0 L 660 0 C 690 35, 740 55, 740 90 C 660 110, 560 135, 515 170 L 820 120 C 845 180, 845 270, 815 330 L 810 475 L 845 450 C 835 510, 800 545, 750 545 L 685 555 C 675 615, 620 665, 560 670 C 495 675, 455 645, 455 585 C 455 510, 560 475, 585 455 C 530 430, 520 380, 445 365 C 365 350, 320 420, 315 510 C 310 570, 275 595, 225 585 C 185 575, 195 455, 130 440 C 75 430, 95 540, 0 555 Z"
+              fill="#0d1b24"
+              stroke="#38bdf8"
+              stroke-opacity="0.35"
+              stroke-width="2"
+            />
+            <path
+              d="M 0 0 L 650 0 C 670 30, 620 90, 510 155 C 470 190, 445 250, 360 245 C 295 240, 270 195, 210 215 C 145 235, 150 380, 120 420 C 70 420, 60 490, 0 505 Z"
+              fill="#131926"
+              opacity="0.85"
+            />
+            <path
+              d="M 620 135 L 820 120 C 845 200, 835 310, 795 365 L 675 365 C 640 310, 635 220, 620 135 Z"
+              fill="#131926"
+              opacity="0.85"
+            />
+            <rect x="208" y="658" width="64" height="64" rx="14" fill="#0d1b24" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="1.5" />
+          </g>
 
           <!-- Grade de Coordenadas Radar -->
           <g opacity="0.22" stroke="#38bdf8" stroke-dasharray="2 6">
@@ -439,9 +441,6 @@
             <line x1="620" x2="620" y1="0" y2="760"></line>
             <line x1="780" x2="780" y1="0" y2="760"></line>
           </g>
-
-          <!-- Linha Diagonal da Diglett's Cave (Túnel Subterrâneo) -->
-          <line x1="240" y1="240" x2="620" y2="445" stroke="#10b981" stroke-width="4.5" stroke-dasharray="8 4" opacity="0.8" filter="url(#glow-emerald)" />
 
           <!-- ================================================================= -->
           <!-- 2. MALHA DE ROTAS, CIDADES E LOCAIS (RENDERIZADA PELO JS)         -->
@@ -532,8 +531,8 @@
             </div>
           </div>
 
-          <!-- Version Toggle (Red / Blue / Compare) -->
-          <div class="inline-flex rounded-lg bg-surface-container-lowest p-1 border border-outline-variant shrink-0">
+          <!-- Version Toggle (Renderizado dinamicamente pelo JS conforme o jogo) -->
+          <div id="version-filter-bar" class="inline-flex rounded-lg bg-surface-container-lowest p-1 border border-outline-variant shrink-0">
             <button type="button" data-version-filter="red" class="px-2.5 py-1 rounded font-label-sm text-label-sm font-medium text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
               Red
             </button>

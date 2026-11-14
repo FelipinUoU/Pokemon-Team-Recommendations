@@ -37,13 +37,14 @@ O **Pokémon Team Recommendations** foi pensado exatamente para resolver esse pr
 - 💾 **Menu Lateral de Equipes Salvas (100% Local no seu PC)**:
   - Dê o nome que quiser para suas equipes e salve no menu lateral.
   - Os dados ficam salvos localmente no navegador da sua própria máquina (`localStorage`) **e** você também pode clicar em **⬇️ Baixar Backup no PC (`.json`)** e **⬆️ Carregar do PC (`.json`)** para guardar os arquivos das suas equipes diretamente em qualquer pasta do seu computador.
-- 🧭 **GPS Pokémon (`gps.html`) — Mapa Interativo de Rotas & Encontros**:
-  - Nova página integrada ao ecossistema do site (acessível pelo seletor **PTR | GPS Pokémon** no topo da tela).
-  - **Menu Lateral "Modos do GPS"**: sidebar com os modos da página — **Pesquisa de Pokémon** (ativo) e **Pesquisa de Itens** (em breve). No mobile funciona como o menu lateral do PTR (abre por cima do conteúdo).
-  - **Mapa Interativo da Região**: visualize o mapa tático da região do jogo (atualmente com suporte completo a **Pokémon Red & Blue — Região de Kanto**), com navegação livre segurando o botão do scroll do mouse (pan) e controle de zoom.
-  - **Inspeção de Rotas, Cavernas e Zonas Especiais**: clique em qualquer rota ou área do mapa (*Rota 1, Viridian Forest, Mt. Moon, Rock Tunnel, Safari Zone, Power Plant, Seafoam Islands, Victory Road, Cerulean Cave*, etc.) para ver todos os Pokémon que aparecem naquele local.
-  - **Taxas de Aparição (%) e Filtros de Captura**: consulte a porcentagem exata de encontrar cada Pokémon, faixa de nível (`Lv.`), método de encontro (*🌿 Grama Alta, ⛰️ Caverna, 🎣 Pesca, 🌊 Surf, 🎁 Estático / Troca*) e alterne entre as versões (*Red*, *Blue* ou *Comparar Ambas*).
-  - **Tags Dinâmicas por Mecânica de Jogo**: exibe automaticamente tags de **Horário do Dia** (para jogos a partir de Johto/Gen 2) e de **Estações do Ano** (exclusivo para Unova — *Black & White 1 e 2* nos Pokémon cuja taxa de aparição muda conforme a estação).
+- 🧭 **GPS Pokémon (`gps.html`) — Mapa Interativo de Rotas, Encontros, Itens & TMs**:
+  - Página integrada ao ecossistema do site (acessível pelo seletor **PTR | GPS Pokémon** no topo da tela).
+  - **Jogos Suportados até Hoenn (Gen 1 a Gen 3)**: suporte completo com mapas interativos de **Kanto**, **Johto** e **Hoenn** para *Pokémon Red & Blue*, *Pokémon Yellow*, *Pokémon Gold, Silver & Crystal*, *Pokémon Ruby, Sapphire & Emerald* e *Pokémon FireRed & LeafGreen*.
+  - **Menu Lateral "Modos do GPS"**: sidebar recolhida por padrão (igual ao PTR) com alternância entre dois modos:
+    - **Pesquisa de Pokémon**: inspecione rotas, cavernas e taxas de aparição (`%`), faixa de nível (`Lv.`), métodos de captura (*🌿 Grama Alta, ⛰️ Caverna, 🎣 Pesca, 🌊 Surf, 🎁 Estático / Troca*) e exclusividades de versão.
+    - **Pesquisa de Itens & TMs**: localize **TMs, HMs, Held Items (Itens Segurados), Pedras de Evolução e Itens Chave** em cada rota ou cidade do jogo, com instruções detalhadas de como obtê-los.
+  - **Integração Direta com o PTR (Ícone de Busca 🔍)**: nos cards dos Pokémon e no painel de edição de status (abas de **4 Ataques** e **Item Recomendado**), clique no ícone de lupa ao lado de qualquer **Item** ou **Ataque** para abrir o **GPS Pokémon** automaticamente no jogo da sua equipe e localizar onde aquele item ou TM/HM é encontrado!
+  - **Mapa no Formato Clássico Town Map com Visual Radar**: rotas terrestres e marítimas ortogonais numeradas, cidades em quadrados vermelhos chanfrados e cavernas/locais especiais em círculos verdes, com navegação livre segurando o botão do scroll do mouse (pan) e controle de zoom.
 
 ---
 
