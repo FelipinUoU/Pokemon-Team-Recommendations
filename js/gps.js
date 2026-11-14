@@ -1163,10 +1163,6 @@ const HOENN_AREAS = [
 const REGION_MAP_LAYOUTS = {
   Kanto: {
     terrainSvg: `
-      <path d="M 0 0 L 660 0 C 690 35, 740 55, 740 90 C 660 110, 560 135, 515 170 L 820 120 C 845 180, 845 270, 815 330 L 810 475 L 845 450 C 835 510, 800 545, 750 545 L 685 555 C 675 615, 620 665, 560 670 C 495 675, 455 645, 455 585 C 455 510, 560 475, 585 455 C 530 430, 520 380, 445 365 C 365 350, 320 420, 315 510 C 310 570, 275 595, 225 585 C 185 575, 195 455, 130 440 C 75 430, 95 540, 0 555 Z" fill="#0d1b24" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="2" />
-      <path d="M 0 0 L 650 0 C 670 30, 620 90, 510 155 C 470 190, 445 250, 360 245 C 295 240, 270 195, 210 215 C 145 235, 150 380, 120 420 C 70 420, 60 490, 0 505 Z" fill="#131926" opacity="0.85" />
-      <path d="M 620 135 L 820 120 C 845 200, 835 310, 795 365 L 675 365 C 640 310, 635 220, 620 135 Z" fill="#131926" opacity="0.85" />
-      <rect x="208" y="658" width="64" height="64" rx="14" fill="#0d1b24" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="1.5" />
       <line x1="240" y1="240" x2="620" y2="445" stroke="#10b981" stroke-width="4.5" stroke-dasharray="8 4" opacity="0.8" filter="url(#glow-emerald)" />
     `,
     routes: [
@@ -1225,11 +1221,7 @@ const REGION_MAP_LAYOUTS = {
   },
 
   Johto: {
-    terrainSvg: `
-      <path d="M 160 0 L 880 0 L 880 620 C 760 610, 680 580, 620 570 C 560 560, 500 660, 400 660 C 330 660, 315 585, 315 470 C 315 390, 260 365, 195 365 C 145 365, 140 260, 160 0 Z" fill="#0d1b24" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="2" />
-      <path d="M 380 0 L 880 0 L 880 390 C 760 390, 660 340, 560 280 C 480 230, 420 140, 380 0 Z" fill="#131926" opacity="0.85" />
-      <path d="M 75 430 C 125 430, 145 480, 145 555 C 145 615, 115 650, 75 650 C 40 650, 25 605, 25 545 C 25 475, 45 430, 75 430 Z" fill="#0d1b24" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="1.5" />
-    `,
+    terrainSvg: ``,
     routes: [
       { num: "29", areaId: "johto-new-bark-29", path: "M 540 520 L 680 520", lx: 610, ly: 520, marine: false },
       { num: "30", areaId: "johto-route-30-31", path: "M 540 520 L 540 340", lx: 540, ly: 430, marine: false },
@@ -1282,14 +1274,7 @@ const REGION_MAP_LAYOUTS = {
   },
 
   Hoenn: {
-    terrainSvg: `
-      <path d="M 35 120 L 560 90 C 600 130, 590 250, 560 330 C 510 385, 420 430, 345 480 C 310 500, 290 560, 240 570 C 175 580, 145 500, 145 415 C 145 365, 60 360, 45 270 Z" fill="#0d1b24" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="2" />
-      <path d="M 140 120 L 420 105 C 435 180, 390 265, 315 290 C 235 315, 165 250, 140 120 Z" fill="#131926" opacity="0.85" />
-      <rect x="95" y="610" width="90" height="65" rx="18" fill="#0d1b24" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="1.5" />
-      <circle cx="715" cy="275" r="46" fill="#0d1b24" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="1.5" />
-      <circle cx="645" cy="435" r="42" fill="#0d1b24" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="1.5" />
-      <rect x="780" y="395" width="66" height="80" rx="16" fill="#0d1b24" stroke="#38bdf8" stroke-opacity="0.35" stroke-width="1.5" />
-    `,
+    terrainSvg: ``,
     routes: [
       { num: "101", areaId: "hoenn-littleroot-102", path: "M 190 540 L 190 465", lx: 190, ly: 502, marine: false },
       { num: "103", areaId: "hoenn-littleroot-102", path: "M 190 465 L 285 465", lx: 242, ly: 465, marine: true },
