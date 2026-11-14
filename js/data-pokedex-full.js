@@ -993,6 +993,197 @@ window.POKE_DATA.FULL_DEX_COMPACT = [
         stats: { hp: 115, atk: 165, def: 102, spa: 95, spd: 96, spe: 104 },
         note: 'DLC Mega Dimension (Legends: Z-A)! 165 Attack, 104 Speed e defesas 102/96 com Thermal Exchange!'
       }
+    },
+
+    // ========================================================================
+    // MEGA EVOLUÇÕES EXCLUSIVAS DO POKÉMON LAZARUS (ILIOS DEX / MRWALKTHROUGHS)
+    // ========================================================================
+    'lapras': {
+      mega: {
+        name: 'Mega Lapras', stone: 'laprasite', stoneName: 'Laprasite', spriteId: 'laz:mega-lapras',
+        isLazarusMega: true, lazarusSlug: 'mega-lapras',
+        types: ['water', 'ice'], ability: 'Drizzle',
+        stats: { hp: 130, atk: 95, def: 110, spa: 105, spd: 135, spe: 60 },
+        note: 'Exclusiva de Pokémon Lazarus! Invoca Chuva (Drizzle) com 635 BST (130 HP / 110 Def / 135 Sp. Def)!'
+      }
+    },
+    'typhlosion': {
+      mega: {
+        name: 'Mega Typhlosion', stone: 'typhlosionite', stoneName: 'Typhlosionite', spriteId: 'laz:mega-typhlosion',
+        isLazarusMega: true, lazarusSlug: 'mega-typhlosion',
+        types: ['fire', 'ground'], ability: 'Dry Skin',
+        stats: { hp: 83, atk: 120, def: 108, spa: 133, spd: 115, spe: 100 },
+        note: 'Exclusiva de Pokémon Lazarus! Vira Fogo/Terrestre com Dry Skin (imune a Água!) e 659 BST!'
+      }
+    },
+    'noctowl': {
+      mega: {
+        name: 'Mega Noctowl', stone: 'noctowlite', stoneName: 'Noctowlite', spriteId: 'laz:mega-noctowl',
+        isLazarusMega: true, lazarusSlug: 'mega-noctowl',
+        types: ['ghost', 'flying'], ability: 'Analytic',
+        stats: { hp: 100, atk: 70, def: 80, spa: 121, spd: 141, spe: 45 },
+        note: 'Exclusiva de Pokémon Lazarus! Ganha o tipo Fantasma/Voador com Analytic, 121 Sp. Atk e 141 Sp. Def!'
+      }
+    },
+    'flygon': {
+      mega: {
+        name: 'Mega Flygon', stone: 'flygonite', stoneName: 'Flygonite', spriteId: 'laz:mega-flygon',
+        isLazarusMega: true, lazarusSlug: 'mega-flygon',
+        types: ['bug', 'dragon'], ability: 'Burrower',
+        stats: { hp: 80, atk: 120, def: 90, spa: 135, spd: 90, spe: 110 },
+        note: 'Exclusiva de Pokémon Lazarus! Vira Inseto/Dragão com habilidade Burrower, 135 Sp. Atk, 120 Atk e 110 Speed!'
+      }
+    },
+    'carracosta': {
+      mega: {
+        name: 'Mega Carracosta', stone: 'carracositite', stoneName: 'Carracositite', spriteId: 'laz:mega-carracosta',
+        isLazarusMega: true, lazarusSlug: 'mega-carracosta',
+        types: ['water', 'rock'], ability: 'Strong Jaw',
+        stats: { hp: 74, atk: 158, def: 163, spa: 88, spd: 75, spe: 37 },
+        note: 'Exclusiva de Pokémon Lazarus! 158 Attack e 163 Defense com Strong Jaw!'
+      }
+    },
+    'archeops': {
+      mega: {
+        name: 'Mega Archeops', stone: 'archeopsite', stoneName: 'Archeopsite', spriteId: 'laz:mega-archeops',
+        isLazarusMega: true, lazarusSlug: 'mega-archeops',
+        types: ['rock', 'flying'], ability: 'Intimidate',
+        stats: { hp: 75, atk: 165, def: 85, spa: 110, spd: 75, spe: 140 },
+        note: 'Exclusiva de Pokémon Lazarus! Troca Defeatist por Intimidate com 165 Attack e 140 Speed (650 BST)!'
+      }
+    },
+    'mandibuzz': {
+      mega: {
+        name: 'Mega Mandibuzz', stone: 'mandibite', stoneName: 'Mandibite', spriteId: 'laz:mega-mandibuzz',
+        isLazarusMega: true, lazarusSlug: 'mega-mandibuzz',
+        types: ['dark', 'flying'], ability: 'Scavenger',
+        stats: { hp: 115, atk: 115, def: 145, spa: 35, spd: 125, spe: 75 },
+        note: 'Exclusiva de Pokémon Lazarus! Muralha com 115 HP, 145 Defense, 125 Sp. Def e Scavenger!'
+      }
+    },
+    'gogoat': {
+      mega: {
+        name: 'Mega Gogoat', stone: 'gogoatite', stoneName: 'Gogoatite', spriteId: 'laz:mega-gogoat',
+        isLazarusMega: true, lazarusSlug: 'mega-gogoat',
+        types: ['grass', 'ground'], ability: 'Stamina',
+        stats: { hp: 133, atk: 134, def: 97, spa: 127, spd: 91, spe: 64 },
+        note: 'Exclusiva de Pokémon Lazarus! Vira Planta/Terrestre com Stamina e 646 BST!'
+      }
+    },
+    'pangoro': {
+      mega: {
+        name: 'Mega Pangoro', stone: 'pangorite', stoneName: 'Pangorite', spriteId: 'laz:mega-pangoro',
+        isLazarusMega: true, lazarusSlug: 'mega-pangoro',
+        types: ['fighting', 'dark'], ability: "Nature's Tools",
+        stats: { hp: 95, atk: 144, def: 98, spa: 79, spd: 91, spe: 88 },
+        note: "Exclusiva de Pokémon Lazarus! 144 Attack e 88 Speed com Nature's Tools!"
+      }
+    },
+    'heliolisk': {
+      mega: {
+        name: 'Mega Heliolisk', stone: 'heliolite', stoneName: 'Heliolite', spriteId: 'laz:mega-heliolisk',
+        isLazarusMega: true, lazarusSlug: 'mega-heliolisk',
+        types: ['electric', 'fire'], ability: 'Drought',
+        stats: { hp: 62, atk: 75, def: 72, spa: 159, spd: 104, spe: 119 },
+        note: 'Exclusiva de Pokémon Lazarus! Vira Elétrico/Fogo com Drought, 159 Sp. Atk e 119 Speed!'
+      }
+    },
+    'tyrantrum': {
+      mega: {
+        name: 'Mega Tyrantrum', stone: 'tyrantrite', stoneName: 'Tyrantrite', spriteId: 'laz:mega-tyrantrum',
+        isLazarusMega: true, lazarusSlug: 'mega-tyrantrum',
+        types: ['ice', 'dragon'], ability: 'Fluffy',
+        stats: { hp: 92, atk: 131, def: 159, spa: 59, spd: 99, spe: 81 },
+        note: 'Exclusiva de Pokémon Lazarus! Vira Gelo/Dragão com Fluffy, 131 Attack e 159 Defense!'
+      }
+    },
+    'aurorus': {
+      mega: {
+        name: 'Mega Aurorus', stone: 'aurorite', stoneName: 'Aurorite', spriteId: 'laz:mega-aurorus',
+        isLazarusMega: true, lazarusSlug: 'mega-aurorus',
+        types: ['fairy', 'ice'], ability: 'Prism Armor',
+        stats: { hp: 128, atk: 77, def: 92, spa: 139, spd: 132, spe: 53 },
+        note: 'Exclusiva de Pokémon Lazarus! Vira Fada/Gelo com Prism Armor, 139 Sp. Atk e 132 Sp. Def!'
+      }
+    },
+    'toucannon': {
+      mega: {
+        name: 'Mega Toucannon', stone: 'toucannonite', stoneName: 'Toucannonite', spriteId: 'laz:mega-toucannon',
+        isLazarusMega: true, lazarusSlug: 'mega-toucannon',
+        types: ['fire', 'flying'], ability: 'Parental Bond',
+        stats: { hp: 80, atk: 140, def: 95, spa: 95, spd: 95, spe: 80 },
+        note: 'Exclusiva de Pokémon Lazarus! Vira Fogo/Voador com Parental Bond e 140 de Attack!'
+      }
+    },
+    'ribombee': {
+      mega: {
+        name: 'Mega Ribombee', stone: 'ribombite', stoneName: 'Ribombite', spriteId: 'laz:mega-ribombee',
+        isLazarusMega: true, lazarusSlug: 'mega-ribombee',
+        types: ['bug', 'fairy'], ability: 'Fairy Aura',
+        stats: { hp: 60, atk: 60, def: 65, spa: 145, spd: 95, spe: 139 },
+        note: 'Exclusiva de Pokémon Lazarus! 145 Sp. Atk e 139 Speed com Fairy Aura (+33% poder Fada)!'
+      }
+    },
+    'centiskorch': {
+      mega: {
+        name: 'Mega Centiskorch', stone: 'centiskite', stoneName: 'Centiskite', spriteId: 'laz:mega-centiskorch',
+        isLazarusMega: true, lazarusSlug: 'mega-centiskorch',
+        types: ['fire', 'bug'], ability: 'Tinted Lens',
+        stats: { hp: 105, atk: 145, def: 85, spa: 100, spd: 100, spe: 90 },
+        note: 'Exclusiva de Pokémon Lazarus! 145 Attack e 90 Speed com Tinted Lens!'
+      }
+    },
+    'grimmsnarl': {
+      mega: {
+        name: 'Mega Grimmsnarl', stone: 'grimmsnarlite', stoneName: 'Grimmsnarlite', spriteId: 'laz:mega-grimmsnarl',
+        isLazarusMega: true, lazarusSlug: 'mega-grimmsnarl',
+        types: ['dark', 'fairy'], ability: 'Unseen Fist',
+        stats: { hp: 95, atk: 160, def: 105, spa: 85, spd: 95, spe: 70 },
+        note: 'Exclusiva de Pokémon Lazarus! 160 de Attack e 105 Defense com Unseen Fist (ignora Protect)!'
+      }
+    },
+    'copperajah': {
+      mega: {
+        name: 'Mega Copperajah', stone: 'copperajite', stoneName: 'Copperajite', spriteId: 'laz:mega-copperajah',
+        isLazarusMega: true, lazarusSlug: 'mega-copperajah',
+        types: ['steel', 'normal'], ability: 'Super Luck',
+        stats: { hp: 122, atk: 150, def: 109, spa: 85, spd: 89, spe: 45 },
+        note: 'Exclusiva de Pokémon Lazarus! Vira Aço/Normal com 150 Attack, 109 Defense e Super Luck!'
+      }
+    },
+    'wyrdeer': {
+      mega: {
+        name: 'Mega Wyrdeer', stone: 'wyrdeerite', stoneName: 'Wyrdeerite', spriteId: 'laz:mega-wyrdeer',
+        isLazarusMega: true, lazarusSlug: 'mega-wyrdeer',
+        types: ['normal', 'psychic'], ability: 'Fur Coat',
+        stats: { hp: 103, atk: 120, def: 97, spa: 140, spd: 115, spe: 50 },
+        note: 'Exclusiva de Pokémon Lazarus! Fur Coat (dobra a Defesa Física!) com 140 Sp. Atk e 120 Attack!'
+      }
+    },
+    'tinkaton': {
+      mega: {
+        name: 'Mega Tinkaton', stone: 'tinkatite', stoneName: 'Tinkatite', spriteId: 'laz:mega-tinkaton',
+        isLazarusMega: true, lazarusSlug: 'mega-tinkaton',
+        types: ['fairy', 'steel'], ability: 'Huge Power',
+        stats: { hp: 90, atk: 85, def: 112, spa: 80, spd: 135, spe: 114 },
+        note: 'Exclusiva de Pokémon Lazarus! Ganha HUGE POWER (dobra o Attack!) com 114 Speed e 135 Sp. Def!'
+      }
+    },
+    'cyclizar': {
+      mega: {
+        name: 'Mega Cyclizar S', stone: 'cyclizite-s', stoneName: 'Cyclizite S', spriteId: 'laz:mega-cyclizar-s',
+        isLazarusMega: true, lazarusSlug: 'mega-cyclizar-s',
+        types: ['dragon', 'fighting'], ability: 'Moxie',
+        stats: { hp: 70, atk: 145, def: 100, spa: 85, spd: 80, spe: 131 },
+        note: 'Exclusiva de Pokémon Lazarus! Forma S (Dragão/Lutador) com 145 Attack, 131 Speed e Moxie!'
+      },
+      megaAlt: {
+        name: 'Mega Cyclizar V', stone: 'cyclizite-v', stoneName: 'Cyclizite V', spriteId: 'laz:mega-cyclizar-v',
+        isLazarusMega: true, lazarusSlug: 'mega-cyclizar-v',
+        types: ['dragon', 'electric'], ability: 'Electric Surge',
+        stats: { hp: 70, atk: 85, def: 80, spa: 145, spd: 95, spe: 136 },
+        note: 'Exclusiva de Pokémon Lazarus! Forma V (Dragão/Elétrico) com 145 Sp. Atk, 136 Speed e Electric Surge!'
+      }
     }
   };
 
@@ -1139,7 +1330,9 @@ window.POKE_DATA.FULL_DEX_COMPACT = [
         itemsCatalog[m.stone] = {
           id: m.stone,
           name: m.stoneName || m.stone.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
-          minGen: m.isLzaMega ? 9 : 6,
+          minGen: (m.isLzaMega || m.isLazarusMega) ? 9 : 6,
+          isLzaStone: Boolean(m.isLzaMega),
+          isLazarusStone: Boolean(m.isLazarusMega),
           category: 'mega',
           icon: '🧬',
           desc: `Permite Mega Evoluir para ${m.name} (${m.note})`

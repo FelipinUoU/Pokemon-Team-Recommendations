@@ -57,7 +57,9 @@
   }
 
   function getCurrentGame() {
-    return GAMES.find(g => g.id === state.selectedGameId) || GAMES[0];
+    const g = GAMES.find(g => g.id === state.selectedGameId) || GAMES[0];
+    if (ENGINE.setCurrentGame) ENGINE.setCurrentGame(g);
+    return g;
   }
 
   function findPokemonById(id) {
@@ -195,6 +197,19 @@
     return badges.join(' ');
   }
 
+  // Ícone de Gigantamax exibido exclusivamente em Pokémon Sword & Shield (gen8-swsh)
+  function renderGigantamaxBadge(mon, extraClass = '') {
+    const game = getCurrentGame();
+    if (!mon || !game || game.id !== 'gen8-swsh') return '';
+    if (!ENGINE.canPokemonGigantamaxInGame || !ENGINE.canPokemonGigantamaxInGame(mon, game)) return '';
+    const gmaxInfo = ENGINE.getGigantamaxInfo ? ENGINE.getGigantamaxInfo(mon, game) : null;
+    const title = gmaxInfo
+      ? `Possui forma Gigantamax em Pokémon Sword & Shield — Golpe G-Max: ${gmaxInfo.gmaxMove}`
+      : 'Possui forma Gigantamax em Pokémon Sword & Shield';
+    const svg = ENGINE.getGigantamaxIconSvg ? ENGINE.getGigantamaxIconSvg('w-3.5 h-3.5') : '';
+    return `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-label-sm text-[10px] font-bold bg-[#e6005c]/20 text-[#ff5c8d] border border-[#ff2a6d]/55 shrink-0 ${extraClass}" title="${title}">${svg}<span>Gigantamax</span></span>`;
+  }
+
   // ==========================================================================
   // 0. RENDERIZAÇÃO DO MENU LATERAL DE EQUIPES SALVAS (STITCH DRAWER)
   // ==========================================================================
@@ -222,6 +237,8 @@
 
     listEl.innerHTML = state.savedTeams.map(saved => {
       const isActive = saved.id === state.activeSavedTeamId;
+      const savedGameObj = GAMES.find(g => g.id === saved.gameId) || null;
+      const isLazSaved = Boolean(savedGameObj && savedGameObj.id === 'fangame-lazarus');
       const spritesHtml = [0, 1, 2, 3, 4, 5].map(i => {
         const slotData = saved.team && saved.team[i];
         const mon = slotData && slotData.pokemonId ? findPokemonById(slotData.pokemonId) : null;
@@ -232,7 +249,7 @@
         }
         return `
           <div class="w-9 h-9 rounded bg-surface-container flex items-center justify-center overflow-hidden" title="${formatDexNum(mon.dex)} ${mon.name}">
-            <img src="${ENGINE.getSpriteUrl(mon.spriteId || mon.dex)}" alt="${mon.name}" class="w-8 h-8 object-contain" loading="lazy" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${mon.dex}.png'" />
+            <img src="${ENGINE.getSpriteUrl(mon.spriteId || mon.dex, savedGameObj)}" alt="${mon.name}" class="w-8 h-8 object-contain ${isLazSaved ? 'sprite-pixelated' : ''}" loading="lazy" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${mon.dex}.png'" />
           </div>
         `;
       }).join('');
@@ -590,6 +607,7 @@
                   ${mechObj.icon} ${activeMechId === 'tera' ? `Tera ${TYPES[slot.teraType]?.name || ''}` : mechObj.shortName}
                 </span>
               ` : ''}
+              ${renderGigantamaxBadge(slot.pokemon)}
             </div>
             <div class="flex items-center gap-1">
               <button data-open-picker-slot="${idx}" class="px-2 h-6 rounded bg-surface-container-lowest hover:bg-primary-container/20 text-on-surface-variant hover:text-primary font-mono text-[11px] flex items-center gap-1 transition-colors cursor-pointer" title="Trocar Pokémon deste slot">
@@ -623,8 +641,8 @@
                 ${game.hasItems ? `
                   <div class="truncate flex items-center gap-1">
                     🎒 Item:
-                    <button data-slot-index="${idx}" data-edit-tab="item" class="text-secondary hover:underline font-semibold truncate cursor-pointer">
-                      ${itemObj ? `${itemObj.icon} ${itemObj.name}` : '+ Escolher Item'}
+                    <button data-slot-index="${idx}" data-edit-tab="item" class="text-secondary hover:underline font-semibold truncate inline-flex items-center gap-1 cursor-pointer">
+                      ${itemObj ? `${ENGINE.getItemIconHtml ? ENGINE.getItemIconHtml(itemObj, 'w-4 h-4') : itemObj.icon} <span class="truncate">${itemObj.name}</span>` : '+ Escolher Item'}
                     </button>
                     ${itemObj ? `
                       <a href="gps.html?game=${encodeURIComponent(state.selectedGameId)}&mode=items&q=${encodeURIComponent(itemObj.name)}" data-gps-locate="true" class="inline-flex items-center justify-center w-4 h-4 rounded bg-surface-container-lowest hover:bg-primary-container hover:text-on-primary-container text-primary border border-primary/30 shrink-0 transition-colors" title="Localizar ${itemObj.name} no GPS Pokémon (${game.name})">
@@ -796,9 +814,12 @@
         <div data-pick-modal-mon="${pokemon.id}" class="bg-surface-container-low hover:bg-surface-container-high rounded-xl p-space-md border ${
           alreadyInTeam ? 'border-tertiary/50 bg-tertiary-container/5' : 'border-outline-variant/20 hover:border-primary/50'
         } flex flex-col justify-between gap-2.5 transition-all cursor-pointer group">
-          <div class="flex items-center justify-between">
-            ${dexBadgeHtml}
-            <span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary font-mono text-[11px] font-bold">${synergyPercent}% Sinergia</span>
+          <div class="flex items-center justify-between gap-1.5">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              ${dexBadgeHtml}
+              ${renderGigantamaxBadge(pokemon)}
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary font-mono text-[11px] font-bold shrink-0">${synergyPercent}% Sinergia</span>
           </div>
 
           <div class="flex items-center gap-3">
@@ -900,6 +921,10 @@
     }
 
     container.classList.remove('hidden');
+
+    if (state.activeEditorTab === 'mechanics') {
+      state.activeEditorTab = 'stats';
+    }
 
     const eff = ENGINE.getEffectivePokemonState(slot, game);
     const moveRecs = ENGINE.getRecommendedMovesForPokemon(slot.pokemon, game, teamAnalysis, slot);
@@ -1049,7 +1074,7 @@
             } flex items-center justify-between gap-3 transition-all cursor-pointer">
               <div class="flex items-center gap-3 min-w-0">
                 <div class="w-11 h-11 rounded-xl bg-surface-container-lowest flex items-center justify-center text-2xl shrink-0 border border-outline-variant/20">
-                  ${it.icon}
+                  ${ENGINE.getItemIconHtml ? ENGINE.getItemIconHtml(it, 'w-8 h-8') : it.icon}
                 </div>
                 <div class="min-w-0">
                   <div class="flex flex-wrap items-center gap-2">
@@ -1090,113 +1115,7 @@
         `;
       }
     }
-    // ABA 3: MECÂNICAS ESPECIAIS DO JOGO
-    else if (state.activeEditorTab === 'mechanics') {
-      const canMega = ENGINE.canPokemonMegaInGame ? ENGINE.canPokemonMegaInGame(slot.pokemon, game) : (game.mechanics.includes('mega') && Boolean(slot.pokemon.mega));
-      const canMegaAlt = ENGINE.canPokemonMegaAltInGame ? ENGINE.canPokemonMegaAltInGame(slot.pokemon, game) : Boolean(slot.pokemon.megaAlt);
-      const canPrimal = game.mechanics.includes('primal') && Boolean(slot.pokemon.primal);
-      const canZMove = game.mechanics.includes('zmove');
-      const canDynamax = game.mechanics.includes('dynamax');
-      const canTera = game.mechanics.includes('tera');
-      const activeTypes = ENGINE.getActiveTypesForGame(game);
-
-      tabBodyHtml = `
-        <div class="p-space-lg space-y-space-md">
-          <div>
-            <h4 class="font-headline font-bold text-sm text-on-surface uppercase tracking-wider">Mecânicas Especiais de Batalha (${game.name})</h4>
-            <p class="text-xs text-on-surface-variant">Ative transformações disponíveis neste jogo para recalcular tipos, atributos, habilidade e sinergia da equipe.</p>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            <div data-set-mechanic="none" class="p-space-md rounded-xl border transition-all cursor-pointer ${
-              !slot.mechanic ? 'bg-primary-container/15 border-2 border-primary' : 'bg-surface-container-low hover:bg-surface-container-high border-outline-variant/20'
-            }">
-              <div class="flex items-center gap-2 font-headline font-bold text-sm text-on-surface mb-1">
-                <span>⚪</span> Forma Base Padrão
-              </div>
-              <p class="text-xs text-on-surface-variant">Usa ${slot.pokemon.name} em sua forma base mantendo o slot de item livre (Leftovers, Life Orb, Choice, etc.).</p>
-            </div>
-
-            ${game.mechanics.includes('mega') ? `
-              <div ${canMega ? 'data-set-mechanic="mega"' : ''} class="p-space-md rounded-xl border transition-all ${
-                slot.mechanic === 'mega'
-                  ? 'bg-primary-container/15 border-2 border-primary cursor-pointer'
-                  : (canMega ? 'bg-surface-container-low hover:bg-surface-container-high border-outline-variant/20 cursor-pointer' : 'bg-surface-container-lowest/50 border-outline-variant/10 opacity-50 cursor-not-allowed')
-              }">
-                <div class="flex items-center gap-2 font-headline font-bold text-sm text-on-surface mb-1">
-                  <span>🧬</span> Mega Evolução ${canMega ? `(${slot.megaVariant === 'x' && canMegaAlt ? slot.pokemon.megaAlt.name : slot.pokemon.mega.name})` : '(Indisponível)'}
-                </div>
-                <p class="text-xs text-on-surface-variant">${canMega ? (slot.megaVariant === 'x' && canMegaAlt ? slot.pokemon.megaAlt.note : slot.pokemon.mega.note) : `${slot.pokemon.name} não possui Mega Evolução disponível neste jogo.`}</p>
-                ${canMega && canMegaAlt ? `
-                  <div class="flex gap-2 mt-3">
-                    <button data-mega-variant="default" class="flex-1 py-1.5 px-2 rounded font-mono text-xs font-bold cursor-pointer ${
-                      slot.megaVariant !== 'x' ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-highest text-on-surface'
-                    }">${slot.pokemon.mega.name}</button>
-                    <button data-mega-variant="x" class="flex-1 py-1.5 px-2 rounded font-mono text-xs font-bold cursor-pointer ${
-                      slot.megaVariant === 'x' ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-highest text-on-surface'
-                    }">${slot.pokemon.megaAlt.name}</button>
-                  </div>
-                ` : ''}
-              </div>
-            ` : ''}
-
-            ${canPrimal ? `
-              <div data-set-mechanic="primal" class="p-space-md rounded-xl border transition-all cursor-pointer ${
-                slot.mechanic === 'primal' ? 'bg-primary-container/15 border-2 border-primary' : 'bg-surface-container-low hover:bg-surface-container-high border-outline-variant/20'
-              }">
-                <div class="flex items-center gap-2 font-headline font-bold text-sm text-on-surface mb-1">
-                  <span>🌋</span> Primal Reversion (${slot.pokemon.primal.name})
-                </div>
-                <p class="text-xs text-on-surface-variant">${slot.pokemon.primal.note}</p>
-              </div>
-            ` : ''}
-
-            ${canZMove ? `
-              <div data-set-mechanic="zmove" class="p-space-md rounded-xl border transition-all cursor-pointer ${
-                slot.mechanic === 'zmove' ? 'bg-primary-container/15 border-2 border-primary' : 'bg-surface-container-low hover:bg-surface-container-high border-outline-variant/20'
-              }">
-                <div class="flex items-center gap-2 font-headline font-bold text-sm text-on-surface mb-1">
-                  <span>💎</span> Portador de Z-Crystal (Z-Move)
-                </div>
-                <p class="text-xs text-on-surface-variant">Equipa automaticamente o Cristal Z ideal para disparar uma explosão STAB única na batalha.</p>
-              </div>
-            ` : ''}
-
-            ${canDynamax ? `
-              <div data-set-mechanic="dynamax" class="p-space-md rounded-xl border transition-all cursor-pointer ${
-                slot.mechanic === 'dynamax' ? 'bg-primary-container/15 border-2 border-primary' : 'bg-surface-container-low hover:bg-surface-container-high border-outline-variant/20'
-              }">
-                <div class="flex items-center gap-2 font-headline font-bold text-sm text-on-surface mb-1">
-                  <span>🌩️</span> Dynamax ${slot.pokemon.hasGmax ? '/ Gigantamax Ace' : 'Ace'}
-                </div>
-                <p class="text-xs text-on-surface-variant">Dobra o HP por 3 turnos e converte todos os golpes em Max Moves com efeitos secundários de campo.</p>
-              </div>
-            ` : ''}
-
-            ${canTera ? `
-              <div data-set-mechanic="tera" class="p-space-md rounded-xl border transition-all cursor-pointer ${
-                slot.mechanic === 'tera' ? 'bg-primary-container/15 border-2 border-primary' : 'bg-surface-container-low hover:bg-surface-container-high border-outline-variant/20'
-              }">
-                <div class="flex items-center gap-2 font-headline font-bold text-sm text-on-surface mb-1">
-                  <span>👑</span> Fenômeno Terastal (Tera Type)
-                </div>
-                <p class="text-xs text-on-surface-variant mb-2">Tera Recomendado: <strong>${TYPES[slot.pokemon.bestTera]?.name || 'Fada'}</strong></p>
-                <div class="tera-selector-row space-y-2" onclick="event.stopPropagation()">
-                  <select id="select-tera-type" class="w-full bg-surface-container-lowest border border-outline-variant/40 rounded-lg px-2.5 py-1.5 text-xs text-on-surface">
-                    ${activeTypes.map(t => `<option value="${t}" ${slot.teraType === t ? 'selected' : ''}>${TYPES[t].icon} Tera ${TYPES[t].name} ${t === slot.pokemon.bestTera ? '★ (Recomendado)' : ''}</option>`).join('')}
-                  </select>
-                  <label class="flex items-center gap-1.5 text-[11px] text-on-surface-variant cursor-pointer">
-                    <input type="checkbox" id="toggle-tera-defense" ${slot.applyTeraDefense ? 'checked' : ''} class="accent-primary" />
-                    <span>Simular defesa do Tera Type na Matriz</span>
-                  </label>
-                </div>
-              </div>
-            ` : ''}
-          </div>
-        </div>
-      `;
-    }
-    // ABA 4: ATRIBUTOS BASE & MATRIZ DEFENSIVA INDIVIDUAL (STITCH 7-COL / 5-COL LAYOUT)
+    // ABA 3: STATUS (ATRIBUTOS BASE & MATRIZ DEFENSIVA INDIVIDUAL)
     else if (state.activeEditorTab === 'stats') {
       const natureObj = ENGINE.getNatureInfo ? ENGINE.getNatureInfo(slot.nature) : { id: slot.nature, up: null, down: null };
       const naturesList = ENGINE.NATURES || [];
@@ -1363,11 +1282,7 @@
             <div class="flex flex-wrap items-center gap-2">
               <span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-mono text-xs font-bold">SLOT #${state.activeSlotIndex + 1} EM FOCO</span>
               <span class="font-mono text-xs text-on-surface-variant font-bold">${formatDexNum(eff.dex)}</span>
-              <span class="px-2.5 py-0.5 rounded-full bg-secondary-container/20 text-secondary border border-secondary/30 font-mono text-xs">${eff.role}</span>
-              <button data-open-picker-slot="${state.activeSlotIndex}" class="px-2.5 py-1 rounded-lg bg-surface-container-lowest hover:bg-primary-container/20 text-primary border border-primary/30 font-mono text-xs font-bold flex items-center gap-1 cursor-pointer">
-                <span class="material-symbols-outlined text-[14px]">swap_horiz</span>
-                Trocar Pokémon
-              </button>
+              ${renderGigantamaxBadge(slot.pokemon)}
               <a href="gps.html?game=${encodeURIComponent(state.selectedGameId)}&mode=pokemon&q=${encodeURIComponent(slot.pokemon.name)}" data-gps-locate="true" class="px-2.5 py-1 rounded-lg bg-surface-container-lowest hover:bg-primary-container text-primary hover:text-on-primary-container border border-primary/30 font-mono text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer" title="Localizar ${slot.pokemon.name} no GPS Pokémon (${game.name})">
                 <span class="material-symbols-outlined text-[14px]">search</span>
                 Onde Capturar (GPS)
@@ -1384,36 +1299,28 @@
           </div>
         </div>
 
-        <!-- 4 Editor Tabs + Botão Fechar fora da seleção -->
+        <!-- 3 Editor Tabs + Botão Fechar fora da seleção -->
         <div class="flex items-center gap-2">
           <div class="flex flex-wrap gap-1.5 bg-surface-container-lowest p-1.5 rounded-xl border border-outline-variant/25">
             <button data-editor-tab="moves" class="px-3 py-2 rounded-lg font-headline font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
               state.activeEditorTab === 'moves' ? 'bg-primary-container text-on-primary-container shadow' : 'text-on-surface-variant hover:text-on-surface'
             }">
               <span class="material-symbols-outlined text-[16px]">swords</span>
-              4 Ataques
+              Ataques
             </button>
             ${game.hasItems ? `
               <button data-editor-tab="item" class="px-3 py-2 rounded-lg font-headline font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
                 state.activeEditorTab === 'item' ? 'bg-primary-container text-on-primary-container shadow' : 'text-on-surface-variant hover:text-on-surface'
               }">
                 <span class="material-symbols-outlined text-[16px]">backpack</span>
-                Item Recomendado
-              </button>
-            ` : ''}
-            ${game.mechanics.length > 0 ? `
-              <button data-editor-tab="mechanics" class="px-3 py-2 rounded-lg font-headline font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
-                state.activeEditorTab === 'mechanics' ? 'bg-primary-container text-on-primary-container shadow' : 'text-on-surface-variant hover:text-on-surface'
-              }">
-                <span class="material-symbols-outlined text-[16px]">auto_awesome</span>
-                Mecânicas
+                Itens
               </button>
             ` : ''}
             <button data-editor-tab="stats" class="px-3 py-2 rounded-lg font-headline font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
               state.activeEditorTab === 'stats' ? 'bg-primary-container text-on-primary-container shadow' : 'text-on-surface-variant hover:text-on-surface'
             }">
               <span class="material-symbols-outlined text-[16px]">monitoring</span>
-              Atributos &amp; Defesas
+              Status
             </button>
           </div>
           <button data-close-editor="true" class="px-2.5 py-2 rounded-lg bg-error-container/20 hover:bg-error-container/40 text-error font-headline font-bold text-xs flex items-center justify-center transition-all cursor-pointer shrink-0" title="Fechar Painel">
@@ -1766,7 +1673,8 @@
               <span class="px-2 py-0.5 rounded bg-surface-container-highest font-mono text-xs font-bold text-primary">${formatDexNum(displayDexNum)}</span>
               ${isTopSynergy ? `<span class="px-2 py-0.5 rounded bg-secondary-container/25 text-secondary font-mono text-[11px] font-bold">🏆 Top #${idx + 1}</span>` : `<span class="text-[11px] font-mono text-on-surface-variant">${pokemon.role}</span>`}
               ${isStarterInGame ? `<span class="px-1.5 py-0.5 rounded bg-primary-container/20 text-primary font-mono text-[10px]">🌟 Inicial</span>` : ''}
-              ${pokemon.mega && game.mechanics.includes('mega') ? `<span class="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono text-[10px]">🧬 Mega</span>` : ''}
+              ${(ENGINE.canPokemonMegaInGame ? ENGINE.canPokemonMegaInGame(pokemon, game) : (pokemon.mega && game.mechanics.includes('mega'))) ? `<span class="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono text-[10px]">🧬 Mega</span>` : ''}
+              ${renderGigantamaxBadge(pokemon)}
             </div>
             <span class="px-2.5 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary border border-tertiary/30 font-mono text-xs font-bold shrink-0">
               ${synergyPercent}% Sinergia
@@ -1924,6 +1832,8 @@
   // Renderiza tudo e persiste
   function renderAll() {
     const game = getCurrentGame();
+    if (ENGINE.setCurrentGame) ENGINE.setCurrentGame(game);
+    document.body.classList.toggle('game-lazarus', Boolean(game && game.id === 'fangame-lazarus'));
     const analysis = ENGINE.analyzeTeam(state.team, game);
     renderSavedTeamsSidebar();
     renderGameHeader();
@@ -2069,6 +1979,9 @@
           }
 
           if (slot.mechanic && !g.mechanics.includes(slot.mechanic)) {
+            slot.mechanic = null;
+          }
+          if (slot.mechanic === 'mega' && ENGINE.canPokemonMegaInGame && !ENGINE.canPokemonMegaInGame(slot.pokemon, g)) {
             slot.mechanic = null;
           }
           if (!g.hasItems) {

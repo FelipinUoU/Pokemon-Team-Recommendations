@@ -230,3 +230,11 @@ body.sidebar-closed #main-workspace {
 .ev-iv-slider.ev-slider::-moz-range-thumb {
   background: #30c88f;
 }
+
+/* Pixelated rendering for Pokémon Lazarus GBC-style sprites & official item sprites */
+body.game-lazarus img,
+.sprite-pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+

@@ -77,6 +77,10 @@ window.POKE_ENGINE = (function () {
       ability = megaData.ability;
       displayName = megaData.name;
       spriteId = megaData.spriteId || spriteId;
+      if (game && game.id === 'fangame-lazarus') {
+        const lazMegaSlug = megaData.lazarusSlug || getLazarusMegaSlug(mon, useAltMega);
+        if (lazMegaSlug) spriteId = `laz:${lazMegaSlug}`;
+      }
       activeMechanicNote = megaData.note;
     } else if (primalActive) {
       slot.mechanic = 'primal';
@@ -85,6 +89,10 @@ window.POKE_ENGINE = (function () {
       ability = mon.primal.ability;
       displayName = mon.primal.name;
       spriteId = mon.primal.spriteId || spriteId;
+      if (game && game.id === 'fangame-lazarus') {
+        if (mon.dex === 382) spriteId = 'laz:primal-kyogre';
+        else if (mon.dex === 383) spriteId = 'laz:primal-groudon';
+      }
       activeMechanicNote = mon.primal.note;
     } else {
       if (game && game.hasItems && (slot.mechanic === 'mega' || slot.mechanic === 'primal')) {
@@ -443,21 +451,127 @@ window.POKE_ENGINE = (function () {
     };
   }
 
-  // Verifica se o Pokémon pode Mega Evoluir no jogo selecionado (Megas de Legends: Z-A / DLC ficam ativas em Legends: Z-A e Fan Games)
+  // Megas presentes no Pokémon Lazarus (58 Megas da Ilios Pokédex)
+  const LAZARUS_MEGA_DEX_SET = new Set([
+    26, 71, 94, 130, 131, 142, 149, 154, 157, 160, 164, 181, 208, 212, 214, 229, 248,
+    282, 303, 306, 308, 323, 330, 334, 354, 362, 384, 460, 475, 478, 560, 565, 567,
+    609, 630, 652, 655, 658, 673, 675, 691, 695, 697, 699, 701, 733, 740, 743, 768,
+    851, 861, 870, 879, 899, 959, 967
+  ]);
+
+  function getLazarusMegaSlug(pokemon, useAlt = false) {
+    if (!pokemon) return null;
+    if (pokemon.dex === 26) return useAlt ? 'mega-raichu-x' : 'mega-raichu-y';
+    if (pokemon.dex === 967) return useAlt ? 'mega-cyclizar-v' : 'mega-cyclizar-s';
+    const megaByDex = {
+      71: 'mega-victreebel', 94: 'mega-gengar', 130: 'mega-gyarados', 131: 'mega-lapras',
+      142: 'mega-aerodactyl', 149: 'mega-dragonite', 154: 'mega-meganium', 157: 'mega-typhlosion',
+      160: 'mega-feraligatr', 164: 'mega-noctowl', 181: 'mega-ampharos', 208: 'mega-steelix',
+      212: 'mega-scizor', 214: 'mega-heracross', 229: 'mega-houndoom', 248: 'mega-tyranitar',
+      282: 'mega-gardevoir', 303: 'mega-mawile', 306: 'mega-aggron', 308: 'mega-medicham',
+      323: 'mega-camerupt', 330: 'mega-flygon', 334: 'mega-altaria', 354: 'mega-banette',
+      362: 'mega-glalie', 384: 'mega-rayquaza', 460: 'mega-abomasnow', 475: 'mega-gallade',
+      478: 'mega-froslass', 560: 'mega-scrafty', 565: 'mega-carracosta', 567: 'mega-archeops',
+      609: 'mega-chandelure', 630: 'mega-mandibuzz', 652: 'mega-chesnaught', 655: 'mega-delphox',
+      658: 'mega-greninja', 673: 'mega-gogoat', 675: 'mega-pangoro', 691: 'mega-dragalge',
+      695: 'mega-heliolisk', 697: 'mega-tyrantrum', 699: 'mega-aurorus', 701: 'mega-hawlucha',
+      733: 'mega-toucannon', 740: 'mega-crabominable', 743: 'mega-ribombee', 768: 'mega-golisopod',
+      851: 'mega-centiskorch', 861: 'mega-grimmsnarl', 870: 'mega-falinks', 879: 'mega-copperajah',
+      899: 'mega-wyrdeer', 959: 'mega-tinkaton'
+    };
+    return megaByDex[pokemon.dex] || null;
+  }
+
+  // Verifica se o Pokémon pode Mega Evoluir no jogo selecionado
+  // - Pokémon Unbound NÃO possui as Megas novas de Legends: Z-A nem as Megas exclusivas do Lazarus
+  // - Megas exclusivas do Lazarus (isLazarusMega) só aparecem em Pokémon Lazarus
   function canPokemonMegaInGame(pokemon, game) {
     if (!pokemon || !pokemon.mega || !game || !game.mechanics || !game.mechanics.includes('mega')) return false;
-    if (pokemon.mega.isLzaMega && !['gen9-lza', 'fangame-unbound', 'fangame-lazarus'].includes(game.id)) {
-      return false;
+    if (pokemon.mega.isLazarusMega) {
+      return game.id === 'fangame-lazarus';
+    }
+    if (pokemon.mega.isLzaMega) {
+      if (game.id === 'gen9-lza') return true;
+      if (game.id === 'fangame-lazarus') return LAZARUS_MEGA_DEX_SET.has(pokemon.dex);
+      return false; // Exclui de Pokémon Unbound e dos jogos Gen 6/7
+    }
+    if (game.id === 'fangame-lazarus') {
+      return LAZARUS_MEGA_DEX_SET.has(pokemon.dex);
     }
     return true;
   }
 
   function canPokemonMegaAltInGame(pokemon, game) {
     if (!pokemon || !pokemon.megaAlt || !game || !game.mechanics || !game.mechanics.includes('mega')) return false;
-    if (pokemon.megaAlt.isLzaMega && !['gen9-lza', 'fangame-unbound', 'fangame-lazarus'].includes(game.id)) {
-      return false;
+    if (pokemon.megaAlt.isLazarusMega) {
+      return game.id === 'fangame-lazarus';
+    }
+    if (pokemon.megaAlt.isLzaMega) {
+      if (game.id === 'gen9-lza') return true;
+      if (game.id === 'fangame-lazarus') return LAZARUS_MEGA_DEX_SET.has(pokemon.dex);
+      return false; // Exclui de Pokémon Unbound e dos jogos Gen 6/7
+    }
+    if (game.id === 'fangame-lazarus') {
+      return LAZARUS_MEGA_DEX_SET.has(pokemon.dex);
     }
     return true;
+  }
+
+  // ==========================================================================
+  // GIGANTAMAX EXCLUSIVO DE POKÉMON SWORD & SHIELD (gen8-swsh)
+  // ==========================================================================
+  const SWSH_GIGANTAMAX_MAP = {
+    'venusaur':              { gmaxMove: 'G-Max Vine Lash', spriteId: 10195 },
+    'charizard':             { gmaxMove: 'G-Max Wildfire', spriteId: 10196 },
+    'blastoise':             { gmaxMove: 'G-Max Cannonade', spriteId: 10197 },
+    'butterfree':            { gmaxMove: 'G-Max Befuddle', spriteId: 10198 },
+    'pikachu':               { gmaxMove: 'G-Max Volt Crash', spriteId: 10199 },
+    'meowth':                { gmaxMove: 'G-Max Gold Rush', spriteId: 10200 },
+    'machamp':               { gmaxMove: 'G-Max Chi Strike', spriteId: 10201 },
+    'gengar':                { gmaxMove: 'G-Max Terror', spriteId: 10202 },
+    'kingler':               { gmaxMove: 'G-Max Foam Burst', spriteId: 10203 },
+    'lapras':                { gmaxMove: 'G-Max Resonance', spriteId: 10204 },
+    'eevee':                 { gmaxMove: 'G-Max Cuddle', spriteId: 10205 },
+    'snorlax':               { gmaxMove: 'G-Max Replenish', spriteId: 10206 },
+    'garbodor':              { gmaxMove: 'G-Max Malodor', spriteId: 10207 },
+    'melmetal':              { gmaxMove: 'G-Max Meltdown', spriteId: 10208 },
+    'rillaboom':             { gmaxMove: 'G-Max Drum Solo', spriteId: 10209 },
+    'cinderace':             { gmaxMove: 'G-Max Fireball', spriteId: 10210 },
+    'inteleon':              { gmaxMove: 'G-Max Hydrosnipe', spriteId: 10211 },
+    'corviknight':           { gmaxMove: 'G-Max Wind Rage', spriteId: 10212 },
+    'orbeetle':              { gmaxMove: 'G-Max Gravitas', spriteId: 10213 },
+    'drednaw':               { gmaxMove: 'G-Max Stonesurge', spriteId: 10214 },
+    'coalossal':             { gmaxMove: 'G-Max Volcalith', spriteId: 10215 },
+    'flapple':               { gmaxMove: 'G-Max Tartness', spriteId: 10216 },
+    'appletun':              { gmaxMove: 'G-Max Sweetness', spriteId: 10217 },
+    'sandaconda':            { gmaxMove: 'G-Max Sandblast', spriteId: 10218 },
+    'toxtricity':            { gmaxMove: 'G-Max Stun Shock', spriteId: 10219 },
+    'toxtricity-low-key':    { gmaxMove: 'G-Max Stun Shock', spriteId: 10219 },
+    'centiskorch':           { gmaxMove: 'G-Max Centiferno', spriteId: 10220 },
+    'hatterene':             { gmaxMove: 'G-Max Smite', spriteId: 10221 },
+    'grimmsnarl':            { gmaxMove: 'G-Max Snooze', spriteId: 10222 },
+    'alcremie':              { gmaxMove: 'G-Max Finale', spriteId: 10223 },
+    'copperajah':            { gmaxMove: 'G-Max Steelsurge', spriteId: 10224 },
+    'duraludon':             { gmaxMove: 'G-Max Depletion', spriteId: 10225 },
+    'urshifu':               { gmaxMove: 'G-Max Rapid Flow', spriteId: 10227 },
+    'urshifu-single-strike': { gmaxMove: 'G-Max One Blow', spriteId: 10226 }
+  };
+
+  function canPokemonGigantamaxInGame(pokemon, game) {
+    if (!pokemon || !game || game.id !== 'gen8-swsh') return false;
+    return Boolean(SWSH_GIGANTAMAX_MAP[pokemon.id]);
+  }
+
+  function getGigantamaxInfo(pokemon, game) {
+    if (!canPokemonGigantamaxInGame(pokemon, game)) return null;
+    return SWSH_GIGANTAMAX_MAP[pokemon.id];
+  }
+
+  function getGigantamaxIconSvg(sizeClass = 'w-3.5 h-3.5') {
+    return `<svg viewBox="0 0 24 24" class="${sizeClass} shrink-0 inline-block" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Gigantamax">
+      <path d="M12 2L14.6 8.3L21 5.5L16.5 11.4L22 16.5L15 15.8L16.2 22L12 17.2L7.8 22L9 15.8L2 16.5L7.5 11.4L3 5.5L9.4 8.3L12 2Z" fill="#ff2a6d" stroke="#ffd1df" stroke-width="1.3" stroke-linejoin="round"/>
+      <circle cx="12" cy="12.2" r="2.3" fill="#ffffff"/>
+    </svg>`;
   }
 
   // Verifica se o Pokémon do slot está efetivamente Mega Evoluído (exige carregar sua Mega Stone nos jogos com itens)
@@ -984,10 +1098,33 @@ window.POKE_ENGINE = (function () {
         return mon.gen <= 7 || mon.id.endsWith('-hisui') || isFeatured || isStarter;
 
       case 'fangame-lazarus':
+        return ILIOS_REGIONAL_DEX_SET.has(mon.dex) || isFeatured || isStarter;
+
       default:
         return mon.gen <= eraNationalGen;
     }
   }
+
+  // Ordem oficial da Pokédex de Ilios (Pokémon Lazarus — #001 Rowlet até #440 Ogerpon)
+  const ILIOS_REGIONAL_ORDER = [
+    722, 723, 724, 725, 726, 727, 728, 729, 730, 650, 651, 652, 653, 654, 655, 656, 657, 658, 906, 907, 908, 909, 910, 911, 912, 913, 914,
+    511, 512, 513, 514, 515, 516, 506, 507, 508, 731, 732, 733, 580, 581, 187, 188, 189, 290, 291, 292, 736, 737, 738, 46, 47, 231, 232,
+    872, 873, 104, 105, 749, 750, 179, 180, 181, 840, 841, 842, 1011, 1019, 742, 743, 88, 89, 265, 266, 267, 268, 269, 357, 280, 281, 282, 475,
+    133, 134, 135, 136, 196, 197, 470, 471, 700, 672, 673, 198, 430, 741, 27, 28, 551, 552, 553, 299, 476, 303, 744, 745, 629, 630, 527, 528,
+    304, 305, 306, 532, 533, 534, 950, 60, 61, 62, 186, 710, 711, 285, 286, 214, 353, 354, 190, 424, 761, 762, 763, 194, 195, 980, 948, 949,
+    522, 523, 163, 164, 619, 620, 955, 956, 37, 38, 679, 680, 681, 557, 558, 774, 92, 93, 94, 343, 344, 757, 758, 963, 964, 175, 176, 468,
+    420, 421, 228, 229, 138, 139, 140, 141, 451, 452, 167, 168, 95, 208, 775, 278, 279, 234, 899, 361, 362, 478, 363, 364, 365, 86, 87,
+    436, 437, 878, 879, 570, 571, 215, 461, 903, 696, 697, 698, 699, 52, 53, 863, 417, 152, 153, 154, 155, 156, 157, 158, 159, 160,
+    782, 783, 784, 701, 850, 851, 408, 409, 410, 411, 442, 835, 836, 921, 922, 923, 944, 945, 418, 419, 434, 435, 940, 941, 128, 967,
+    767, 768, 172, 25, 26, 778, 77, 78, 222, 864, 456, 457, 320, 321, 72, 73, 692, 693, 123, 212, 900, 759, 760, 885, 886, 887, 777, 739, 740,
+    345, 346, 347, 348, 702, 441, 307, 308, 96, 97, 23, 24, 550, 902, 674, 675, 690, 691, 574, 575, 576, 577, 578, 579, 607, 608, 609,
+    935, 936, 937, 170, 171, 90, 91, 366, 367, 368, 669, 670, 671, 174, 39, 40, 694, 695, 870, 328, 329, 330, 84, 85, 957, 958, 959,
+    559, 560, 207, 472, 324, 322, 323, 369, 339, 340, 517, 518, 352, 129, 130, 753, 754, 765, 766, 263, 264, 862, 704, 705, 706, 779,
+    859, 860, 861, 333, 334, 56, 57, 979, 100, 101, 131, 203, 981, 69, 70, 71, 81, 82, 462, 613, 614, 58, 59, 54, 55, 193, 469, 142,
+    223, 224, 627, 628, 667, 668, 177, 178, 459, 460, 355, 356, 477, 220, 221, 473, 341, 342, 764, 201, 564, 565, 566, 567,
+    880, 881, 882, 883, 772, 773, 246, 247, 248, 781, 147, 148, 149, 243, 1021, 244, 1020, 245, 1009, 382, 383, 384, 1017
+  ];
+  const ILIOS_REGIONAL_DEX_SET = new Set(ILIOS_REGIONAL_ORDER);
 
   // ==========================================================================
   // NUMERAÇÃO E ORDEM OFICIAL DA POKÉDEX REGIONAL DE CADA JOGO (ex: Emerald #001 Treecko)
@@ -1079,6 +1216,8 @@ window.POKE_ENGINE = (function () {
         // Na Pokédex de Unova, Snivy (#495) é #001 (e Victini #494 é #000)
         map.set(m.id, m.dex - 494);
       });
+    } else if (game.id === 'fangame-lazarus') {
+      ILIOS_REGIONAL_ORDER.forEach(d => assignByDex(d));
     } else {
       // Jogos de Unova B2W2, Kalos, Alola, Galar, Hisui, Paldea, Lumiose (Legends Z-A) e Fan Games:
       // 1º: Iniciais oficiais do jogo e suas linhas evolutivas (#001 a #009)
@@ -1803,8 +1942,258 @@ window.POKE_ENGINE = (function () {
     const primaryType = (pokemon.types && pokemon.types[0]) || 'normal';
     return DEFAULT_CATEGORY_BY_TYPE[primaryType] || 'Pokémon';
   }
-  function getSpriteUrl(spriteId) {
+  // ==========================================================================
+  // SPRITES PIXELIZADOS DO POKÉMON LAZARUS (https://mrwalkthroughs.com/pokemon-lazarus/pokedex/)
+  // ==========================================================================
+  let currentActiveGameId = null;
+
+  function setCurrentGame(game) {
+    currentActiveGameId = game && game.id ? game.id : (typeof game === 'string' ? game : null);
+  }
+
+  const LAZARUS_SPRITE_BY_DEX = {
+    722: "rowlet", 723: "dartrix", 724: "decidueye", 725: "litten", 726: "torracat", 727: "incineroar",
+    728: "popplio", 729: "brionne", 730: "primarina", 650: "chespin", 651: "quilladin", 652: "chesnaught",
+    653: "fennekin", 654: "braixen", 655: "delphox", 656: "froakie", 657: "frogadier", 658: "greninja",
+    906: "sprigatito", 907: "floragato", 908: "meowscarada", 909: "fuecoco", 910: "crocalor", 911: "skeledirge",
+    912: "quaxly", 913: "quaxwell", 914: "quaquaval", 511: "pansage", 512: "simisage", 513: "pansear",
+    514: "simisear", 515: "panpour", 516: "simipour", 506: "lillipup", 507: "herdier", 508: "stoutland",
+    731: "pikipek", 732: "trumbeak", 733: "toucannon", 580: "ducklett", 581: "swanna", 187: "hoppip",
+    188: "skiploom", 189: "jumpluff", 290: "nincada", 291: "ninjask", 292: "shedinja", 736: "grubbin",
+    737: "charjabug", 738: "vikavolt", 46: "paras", 47: "parasect", 231: "phanpy", 232: "donphan",
+    872: "snom", 873: "frosmoth", 104: "cubone", 105: "marowak", 749: "mudbray", 750: "mudsdale",
+    179: "mareep", 180: "flaaffy", 181: "ampharos", 840: "applin", 841: "flapple", 842: "appletun",
+    1011: "dipplin", 1019: "hydrapple", 742: "cutiefly", 743: "ribombee", 88: "grimer", 89: "muk",
+    265: "wurmple", 266: "silcoon", 267: "beautifly", 268: "cascoon", 269: "dustox", 357: "tropius",
+    280: "ralts", 281: "kirlia", 282: "gardevoir", 475: "gallade", 133: "eevee", 134: "vaporeon",
+    135: "jolteon", 136: "flareon", 196: "espeon", 197: "umbreon", 470: "leafeon", 471: "glaceon",
+    700: "sylveon", 672: "skiddo", 673: "gogoat", 198: "murkrow", 430: "honchkrow", 741: "oricorio-baile",
+    27: "sandshrew", 28: "sandslash", 551: "sandile", 552: "krokorok", 553: "krookodile", 299: "nosepass",
+    476: "probopass", 303: "mawile", 744: "rockruff", 745: "lycanroc", 629: "vullaby", 630: "mandibuzz",
+    527: "woobat", 528: "swoobat", 304: "aron", 305: "lairon", 306: "aggron", 532: "timburr",
+    533: "gurdurr", 534: "conkeldurr", 950: "klawf", 60: "poliwag", 61: "poliwhirl", 62: "poliwrath",
+    186: "politoed", 710: "pumpkaboo", 711: "gourgeist", 285: "shroomish", 286: "breloom", 214: "heracross",
+    353: "shuppet", 354: "banette", 190: "aipom", 424: "ambipom", 761: "bounsweet", 762: "steenee",
+    763: "tsareena", 194: "wooper", 195: "quagsire", 980: "clodsire", 948: "toedscool", 949: "toedscruel",
+    522: "blitzle", 523: "zebstrika", 163: "hoothoot", 164: "noctowl", 619: "mienfoo", 620: "mienshao",
+    955: "flittle", 956: "espathra", 37: "vulpix", 38: "ninetales", 679: "honedge", 680: "doublade",
+    681: "aegislash", 557: "dwebble", 558: "crustle", 774: "minior", 92: "gastly", 93: "haunter",
+    94: "gengar", 343: "baltoy", 344: "claydol", 757: "salandit", 758: "salazzle", 963: "finizen",
+    964: "palafin", 175: "togepi", 176: "togetic", 468: "togekiss", 420: "cherubi", 421: "cherrim",
+    228: "houndour", 229: "houndoom", 138: "omanyte", 139: "omastar", 140: "kabuto", 141: "kabutops",
+    451: "skorupi", 452: "drapion", 167: "spinarak", 168: "ariados", 95: "onix", 208: "steelix",
+    775: "komala", 278: "wingull", 279: "pelipper", 234: "stantler", 899: "wyrdeer", 361: "snorunt",
+    362: "glalie", 478: "froslass", 363: "spheal", 364: "sealeo", 365: "walrein", 86: "seel",
+    87: "dewgong", 436: "bronzor", 437: "bronzong", 878: "cufant", 879: "copperajah", 570: "zorua",
+    571: "zoroark", 215: "sneasel", 461: "weavile", 903: "sneasler", 696: "tyrunt", 697: "tyrantrum",
+    698: "amaura", 699: "aurorus", 52: "meowth", 53: "persian", 863: "perrserker", 417: "pachirisu",
+    152: "chikorita", 153: "bayleef", 154: "meganium", 155: "cyndaquil", 156: "quilava", 157: "typhlosion",
+    158: "totodile", 159: "croconaw", 160: "feraligatr", 782: "jangmo-o", 783: "hakamo-o", 784: "kommo-o",
+    701: "hawlucha", 850: "sizzlipede", 851: "centiskorch", 408: "cranidos", 409: "rampardos", 410: "shieldon",
+    411: "bastiodon", 442: "spiritomb", 835: "yamper", 836: "boltund", 921: "pawmi", 922: "pawmo",
+    923: "pawmot", 944: "shroodle", 945: "grafaiai", 418: "buizel", 419: "floatzel", 434: "stunky",
+    435: "skuntank", 940: "wattrel", 941: "kilowattrel", 128: "tauros", 967: "cyclizar", 767: "wimpod",
+    768: "golisopod", 172: "pichu", 25: "pikachu", 26: "raichu", 778: "mimikyu", 77: "ponyta",
+    78: "rapidash", 222: "corsola", 864: "cursola", 456: "finneon", 457: "lumineon", 320: "wailmer",
+    321: "wailord", 72: "tentacool", 73: "tentacruel", 692: "clauncher", 693: "clawitzer", 123: "scyther",
+    212: "scizor", 900: "kleavor", 759: "stufful", 760: "bewear", 885: "dreepy", 886: "drakloak",
+    887: "dragapult", 777: "togedemaru", 739: "crabrawler", 740: "crabominable", 345: "lileep", 346: "cradily",
+    347: "anorith", 348: "armaldo", 702: "dedenne", 441: "chatot", 307: "meditite", 308: "medicham",
+    96: "drowzee", 97: "hypno", 23: "ekans", 24: "arbok", 550: "basculin-red", 902: "basculegion-male",
+    674: "pancham", 675: "pangoro", 690: "skrelp", 691: "dragalge", 574: "gothita", 575: "gothorita",
+    576: "gothitelle", 577: "solosis", 578: "duosion", 579: "reuniclus", 607: "litwick", 608: "lampent",
+    609: "chandelure", 935: "charcadet", 936: "armarouge", 937: "ceruledge", 170: "chinchou", 171: "lanturn",
+    90: "shellder", 91: "cloyster", 366: "clamperl", 367: "huntail", 368: "gorebyss", 669: "flabebe",
+    670: "floette", 671: "florges", 174: "igglybuff", 39: "jigglypuff", 40: "wigglytuff", 694: "helioptile",
+    695: "heliolisk", 870: "falinks", 328: "trapinch", 329: "vibrava", 330: "flygon", 84: "doduo",
+    85: "dodrio", 957: "tinkatink", 958: "tinkatuff", 959: "tinkaton", 559: "scraggy", 560: "scrafty",
+    207: "gligar", 472: "gliscor", 324: "torkoal", 322: "numel", 323: "camerupt", 369: "relicanth",
+    339: "barboach", 340: "whiscash", 517: "munna", 518: "musharna", 352: "kecleon", 129: "magikarp",
+    130: "gyarados", 753: "fomantis", 754: "lurantis", 765: "oranguru", 766: "passimian", 263: "zigzagoon",
+    264: "linoone", 862: "obstagoon", 704: "goomy", 705: "sliggoo", 706: "goodra", 779: "bruxish",
+    859: "impidimp", 860: "morgrem", 861: "grimmsnarl", 333: "swablu", 334: "altaria", 56: "mankey",
+    57: "primeape", 979: "annihilape", 100: "voltorb", 101: "electrode", 131: "lapras", 203: "girafarig",
+    981: "farigiraf", 69: "bellsprout", 70: "weepinbell", 71: "victreebel", 81: "magnemite", 82: "magneton",
+    462: "magnezone", 613: "cubchoo", 614: "beartic", 58: "growlithe", 59: "arcanine", 54: "psyduck",
+    55: "golduck", 193: "yanma", 469: "yanmega", 142: "aerodactyl", 223: "remoraid", 224: "octillery",
+    627: "rufflet", 628: "braviary", 667: "litleo", 668: "pyroar-male", 177: "natu", 178: "xatu",
+    459: "snover", 460: "abomasnow", 355: "duskull", 356: "dusclops", 477: "dusknoir", 220: "swinub",
+    221: "piloswine", 473: "mamoswine", 341: "corphish", 342: "crawdaunt", 764: "comfey", 201: "unown",
+    564: "tirtouga", 565: "carracosta", 566: "archen", 567: "archeops", 880: "dracozolt", 881: "arctozolt",
+    882: "dracovish", 883: "arctovish", 772: "type-null", 773: "silvally", 246: "larvitar", 247: "pupitar",
+    248: "tyranitar", 781: "dhelmise", 147: "dratini", 148: "dragonair", 149: "dragonite", 243: "raikou",
+    1021: "raging-bolt", 244: "entei", 1020: "gouging-fire", 245: "suicune", 1009: "walking-wake",
+    382: "kyogre", 383: "groudon", 384: "rayquaza", 1017: "ogerpon"
+  };
+
+  // Mapeamento de formas regionais / variantes (pelo spriteId do PokéAPI) para o slug do Pokémon Lazarus
+  const LAZARUS_SPRITE_BY_FORM_ID = {
+    10100: "alolan-raichu",
+    10101: "alolan-sandshrew",
+    10102: "alolan-sandslash",
+    10103: "alolan-vulpix",
+    10104: "alolan-ninetales",
+    10107: "alolan-meowth",
+    10108: "alolan-persian",
+    10112: "alolan-grimer",
+    10113: "alolan-muk",
+    10115: "alolan-marowak",
+    10161: "galarian-meowth",
+    10162: "galarian-ponyta",
+    10163: "galarian-rapidash",
+    10173: "galarian-corsola",
+    10174: "galarian-zigzagoon",
+    10175: "galarian-linoone",
+    10229: "hisuian-growlithe",
+    10230: "hisuian-arcanine",
+    10231: "hisuian-voltorb",
+    10232: "hisuian-electrode",
+    10233: "hisuian-typhlosion",
+    10235: "hisuian-sneasel",
+    10238: "hisuian-zorua",
+    10239: "hisuian-zoroark",
+    10240: "hisuian-braviary",
+    10241: "hisuian-sliggoo",
+    10242: "hisuian-goodra",
+    10244: "hisuian-decidueye",
+    10250: "paldean-tauros-combat-breed",
+    10251: "paldean-tauros-blaze-breed",
+    10252: "paldean-tauros-aqua-breed",
+    10253: "paldean-wooper",
+    10256: "hero-palafin",
+    10273: "ogerpon-wellspring",
+    10274: "ogerpon-hearthflame",
+    10275: "ogerpon-cornerstone",
+    10123: "oricorio-pom-pom",
+    10124: "oricorio-pau",
+    10125: "oricorio-sensu",
+    10126: "midnight-lycanroc",
+    10152: "dusk-lycanroc",
+    10035: "mega-charizard-x",
+    10045: "mega-ampharos",
+    10051: "mega-gardevoir",
+    10068: "mega-gallade",
+    10052: "mega-mawile",
+    10053: "mega-aggron",
+    10047: "mega-heracross",
+    10056: "mega-banette",
+    10038: "mega-gengar",
+    10048: "mega-houndoom",
+    10072: "mega-steelix",
+    10074: "mega-glalie",
+    10046: "mega-scizor",
+    10054: "mega-medicham",
+    10087: "mega-camerupt",
+    10041: "mega-gyarados",
+    10067: "mega-altaria",
+    10042: "mega-aerodactyl",
+    10060: "mega-abomasnow",
+    10049: "mega-tyranitar",
+    10079: "mega-rayquaza",
+    10077: "primal-kyogre",
+    10078: "primal-groudon"
+  };
+
+  function getSpriteUrl(spriteId, game = null) {
+    const activeId = (game && game.id) ? game.id : currentActiveGameId;
+    if (typeof spriteId === 'string' && spriteId.startsWith('laz:')) {
+      const slug = spriteId.slice(4);
+      return `https://static.mrwalkthroughs.com/assets/sprites/lazarus/${slug}.png`;
+    }
+    if (activeId === 'fangame-lazarus') {
+      const numId = Number(spriteId);
+      if (LAZARUS_SPRITE_BY_FORM_ID[numId]) {
+        return `https://static.mrwalkthroughs.com/assets/sprites/lazarus/${LAZARUS_SPRITE_BY_FORM_ID[numId]}.png`;
+      }
+      if (LAZARUS_SPRITE_BY_DEX[numId]) {
+        return `https://static.mrwalkthroughs.com/assets/sprites/lazarus/${LAZARUS_SPRITE_BY_DEX[numId]}.png`;
+      }
+      return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${spriteId}.png`;
+    }
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${spriteId}.png`;
+  }
+
+  // ==========================================================================
+  // ÍCONES OFICIAIS DOS ITENS DOS GAMES DE POKÉMON (BASEADO NOS ÚLTIMOS JOGOS)
+  // ==========================================================================
+  const ITEM_SLUG_OVERRIDES = {
+    'starmite': 'starminite',
+    'dragonitite': 'dragoninite',
+    'feraligatrite': 'feraligite',
+    'staraptorite': 'staraptite',
+    'excadrillite': 'excadrite',
+    'baxcaliburite': 'baxcalibrite',
+    'darkraite': 'darkranite',
+    'scolipedite': 'scolipite',
+    'golisopodite': 'golisopite',
+    'glimmorite': 'glimmoranite',
+    'dragon-ascent-mega': 'meteorite',
+    // Mega Stones exclusivas do Pokémon Lazarus mapeadas para pedras Mega equivalentes
+    'laprasite': 'blastoisinite',
+    'typhlosionite': 'houndoominite',
+    'noctowlite': 'alakazite',
+    'flygonite': 'sceptilite',
+    'carracositite': 'gyaradosite',
+    'archeopsite': 'aerodactylite',
+    'mandibite': 'absolite',
+    'gogoatite': 'venusaurite',
+    'pangorite': 'lucarionite',
+    'heliolite': 'manectite',
+    'tyrantrite': 'tyranitarite',
+    'aurorite': 'glalitite',
+    'toucannonite': 'charizarditey',
+    'ribombite': 'gardevoirite',
+    'centiskite': 'blazikenite',
+    'grimmsnarlite': 'mawilite',
+    'copperajite': 'aggronite',
+    'wyrdeerite': 'kangaskhanite',
+    'tinkatite': 'diancite',
+    'cyclizite-s': 'salamencite',
+    'cyclizite-v': 'ampharosite'
+  };
+
+  function getItemSpriteUrl(itemOrId) {
+    if (!itemOrId) return '';
+    const item = typeof itemOrId === 'string' ? (ITEMS[itemOrId] || { id: itemOrId }) : itemOrId;
+    const rawId = item.id || '';
+    const mappedId = ITEM_SLUG_OVERRIDES[rawId] || rawId;
+    const cleanNoDash = mappedId.replace(/-/g, '');
+
+    if (rawId === 'red-orb' || rawId === 'blue-orb' || rawId === 'thick-club' || rawId === 'never-melt-ice') {
+      return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${rawId}.png`;
+    }
+    if (item.category === 'zmove' || rawId.endsWith('-z')) {
+      return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${rawId}--held.png`;
+    }
+    if (item.category === 'mega' && mappedId !== 'meteorite') {
+      return `https://www.serebii.net/itemdex/sprites/za/${cleanNoDash}.png`;
+    }
+    if (rawId === 'heavy-duty-boots') {
+      return 'https://www.serebii.net/itemdex/sprites/sv/heavy-dutyboots.png';
+    }
+    return `https://www.serebii.net/itemdex/sprites/sv/${cleanNoDash}.png`;
+  }
+
+  function getItemFallbackSpriteUrl(itemOrId) {
+    if (!itemOrId) return '';
+    const item = typeof itemOrId === 'string' ? (ITEMS[itemOrId] || { id: itemOrId }) : itemOrId;
+    const rawId = item.id || '';
+    if (item.category === 'zmove' || rawId.endsWith('-z')) {
+      return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${rawId}--held.png`;
+    }
+    const mappedId = ITEM_SLUG_OVERRIDES[rawId] || rawId;
+    if (item.category === 'mega' && ITEM_SLUG_OVERRIDES[rawId] && !rawId.endsWith('ite')) {
+      return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/key-stone.png';
+    }
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${mappedId}.png`;
+  }
+
+  function getItemIconHtml(itemOrId, sizeClass = 'w-5 h-5') {
+    if (!itemOrId) return '';
+    const item = typeof itemOrId === 'string' ? (ITEMS[itemOrId] || { id: itemOrId, name: itemOrId, icon: '🎒' }) : itemOrId;
+    const primaryUrl = getItemSpriteUrl(item);
+    const fallbackUrl = getItemFallbackSpriteUrl(item);
+    return `<img src="${primaryUrl}" alt="${item.name || item.id}" referrerpolicy="no-referrer" class="${sizeClass} object-contain inline-block shrink-0 select-none" onerror="if(this.src!=='${fallbackUrl}'){this.src='${fallbackUrl}';}else{this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/key-stone.png';}" />`;
   }
 
   return {
@@ -1828,12 +2217,18 @@ window.POKE_ENGINE = (function () {
     getVariantShortLabel,
     canPokemonMegaInGame,
     canPokemonMegaAltInGame,
+    canPokemonGigantamaxInGame,
+    getGigantamaxInfo,
+    getGigantamaxIconSvg,
     isPokemonMegaActive,
     isPokemonPrimalActive,
     getActiveSlotMechanic,
     isPokemonAvailableInGame,
     createOptimizedSlot,
     fetchPokemonFromPokeAPI,
-    getSpriteUrl
+    setCurrentGame,
+    getSpriteUrl,
+    getItemSpriteUrl,
+    getItemIconHtml
   };
 })();

@@ -383,17 +383,17 @@ window.POKE_DATA.GAMES = [
     id: 'fangame-lazarus',
     generation: 99,
     genLabel: 'Fan Game / ROM Hack',
-    name: 'Pokémon Lazarus',
+    name: 'Pokémon Lazarus (Ilios)',
     versions: ['Standard', 'Hardcore Mode'],
-    region: 'Lazarus Region',
+    region: 'Ilios',
     maxDexGen: 9,
     typeChartMode: 'modern',
-    mechanics: ['mega', 'tera', 'zmove'],
+    mechanics: ['mega', 'primal', 'tera', 'zmove'],
     hasItems: true,
     hasAbilities: true,
-    starters: ['charmander', 'totodile', 'treecko', 'riolu', 'eevee', 'ralts'],
-    featuredMons: ['charizard', 'feraligatr', 'sceptile', 'lucario', 'gardevoir', 'sylveon', 'garchomp', 'gengar', 'metagross', 'kingambit', 'annihilape', 'volcarona', 'greninja', 'dragapult', 'tyranitar', 'aegislash', 'excadrill', 'Mimikyu', 'ceruledge', 'scizor', 'toxapex'],
-    notes: 'Fan game completo com balanceamento moderno, Mega Evoluções, Terastal opcional, Pokémon de todas as gerações com movesets atualizados e chefes estratégicos que exigem sinergia elemental perfeita.'
+    starters: ['rowlet', 'litten', 'popplio', 'chespin', 'fennekin', 'froakie', 'sprigatito', 'fuecoco', 'quaxly'],
+    featuredMons: ['decidueye', 'incineroar', 'primarina', 'chesnaught', 'delphox', 'greninja', 'meowscarada', 'skeledirge', 'quaquaval', 'toucannon', 'ribombee', 'gogoat', 'mandibuzz', 'noctowl', 'wyrdeer', 'copperajah', 'tyrantrum', 'aurorus', 'typhlosion', 'centiskorch', 'cyclizar', 'pangoro', 'heliolisk', 'flygon', 'tinkaton', 'grimmsnarl', 'lapras', 'carracosta', 'archeops', 'ampharos', 'gardevoir', 'gallade', 'gengar', 'scizor', 'tyranitar', 'dragonite'],
+    notes: 'ROM Hack GBC-style na região de Ilios (por Nemo622) com sprites pixelizados exclusivos, 440 Pokémon na Ilios Dex e 58 Mega Evoluções (incluindo Megas inéditas exclusivas como Mega Toucannon, Mega Ribombee, Mega Flygon, Mega Tinkaton, Mega Cyclizar S/V, Mega Typhlosion e mais)!'
   }
 ];
 
