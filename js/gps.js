@@ -206,6 +206,18 @@ const GAME_GPS_CONFIG = {
       { key: "blue", label: "Expert / Insane", activeClass: "bg-error-container/40 text-error border border-error/50" },
       { key: "both", label: "Todas as Dificuldades", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
     ]
+  },
+  "fangame-lazarus": {
+    id: "fangame-lazarus",
+    name: "Pokémon Lazarus (Ilios)",
+    region: "Ilios",
+    hasTimeOfDay: true,
+    hasSeasons: false,
+    versions: [
+      { key: "red", label: "Standard", activeClass: "bg-primary-container/30 text-primary border border-primary/50" },
+      { key: "blue", label: "Hardcore Mode", activeClass: "bg-error-container/40 text-error border border-error/50" },
+      { key: "both", label: "Todas as Modalidades", activeClass: "bg-surface-container-high text-primary border border-primary/40" }
+    ]
   }
 };
 
@@ -232,7 +244,8 @@ const PTR_GAME_ID_MAP = {
   "gen8-swsh": "gen8-swsh",
   "gen8-bdsp": "gen8-bdsp",
   "gen8-pla": "gen8-pla",
-  "fangame-unbound": "fangame-unbound"
+  "fangame-unbound": "fangame-unbound",
+  "fangame-lazarus": "fangame-lazarus"
 };
 
 const TYPE_BADGE_STYLES = {
@@ -2286,6 +2299,168 @@ const BORRIUS_AREAS = [
 ];
 
 // ============================================================================
+// 4H. DADOS DE ILIOS (POKÉMON LAZARUS — POR NEMO622, DOCUMENTAÇÃO OFICIAL)
+// ============================================================================
+const ILIOS_AREAS = [
+  {
+    id: "ilios-acrisia-bronze",
+    name: "Acrisia City, Acrisia University, Acrisia Mountains & Bronze Fields (North & South)",
+    sector: "Setor Ilios Noroeste — Universidade & Início",
+    category: "route",
+    connections: "Acrisia Mountains (Norte) ⇄ Acrisia City (Acrisia University) ⇄ Bronze Fields (Sul) & Riverwalk Trail (Sudeste)",
+    levelRange: "Lv. 2 — 12",
+    dominantTypes: "Planta / Fogo / Água / Voador / Elétrico",
+    encounters: [
+      { id: 722, name: "Rowlet / Litten / Popplio (Iniciais Gen 7)", types: ["Planta", "Fogo", "Água"], method: "static", methodLabel: "🎁 Escolha de Inicial c/ Prof. Elia na Acrisia University (Ou 100/135/170 na Pokédex!)", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "⭐ 9 Opções de Iniciais em Acrisia!", recommended: true },
+      { id: 650, name: "Chespin / Fennekin / Froakie (Iniciais Gen 6)", types: ["Planta", "Fogo", "Água"], method: "static", methodLabel: "🎁 Escolha de Inicial c/ Prof. Elia na Acrisia University", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "🐸 Evolui p/ Greninja / Delphox / Chesnaught", recommended: true },
+      { id: 906, name: "Sprigatito / Fuecoco / Quaxly (Iniciais Gen 9)", types: ["Planta", "Fogo", "Água"], method: "static", methodLabel: "🎁 Escolha de Inicial c/ Prof. Elia na Acrisia University", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "🔥 Evolui p/ Meowscarada / Skeledirge / Quaquaval", recommended: true },
+      { id: 731, name: "Pikipek", types: ["Normal", "Voador"], method: "grass", methodLabel: "🌿 Bronze Fields (North & South)", levels: "Lv. 3 — 7", rateRed: 30, rateBlue: 30, highlight: "🧬 Evolui p/ MEGA TOUCANNON exclusivo de Lazarus!", recommended: true },
+      { id: 179, name: "Mareep", types: ["Elétrico"], method: "grass", methodLabel: "🌿 Bronze Fields", levels: "Lv. 3 — 7", rateRed: 25, rateBlue: 25, highlight: "Evolui p/ Mega Ampharos", recommended: true },
+      { id: 163, name: "Hoothoot", types: ["Normal", "Voador"], method: "grass", methodLabel: "🌿 Bronze Fields (Noite) & Acrisia Mountains", levels: "Lv. 3 — 9", rateRed: 25, rateBlue: 25, timeTag: "🌙 Noite", highlight: "Evolui p/ Noctowl", recommended: true }
+    ],
+    items: [
+      { name: "Mega Stone Shop (Todas as 58 Mega Stones de Ilios, incluindo Mega Toucannon, Mega Ribombee, Mega Flygon, Mega Tinkaton e Mega Cyclizar!)", category: "stone", icon: "🧬", how: "Loja gerenciada por Niko dentro da Acrisia University (desbloqueada após concluir a missão de Niko em Sofos City; o estoque aumenta a cada Insígnia)!" },
+      { name: "Exp. Share & Rotom Phone", category: "key", icon: "📱", how: "Obtidos logo no início da jornada entre Acrisia City e Bronze Fields!" },
+      { name: "Loaded Dice, TM27 — Return, Oval Charm & 3x Leftovers", move: "Return", moveType: "Normal", category: "held", icon: "🍎", how: "Recompensas da Prof. Elia na Acrisia University ao registrar Pokémon na Ilios Dex (Loaded Dice c/ 25, TM27 Return c/ 50, Iniciais extras c/ 100/135/170 e 3 Leftovers c/ 250 capturados)!" },
+      { name: "Espathra Whistle (Montaria Rápida)", category: "key", icon: "🪈", how: "Obtido nas Acrisia Mountains!" }
+    ]
+  },
+  {
+    id: "ilios-jusmail-riverwalk-kalami",
+    name: "Jusmail Town (1º Ginásio), Riverwalk Trail & Kalami City (2º Ginásio)",
+    sector: "Setor Ilios Norte-Central — Musas Polymnia & Ourani",
+    category: "route",
+    connections: "Bronze Fields ⇄ Jusmail Town | Acrisia City ⇄ Riverwalk Trail (West & South) ⇄ Kalami City",
+    levelRange: "Lv. 7 — 20",
+    dominantTypes: "Inseto / Fada / Terra / Aço / Fogo",
+    encounters: [
+      { id: 742, name: "Cutiefly", types: ["Inseto", "Fada"], method: "grass", methodLabel: "🌿 Riverwalk Trail & Jusmail Gardens", levels: "Lv. 8 — 14", rateRed: 25, rateBlue: 25, highlight: "🧬 Evolui p/ MEGA RIBOMBEE exclusivo de Lazarus!", recommended: true },
+      { id: 304, name: "Aron", types: ["Aço", "Pedra"], method: "grass", methodLabel: "🌿 Riverwalk Trail & Kalami Outskirts", levels: "Lv. 9 — 15", rateRed: 25, rateBlue: 25, highlight: "Evolui p/ Mega Aggron", recommended: true },
+      { id: 749, name: "Mudbray", types: ["Terra"], method: "grass", methodLabel: "🌿 Riverwalk Trail", levels: "Lv. 10 — 15", rateRed: 20, rateBlue: 20, highlight: "🐴 Evolui p/ Mudsdale (Stamina)", recommended: true },
+      { id: 551, name: "Sandile", types: ["Terra", "Noturno"], method: "grass", methodLabel: "🌿 Riverwalk Trail (South)", levels: "Lv. 10 — 15", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Krookodile (Moxie)", recommended: true },
+      { id: 406, name: "Budew & Shroomish", types: ["Planta"], method: "grass", methodLabel: "🌿 Jusmail Town & Riverwalk Trail", levels: "Lv. 7 — 13", rateRed: 25, rateBlue: 25, highlight: "Evoluem p/ Roserade e Breloom", recommended: true },
+      { id: 840, name: "Applin (Segura Leftovers!)", types: ["Planta", "Dragão"], method: "grass", methodLabel: "🌿 Árvores e Pomares de Jusmail Town / Bronze Fields", levels: "Lv. 8 — 14", rateRed: 15, rateBlue: 15, highlight: "🍎 Chance de segurar Leftovers selvagem!", recommended: true }
+    ],
+    items: [
+      { name: "TM09 — Bullet Seed & HM01 — Cut", move: "Bullet Seed", moveType: "Planta", category: "tm", icon: "💿", how: "Prêmios ao derrotar a 1ª Líder de Ginásio Polymnia (Musa da Agricultura) em Jusmail Town (Harvest Badge)!" },
+      { name: "HM06 — Rock Smash, DexNav & Ability Capsule", move: "Rock Smash", moveType: "Lutador", category: "tm", icon: "💿", how: "Prêmios ao derrotar a 2ª Líder de Ginásio Ourani em Kalami City (Gemstone Badge) e falar com a Prof. Elia!" },
+      { name: "Nature Mints & Berry Club", category: "key", icon: "🌿", how: "Jusmail Town Berry Club (permite cultivar Berries e obter Mints para ajustar a Nature dos Pokémon)!" },
+      { name: "Old Rod", category: "key", icon: "🎣", how: "Entregue pelo pescador nos píeres a leste de Kalami City!" },
+      { name: "Leftovers (Farm Rápido c/ Thief/DexNav)", category: "held", icon: "🍎", how: "Equipado em Applin selvagens (use o DexNav + golpe Thief/Covet para farmar Leftovers logo no início da campanha)!" }
+    ]
+  },
+  {
+    id: "ilios-wanderers-pythios-kaptara",
+    name: "Wanderer's Woods, Pythios Town (3º Ginásio), Satyr's Lair & Kaptara Island",
+    sector: "Setor Ilios Sudoeste — Musa Kleio & Ilha Kaptara",
+    category: "route",
+    connections: "Jusmail Town ⇄ Wanderer's Woods ⇄ Pythios Town (Pythios Cemetery) ⇄ Satyr's Lair ⇄ Kaptara Island",
+    levelRange: "Lv. 16 — 38",
+    dominantTypes: "Fantasma / Psíquico / Fada / Aço",
+    encounters: [
+      { id: 92, name: "Gastly", types: ["Fantasma", "Veneno"], method: "grass", methodLabel: "🌿 Wanderer's Woods & Pythios Cemetery", levels: "Lv. 16 — 22", rateRed: 30, rateBlue: 30, highlight: "👻 Evolui p/ Mega Gengar", recommended: true },
+      { id: 957, name: "Tinkatink", types: ["Fada", "Aço"], method: "grass", methodLabel: "🌿 Ruínas de Pythios & Satyr's Lair", levels: "Lv. 18 — 26", rateRed: 20, rateBlue: 20, highlight: "🔨 Evolui p/ MEGA TINKATON exclusivo de Lazarus!", recommended: true },
+      { id: 859, name: "Impidimp", types: ["Noturno", "Fada"], method: "grass", methodLabel: "🌿 Wanderer's Woods", levels: "Lv. 16 — 21", rateRed: 25, rateBlue: 25, highlight: "👹 Evolui p/ Grimmsnarl (Prankster)", recommended: true },
+      { id: 280, name: "Ralts", types: ["Psíquico", "Fada"], method: "grass", methodLabel: "🌿 Wanderer's Woods", levels: "Lv. 15 — 20", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Mega Gardevoir ou Mega Gallade", recommended: true },
+      { id: 234, name: "Stantler (Wyrdeer)", types: ["Normal", "Psíquico"], method: "grass", methodLabel: "🌿 Satyr's Lair & Kaptara Island", levels: "Lv. 22 — 32", rateRed: 25, rateBlue: 25, highlight: "🦌 Evolui p/ Wyrdeer!" }
+    ],
+    items: [
+      { name: "TM04 — Calm Mind", move: "Calm Mind", moveType: "Psíquico", category: "tm", icon: "💿", how: "Prêmio da 3ª Líder de Ginásio Kleio (Musa da História — Fantasma/Psíquico) em Pythios Town (Grave Badge)!" },
+      { name: "HM02 — Fly", move: "Fly", moveType: "Voador", category: "tm", icon: "💿", how: "Obtido na exploração de Satyr's Lair e Kaptara Island (ao sul de Pythios Town)!" },
+      { name: "TM30 — Shadow Ball & Deepwater Curse", move: "Shadow Ball", moveType: "Fantasma", category: "tm", icon: "💿", how: "Pythios Cemetery e estudante universitário em Wanderer's Woods!" }
+    ]
+  },
+  {
+    id: "ilios-erinys-froslass-sofos",
+    name: "Erinys Path (West & East), Froslass Cavern, Asfal Hills & Sofos City (4º Ginásio)",
+    sector: "Setor Ilios Central — Musa Terpsikore & Key Stone",
+    category: "cave",
+    connections: "Pythios Town ⇄ Erinys Path ⇄ Froslass Cavern ⇄ Asfal Hills ⇄ Sofos City (Acropolis Temple)",
+    levelRange: "Lv. 22 — 32",
+    dominantTypes: "Gelo / Fada / Lutador / Psíquico",
+    encounters: [
+      { id: 175, name: "Togepi", types: ["Fada"], method: "grass", methodLabel: "🌿 Erinys Path (West & East)", levels: "Lv. 20 — 24", rateRed: 15, rateBlue: 15, highlight: "👑 Evolui p/ Togekiss (Air Slash + Serene Grace)", recommended: true },
+      { id: 361, name: "Snorunt", types: ["Gelo"], method: "cave", methodLabel: "⛰️ Froslass Cavern (1F, B1F e B2F)", levels: "Lv. 22 — 27", rateRed: 30, rateBlue: 30, highlight: "❄️ Evolui p/ Froslass ou Mega Glalie", recommended: true },
+      { id: 215, name: "Sneasel", types: ["Noturno", "Gelo"], method: "cave", methodLabel: "⛰️ Froslass Cavern", levels: "Lv. 23 — 27", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Weavile", recommended: true },
+      { id: 577, name: "Solosis", types: ["Psíquico"], method: "grass", methodLabel: "🌿 Erinys Path", levels: "Lv. 21 — 25", rateRed: 25, rateBlue: 25, highlight: "Evolui p/ Reuniclus", recommended: true },
+      { id: 672, name: "Skiddo / Gogoat", types: ["Planta"], method: "grass", methodLabel: "🌿 Asfal Hills & Sofos City", levels: "Lv. 24 — 28", rateRed: 30, rateBlue: 30, recommended: true },
+      { id: 243, name: "Raikou, Entei & Suicune", types: ["Elétrico", "Fogo", "Água"], method: "static", methodLabel: "🎁 Estátuas do Sofos Acropolis Temple (Despertam na campanha/pós-game)", levels: "Lv. 50 — 60", rateRed: 100, rateBlue: 100, highlight: "⚡🔥💧 Feras Lendárias do Templo de Sofos!" }
+    ],
+    items: [
+      { name: "Key Stone (Desbloqueia Mega Evolução e a Loja de Mega Stones!)", category: "key", icon: "🧬", how: "Conclua a missão de Niko em Sofos City / Asfal Hills!" },
+      { name: "HM03 — Surf", move: "Surf", moveType: "Água", category: "tm", icon: "💿", how: "Entregue por Niko em Asfal Hills / Sofos City!" },
+      { name: "TM53 — Power-Up Punch", move: "Power-Up Punch", moveType: "Lutador", category: "tm", icon: "💿", how: "Prêmio da 4ª Líder de Ginásio Terpsikore (Musa da Dança — Lutador/Psíquico) em Sofos City!" },
+      { name: "TM08 — Bulk Up", move: "Bulk Up", moveType: "Lutador", category: "tm", icon: "💿", how: "Penhasco sudoeste de Erinys Path (West), com vista para o mar!" },
+      { name: "TM06 — Toxic", move: "Toxic", moveType: "Veneno", category: "tm", icon: "💿", how: "Entregue pelo marinheiro a oeste do Battle Pavilion em Sofos City!" },
+      { name: "Fire Stone, Water Stone, Thunder Stone, Leaf Stone, Sun Stone & Moon Stone (Troca de Shards)", category: "stone", icon: "💎", how: "Trocador de Shards em Sofos City (Red Shard = Fire/Sun Stone; Blue Shard = Water/Moon Stone; Green Shard = Leaf Stone; Yellow Shard = Thunder Stone)!" },
+      { name: "Amulet Coin & Good Rod", category: "held", icon: "🪙", how: "Amulet Coin com o estudante universitário de Sofos City; Good Rod com o Fishing Guru de Sofos City!" }
+    ]
+  },
+  {
+    id: "ilios-asteri-myrrini-fresco",
+    name: "Sea of Asteri, Marmaro Island (Mines), Myrrini Island (5º Ginásio), Sea of Vulcai & Fresco Isles (6º Ginásio)",
+    sector: "Setor Arquipélago de Ilios — Musas Euterpe, Thalia & Melpomene",
+    category: "route",
+    connections: "Sofos City ⇄ Sea of Asteri ⇄ Marmaro Island (Marmaro Mines) ⇄ Myrrini Island ⇄ Sea of Vulcai ⇄ Fresco Isles",
+    levelRange: "Lv. 28 — 38",
+    dominantTypes: "Água / Veneno / Terra / Dragão / Elétrico",
+    encounters: [
+      { id: 328, name: "Trapinch", types: ["Terra"], method: "cave", methodLabel: "⛰️ Marmaro Mines & Fresco Isles", levels: "Lv. 28 — 34", rateRed: 25, rateBlue: 25, highlight: "🧬 Evolui p/ MEGA FLYGON exclusivo de Lazarus!", recommended: true },
+      { id: 131, name: "Lapras", types: ["Água", "Gelo"], method: "surf", methodLabel: "🌊 Sea of Asteri & Sea of Vulcai", levels: "Lv. 30 — 36", rateRed: 15, rateBlue: 15, highlight: "Tanque Água/Gelo", recommended: true },
+      { id: 878, name: "Cufant", types: ["Aço"], method: "cave", methodLabel: "⛰️ Marmaro Mines", levels: "Lv. 28 — 33", rateRed: 25, rateBlue: 25, highlight: "🐘 Evolui p/ Copperajah (Sheer Force)", recommended: true },
+      { id: 694, name: "Helioptile", types: ["Elétrico", "Normal"], method: "grass", methodLabel: "🌿 Fresco Isles", levels: "Lv. 31 — 35", rateRed: 25, rateBlue: 25, highlight: "☀️ Evolui p/ Heliolisk (Sun Stone)", recommended: true },
+      { id: 155, name: "Cyndaquil / Quilava", types: ["Fogo"], method: "grass", methodLabel: "🌿 Encostas vulcânicas do Sea of Vulcai / Fresco Isles", levels: "Lv. 30 — 36", rateRed: 20, rateBlue: 20, highlight: "🧬 Evolui p/ MEGA TYPHLOSION exclusivo de Lazarus!", recommended: true }
+    ],
+    items: [
+      { name: "HM08 — Dive", move: "Dive", moveType: "Água", category: "tm", icon: "💿", how: "Obtido no interior das Marmaro Mines (permite mergulhar nas trincheiras do Sea of Asteri e Sea of Vulcai)!" },
+      { name: "TM21 — Acid Spray & TM84 — Poison Jab", move: "Poison Jab", moveType: "Veneno", category: "tm", icon: "💿", how: "TM21 é prêmio da 5ª Líder de Ginásio Euterpe (Musa do Entretenimento — Água/Veneno) em Myrrini Island; TM Poison Jab com o estudante universitário de Myrrini!" },
+      { name: "TM49 — Bulldoze & Permissão do HM04 — Strength", move: "Bulldoze", moveType: "Terra", category: "tm", icon: "💿", how: "Prêmio das Líderes Gêmeas Thalia & Melpomene (6º Ginásio em Dupla — Elétrico/Terra) nas Fresco Isles (Theatrical Badge)!" }
+    ]
+  },
+  {
+    id: "ilios-palati-pello-areios",
+    name: "Palati City (7º Ginásio), Tower of Dioxippus, Port Pello, Corrin Crossing & Areios Town (8º Ginásio)",
+    sector: "Setor Ilios Sul & Leste — Musas Rhadine & Kalliope",
+    category: "special",
+    connections: "Sea of Vulcai ⇄ Palati City (Tower of Dioxippus) | Myrrini ⇄ Port Pello ⇄ Corrin Crossing ⇄ Areios Town (Areios Hideout)",
+    levelRange: "Lv. 36 — 52",
+    dominantTypes: "Fogo / Voador / Dragão / Normal",
+    encounters: [
+      { id: 967, name: "Cyclizar", types: ["Dragão", "Normal"], method: "grass", methodLabel: "🌿 Corrin Crossing & Areios Outskirts", levels: "Lv. 38 — 46", rateRed: 25, rateBlue: 25, highlight: "👑 Evolui p/ MEGA CYCLIZAR S/V (As do Campeão Anyalios)!", recommended: true },
+      { id: 850, name: "Sizzlipede / Centiskorch", types: ["Fogo", "Inseto"], method: "cave", methodLabel: "⛰️ Tower of Dioxippus & Palati City", levels: "Lv. 36 — 42", rateRed: 25, rateBlue: 25, highlight: "🔥 Flash Fire / White Smoke", recommended: true },
+      { id: 696, name: "Tyrunt & Amaura", types: ["Pedra", "Dragão"], method: "cave", methodLabel: "⛰️ Deserto e Montanhas de Areios Town", levels: "Lv. 40 — 46", rateRed: 20, rateBlue: 20, highlight: "🦖 Evoluem p/ Tyrantrum (Strong Jaw) e Aurorus", recommended: true },
+      { id: 629, name: "Vullaby / Mandibuzz", types: ["Noturno", "Voador"], method: "grass", methodLabel: "🌿 Corrin Crossing & Areios Desert", levels: "Lv. 40 — 48", rateRed: 25, rateBlue: 25, recommended: true },
+      { id: 674, name: "Pancham / Pangoro", types: ["Lutador", "Noturno"], method: "grass", methodLabel: "🌿 Port Pello & Corrin Crossing", levels: "Lv. 38 — 45", rateRed: 25, rateBlue: 25, recommended: true }
+    ],
+    items: [
+      { name: "TM35 — Flamethrower, TM57 — Roost & TM58 — Thunder Wave", move: "Flamethrower", moveType: "Fogo", category: "tm", icon: "💿", how: "TM35 Flamethrower é prêmio da 7ª Líder de Ginásio Rhadine (Fogo/Voador) em Palati City; TM57 Roost e TM58 Thunder Wave nas missões de Palati City!" },
+      { name: "TM02 — Dragon Claw", move: "Dragon Claw", moveType: "Dragão", category: "tm", icon: "💿", how: "Prêmio do 8º Ginásio em Areios Town após desmantelar o Areios Hideout da Team Chimera!" },
+      { name: "TM54 — Spikes", move: "Spikes", moveType: "Terra", category: "tm", icon: "💿", how: "Entregue pelo estudante universitário na ponte de Corrin Crossing!" }
+    ]
+  },
+  {
+    id: "ilios-pentepetal-ahiyawa-bastion",
+    name: "Péntepetal City, Davosi Straits, Ruins of Ahiyawa (Liga Ilios) & Skyborne Bastion",
+    sector: "Setor Liga Ilios & Pós-Game (Ruins of Ahiyawa & Skyborne Bastion)",
+    category: "special",
+    connections: "Erinys Path ⇄ Péntepetal City ⇄ Davosi Straits (Waterfall) ⇄ Ruins of Ahiyawa (Elite Four & Campeão Anyalios) & Skyborne Bastion",
+    levelRange: "Lv. 48 — 78",
+    dominantTypes: "Dragão / Aço / Pedra / Psíquico / Fada",
+    encounters: [
+      { id: 147, name: "Dratini / Dragonair", types: ["Dragão"], method: "surf", methodLabel: "🌊 Cachoeiras de Davosi Straits & Ruins of Ahiyawa", levels: "Lv. 45 — 55", rateRed: 20, rateBlue: 20, highlight: "👑 Evolui p/ Dragonite (Multiscale)", recommended: true },
+      { id: 246, name: "Larvitar / Pupitar", types: ["Pedra", "Terra"], method: "cave", methodLabel: "⛰️ Ruins of Ahiyawa & Skyborne Bastion", levels: "Lv. 48 — 58", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Mega Tyranitar", recommended: true },
+      { id: 870, name: "Falinks", types: ["Lutador"], method: "grass", methodLabel: "🌿 Ruins of Ahiyawa & Skyborne Bastion", levels: "Lv. 48 — 56", rateRed: 20, rateBlue: 20, highlight: "🧬 Evolui p/ MEGA FALINKS exclusivo de Lazarus!", recommended: true },
+      { id: 123, name: "Scyther / Scizor", types: ["Inseto", "Aço"], method: "grass", methodLabel: "🌿 Péntepetal Outskirts & Skyborne Bastion", levels: "Lv. 46 — 55", rateRed: 20, rateBlue: 20, highlight: "Evolui p/ Mega Scizor", recommended: true }
+    ],
+    items: [
+      { name: "HM07 — Waterfall", move: "Waterfall", moveType: "Água", category: "tm", icon: "💿", how: "Obtido nos estreitos aquáticos de Davosi Straits (necessário para subir as cachoeiras até as Ruins of Ahiyawa e enfrentar a Elite Four)!" },
+      { name: "Mercado de TMs de Péntepetal City (TM51 a TM55, Earthquake, Ice Beam, Thunderbolt, Psychic, Swords Dance)", move: "Earthquake", moveType: "Terra", category: "tm", icon: "💿", how: "Vendidos pelos mercadores de rua no grande bazar de Péntepetal City e no lobby das Ruins of Ahiyawa!" },
+      { name: "Choice Band, Choice Specs, Choice Scarf, Life Orb, Focus Sash & Assault Vest", category: "held", icon: "🎗️", how: "Bazar de Péntepetal City, Battle Pavilion de Sofos City e Skyborne Bastion!" }
+    ]
+  }
+];
+
+// ============================================================================
 // 4. GEOMETRIA CLÁSSICA DO TOWN MAP (KANTO, JOHTO & HOENN) NO TEMA RADAR
 // ============================================================================
 const REGION_MAP_LAYOUTS = {
@@ -2831,6 +3006,58 @@ const REGION_MAP_LAYOUTS = {
       { name: "Crystal Peak", areaId: "borrius-east-polder-redwood-cube", x: 780, y: 275, lx: 780, ly: 305, anchor: "middle" },
       { name: "Redwood Forest", areaId: "borrius-east-polder-redwood-cube", x: 840, y: 270, lx: 812, ly: 274, anchor: "end" }
     ]
+  },
+
+  // ==========================================================================
+  // GEOMETRIA EXATA DE ILIOS (POKÉMON LAZARUS — BASEADO NA IMAGEM ENVIADA)
+  // ==========================================================================
+  Ilios: {
+    terrainSvg: ``,
+    routes: [
+      // Noroeste: Acrisia City, Acrisia Mountains, Riverwalk Trail & Bronze Fields
+      { num: "Mtn", areaId: "ilios-acrisia-bronze", path: "M 180 205 L 150 205 L 150 115 M 180 205 L 85 205", lx: 120, ly: 205, marine: false },
+      { num: "River", areaId: "ilios-jusmail-riverwalk-kalami", path: "M 180 205 L 250 205 L 250 265", lx: 225, ly: 205, marine: false },
+      { num: "Bronze", areaId: "ilios-acrisia-bronze", path: "M 180 205 L 180 355", lx: 180, ly: 280, marine: false },
+      { num: "Woods", areaId: "ilios-wanderers-pythios-kaptara", path: "M 180 355 L 180 465", lx: 180, ly: 410, marine: false },
+      // Sudoeste: Kaptara Island & Satyr's Lair
+      { num: "Kaptara", areaId: "ilios-wanderers-pythios-kaptara", path: "M 180 465 L 180 565 M 205 595 L 205 695", lx: 205, ly: 645, marine: false },
+      // Centro: Erinys Path, Froslass Cavern, Asfal Hills & Sofos City
+      { num: "Erinys", areaId: "ilios-erinys-froslass-sofos", path: "M 180 465 L 380 465", lx: 332, ly: 465, marine: false },
+      // Península Sul da Liga: Péntepetal City, Davosi Straits & Ruins of Ahiyawa
+      { num: "Davosi", areaId: "ilios-pentepetal-ahiyawa-bastion", path: "M 305 465 L 305 695", lx: 305, ly: 640, marine: false },
+      // Mar Central: Sea of Asteri & Sea of Vulcai
+      { num: "Asteri", areaId: "ilios-asteri-myrrini-fresco", path: "M 380 465 L 545 465", lx: 425, ly: 465, marine: true },
+      { num: "Vulcai", areaId: "ilios-asteri-myrrini-fresco", path: "M 440 465 L 440 665 M 405 665 L 475 665", lx: 440, ly: 565, marine: true },
+      // Nordeste: Travessia Marítima p/ Port Pello, Corrin Crossing & Areios Town
+      { num: "Ferry", areaId: "ilios-palati-pello-areios", path: "M 545 465 L 545 275 L 675 275", lx: 545, ly: 370, marine: true },
+      { num: "Corrin", areaId: "ilios-palati-pello-areios", path: "M 675 275 L 740 275 L 740 175 L 845 175", lx: 740, ly: 225, marine: true }
+    ],
+    cities: [
+      { name: "Acrisia Mountains", areaId: "ilios-acrisia-bronze", x: 150, y: 115, lx: 150, ly: 78, anchor: "middle" },
+      { name: "Acrisia City", areaId: "ilios-acrisia-bronze", x: 180, y: 205, lx: 142, ly: 182, anchor: "end" },
+      { name: "Kalami City", areaId: "ilios-jusmail-riverwalk-kalami", x: 250, y: 265, lx: 288, ly: 270, anchor: "start" },
+      { name: "Jusmail Town", areaId: "ilios-jusmail-riverwalk-kalami", x: 180, y: 355, lx: 142, ly: 360, anchor: "end" },
+      { name: "Pythios Town", areaId: "ilios-wanderers-pythios-kaptara", x: 180, y: 465, lx: 142, ly: 470, anchor: "end" },
+      { name: "Kaptara Island", areaId: "ilios-wanderers-pythios-kaptara", x: 205, y: 695, lx: 168, ly: 700, anchor: "end" },
+      { name: "Sofos City", areaId: "ilios-erinys-froslass-sofos", x: 380, y: 465, lx: 380, ly: 430, anchor: "middle" },
+      { name: "Péntepetal City", areaId: "ilios-pentepetal-ahiyawa-bastion", x: 305, y: 585, lx: 268, ly: 590, anchor: "end" },
+      { name: "Ruins of Ahiyawa", areaId: "ilios-pentepetal-ahiyawa-bastion", x: 305, y: 695, lx: 342, ly: 700, anchor: "start" },
+      { name: "Marmaro Island", areaId: "ilios-asteri-myrrini-fresco", x: 475, y: 465, lx: 475, ly: 430, anchor: "middle" },
+      { name: "Myrrini Island", areaId: "ilios-asteri-myrrini-fresco", x: 545, y: 465, lx: 582, ly: 470, anchor: "start" },
+      { name: "Fresco Isles", areaId: "ilios-asteri-myrrini-fresco", x: 475, y: 585, lx: 512, ly: 590, anchor: "start" },
+      { name: "Palati City", areaId: "ilios-palati-pello-areios", x: 440, y: 665, lx: 440, ly: 705, anchor: "middle" },
+      { name: "Port Pello", areaId: "ilios-palati-pello-areios", x: 675, y: 275, lx: 675, ly: 315, anchor: "middle" },
+      { name: "Areios Town", areaId: "ilios-palati-pello-areios", x: 810, y: 175, lx: 810, ly: 215, anchor: "middle" },
+      { name: "Skyborne Bastion", areaId: "ilios-pentepetal-ahiyawa-bastion", x: 835, y: 535, lx: 835, ly: 575, anchor: "middle" }
+    ],
+    sites: [
+      { name: "Acrisia University", areaId: "ilios-acrisia-bronze", x: 85, y: 205, lx: 85, ly: 175, anchor: "middle" },
+      { name: "Froslass Cavern", areaId: "ilios-erinys-froslass-sofos", x: 270, y: 465, lx: 270, ly: 435, anchor: "middle" },
+      { name: "Satyr's Lair", areaId: "ilios-wanderers-pythios-kaptara", x: 205, y: 595, lx: 175, ly: 598, anchor: "end" },
+      { name: "Ilios League Temple", areaId: "ilios-pentepetal-ahiyawa-bastion", x: 305, y: 730, lx: 305, ly: 746, anchor: "middle" },
+      { name: "Tower of Dioxippus", areaId: "ilios-palati-pello-areios", x: 482, y: 690, lx: 510, ly: 694, anchor: "start" },
+      { name: "Areios Hideout", areaId: "ilios-palati-pello-areios", x: 840, y: 135, lx: 840, ly: 108, anchor: "middle" }
+    ]
   }
 };
 
@@ -2864,6 +3091,7 @@ function getAreasForCurrentGame() {
   if (cfg.region === "Galar") return GALAR_AREAS;
   if (cfg.region === "Hisui") return HISUI_AREAS;
   if (cfg.region === "Borrius") return BORRIUS_AREAS;
+  if (cfg.region === "Ilios") return ILIOS_AREAS;
   return KANTO_AREAS;
 }
 
