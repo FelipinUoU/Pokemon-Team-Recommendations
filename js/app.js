@@ -532,7 +532,6 @@
               <span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-bold tracking-wider">
                 SLOT #${idx + 1} — VAGA ABERTA
               </span>
-              <span class="text-[11px] font-mono text-primary">Clique para Abrir Pokédex</span>
             </div>
 
             <div class="my-2 flex flex-col items-center justify-center text-center py-1">
