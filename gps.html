@@ -20,10 +20,10 @@
         extend: {
           colors: {
             "tertiary": "#56e5a9",
-            "primary-container": "#38bdf8",
+            "primary-container": "rgb(var(--gps-primary-container) / <alpha-value>)",
             "secondary-fixed-dim": "#ffb95f",
             "on-secondary-fixed": "#2a1700",
-            "primary": "#8ed5ff",
+            "primary": "rgb(var(--gps-primary) / <alpha-value>)",
             "surface-tint": "#7bd0ff",
             "surface": "#0d1322",
             "background": "#0d1322",
@@ -35,7 +35,7 @@
             "on-primary-fixed-variant": "#004c69",
             "secondary-fixed": "#ffddb8",
             "surface-container-highest": "#2f3445",
-            "on-primary-container": "#004965",
+            "on-primary-container": "rgb(var(--gps-on-primary-container) / <alpha-value>)",
             "inverse-primary": "#00668a",
             "primary-fixed": "#c4e7ff",
             "error": "#ffb4ab",
@@ -54,7 +54,7 @@
             "outline": "#87929a",
             "surface-dim": "#0d1322",
             "surface-container-high": "#242a3a",
-            "on-primary": "#00354a",
+            "on-primary": "rgb(var(--gps-on-primary) / <alpha-value>)",
             "on-surface-variant": "#bdc8d1",
             "surface-container-lowest": "#080e1d",
             "on-secondary-container": "#5b3800",
@@ -113,6 +113,22 @@
   </script>
   <link rel="stylesheet" href="css/styles.css" />
   <style>
+    :root {
+      --gps-primary: 142 213 255;
+      --gps-primary-container: 56 189 248;
+      --gps-on-primary: 0 53 74;
+      --gps-on-primary-container: 0 73 101;
+      --gps-grid-line: rgba(56, 189, 248, 0.05);
+      --gps-glow: rgba(56, 189, 248, 0.35);
+    }
+    body.gps-items-mode {
+      --gps-primary: 255 185 95;
+      --gps-primary-container: 238 152 0;
+      --gps-on-primary: 71 42 0;
+      --gps-on-primary-container: 42 23 0;
+      --gps-grid-line: rgba(255, 185, 95, 0.06);
+      --gps-glow: rgba(255, 185, 95, 0.35);
+    }
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
       display: inline-block;
@@ -122,11 +138,11 @@
     .hud-grid {
       background-size: 28px 28px;
       background-image:
-        linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+        linear-gradient(to right, var(--gps-grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--gps-grid-line) 1px, transparent 1px);
     }
     .tactical-glow-primary {
-      box-shadow: 0 0 16px -2px rgba(56, 189, 248, 0.35);
+      box-shadow: 0 0 16px -2px var(--gps-glow);
     }
     @keyframes radarSweep {
       0% { transform: rotate(0deg); }
@@ -242,8 +258,8 @@
       <!-- Lista de Modos do GPS -->
       <div class="space-y-space-sm">
         <!-- Modo 1: Pesquisa de Pokémon -->
-        <button type="button" id="btn-gps-mode-pokemon" class="w-full text-left p-space-md rounded-xl bg-surface-container-high border border-primary/50 shadow-md transition-all cursor-pointer flex items-start gap-3">
-          <div class="w-9 h-9 rounded-lg bg-primary/15 border border-primary/40 flex items-center justify-center text-primary shrink-0 mt-0.5">
+        <button type="button" id="btn-gps-mode-pokemon" class="w-full text-left p-space-md rounded-xl bg-surface-container-high border border-[#8ed5ff]/50 shadow-md transition-all cursor-pointer flex items-start gap-3">
+          <div class="w-9 h-9 rounded-lg bg-[#8ed5ff]/15 border border-[#8ed5ff]/40 flex items-center justify-center text-[#8ed5ff] shrink-0 mt-0.5">
             <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="9" />
               <circle cx="12" cy="12" r="3" />
@@ -263,7 +279,7 @@
 
         <!-- Modo 2: Pesquisa de Itens & TMs -->
         <button type="button" id="btn-gps-mode-items" class="w-full text-left p-space-md rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/40 transition-all cursor-pointer flex items-start gap-3">
-          <div class="w-9 h-9 rounded-lg bg-secondary/15 border border-secondary/40 flex items-center justify-center text-secondary shrink-0 mt-0.5">
+          <div class="w-9 h-9 rounded-lg bg-[#ffb95f]/15 border border-[#ffb95f]/40 flex items-center justify-center text-[#ffb95f] shrink-0 mt-0.5">
             <span class="material-symbols-outlined text-[18px]">inventory_2</span>
           </div>
           <div class="flex-1 min-w-0">
@@ -408,7 +424,7 @@
           </g>
 
           <!-- Grade de Coordenadas Radar -->
-          <g opacity="0.22" stroke="#38bdf8" stroke-dasharray="2 6">
+          <g id="radar-coord-grid" opacity="0.22" stroke="#38bdf8" stroke-dasharray="2 6">
             <line x1="0" x2="880" y1="120" y2="120"></line>
             <line x1="0" x2="880" y1="260" y2="260"></line>
             <line x1="0" x2="880" y1="400" y2="400"></line>

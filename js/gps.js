@@ -1404,15 +1404,29 @@ function syncModeSidebarUI() {
   const btnItems = document.getElementById("btn-gps-mode-items");
   const searchInput = document.getElementById("gps-search-input");
   const methodSelect = document.getElementById("gps-method-select");
+  const coordGrid = document.getElementById("radar-coord-grid");
+  const subtitleEl = document.querySelector("header p");
 
   const isItems = gpsState.mode === "items";
 
+  // Alterna a paleta de cores inteira do GPS Pokémon para o tema âmbar/dourado de Pesquisa de Itens
+  document.body.classList.toggle("gps-items-mode", isItems);
+
+  if (coordGrid) {
+    coordGrid.setAttribute("stroke", isItems ? "#ffb95f" : "#38bdf8");
+  }
+  if (subtitleEl) {
+    subtitleEl.textContent = isItems
+      ? "O guia interativo de localização de Itens, TMs e HMs!"
+      : "O guia interativo de rotas e localização de Pokémon!";
+  }
+
   if (btnPokemon && btnItems) {
     if (!isItems) {
-      btnPokemon.className = "w-full text-left p-space-md rounded-xl bg-surface-container-high border border-primary/50 shadow-md transition-all cursor-pointer flex items-start gap-3";
+      btnPokemon.className = "w-full text-left p-space-md rounded-xl bg-surface-container-high border border-[#8ed5ff]/50 shadow-md transition-all cursor-pointer flex items-start gap-3";
       btnItems.className = "w-full text-left p-space-md rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/40 transition-all cursor-pointer flex items-start gap-3";
     } else {
-      btnItems.className = "w-full text-left p-space-md rounded-xl bg-surface-container-high border border-secondary/60 shadow-md transition-all cursor-pointer flex items-start gap-3";
+      btnItems.className = "w-full text-left p-space-md rounded-xl bg-surface-container-high border border-[#ffb95f]/60 shadow-md transition-all cursor-pointer flex items-start gap-3";
       btnPokemon.className = "w-full text-left p-space-md rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/40 transition-all cursor-pointer flex items-start gap-3";
     }
   }
@@ -1500,6 +1514,11 @@ function renderInteractiveMapNodes() {
     return area ? doesAreaMatchFilter(area) : true;
   };
 
+  const isItems = gpsState.mode === "items";
+  const selAccent = isItems ? "#ffb95f" : "#38bdf8";
+  const selInner = isItems ? "#78350f" : "#0c4a6e";
+  const selText = isItems ? "#ffddb8" : "#8ed5ff";
+
   // 1. Render Orthogonal Route Strips (Border + Fill + Route Number)
   const routesSvg = layout.routes.map(r => {
     const isSelected = r.areaId === gpsState.selectedAreaId;
@@ -1508,7 +1527,7 @@ function renderInteractiveMapNodes() {
     const opacity = !hasMethod ? "0.35" : "1";
 
     const outerStroke = isSelected
-      ? "#38bdf8"
+      ? selAccent
       : matched
         ? "#f59e0b"
         : r.marine
@@ -1516,7 +1535,7 @@ function renderInteractiveMapNodes() {
           : "#475569";
 
     const innerStroke = isSelected
-      ? "#0c4a6e"
+      ? selInner
       : matched
         ? "#78350f"
         : r.marine
@@ -1524,7 +1543,7 @@ function renderInteractiveMapNodes() {
           : "#1e293b";
 
     const numFill = isSelected
-      ? "#8ed5ff"
+      ? selText
       : matched
         ? "#fde047"
         : r.marine
@@ -1549,7 +1568,7 @@ function renderInteractiveMapNodes() {
     return `
       <g class="cursor-pointer group" data-area-id="${c.areaId}" transform="translate(${c.x}, ${c.y})">
         ${isSelected || matched ? `
-          <rect x="-22" y="-22" width="44" height="44" rx="4" fill="none" stroke="${matched ? "#f59e0b" : "#38bdf8"}" stroke-width="2.5" opacity="0.55">
+          <rect x="-22" y="-22" width="44" height="44" rx="4" fill="none" stroke="${matched ? "#f59e0b" : selAccent}" stroke-width="2.5" opacity="0.55">
             <animate attributeName="x" values="-18;-25;-18" dur="1.6s" repeatCount="indefinite" />
             <animate attributeName="y" values="-18;-25;-18" dur="1.6s" repeatCount="indefinite" />
             <animate attributeName="width" values="36;50;36" dur="1.6s" repeatCount="indefinite" />
@@ -1557,12 +1576,12 @@ function renderInteractiveMapNodes() {
             <animate attributeName="opacity" values="0.65;0.15;0.65" dur="1.6s" repeatCount="indefinite" />
           </rect>
         ` : ""}
-        <rect x="-17" y="-17" width="34" height="34" fill="#475569" stroke="${isSelected ? "#38bdf8" : matched ? "#f59e0b" : "#94a3b8"}" stroke-width="${isSelected || matched ? "2.5" : "1.5"}" />
+        <rect x="-17" y="-17" width="34" height="34" fill="#475569" stroke="${isSelected ? selAccent : matched ? "#f59e0b" : "#94a3b8"}" stroke-width="${isSelected || matched ? "2.5" : "1.5"}" />
         <polygon points="-17,-17 17,-17 11,-11 -11,-11" fill="#94a3b8" opacity="0.55" />
         <polygon points="-17,17 17,17 11,11 -11,11" fill="#1e293b" opacity="0.8" />
-        <rect x="-11" y="-11" width="22" height="22" fill="${isSelected ? "#38bdf8" : matched ? "#f59e0b" : "#ef4444"}" class="group-hover:fill-[#f87171] transition-colors" filter="url(#glow-red)" />
+        <rect x="-11" y="-11" width="22" height="22" fill="${isSelected ? selAccent : matched ? "#f59e0b" : "#ef4444"}" class="group-hover:fill-[#f87171] transition-colors" filter="url(#glow-red)" />
       </g>
-      <text x="${c.lx}" y="${c.ly}" fill="${isSelected ? "#8ed5ff" : matched ? "#fde047" : "#dde2f7"}" font-family="Plus Jakarta Sans" font-size="12" font-weight="800" text-anchor="${c.anchor}" style="paint-order: stroke; stroke: #060c1a; stroke-width: 4px; stroke-linejoin: round;">${c.name}</text>
+      <text x="${c.lx}" y="${c.ly}" fill="${isSelected ? selText : matched ? "#fde047" : "#dde2f7"}" font-family="Plus Jakarta Sans" font-size="12" font-weight="800" text-anchor="${c.anchor}" style="paint-order: stroke; stroke: #060c1a; stroke-width: 4px; stroke-linejoin: round;">${c.name}</text>
     `;
   }).join("");
 
@@ -1576,7 +1595,7 @@ function renderInteractiveMapNodes() {
     return `
       <g class="cursor-pointer group" data-area-id="${s.areaId}" opacity="${opacity}">
         ${isSelected || matched ? `
-          <circle cx="${s.x}" cy="${s.y}" r="16" fill="${matched ? "#f59e0b" : "#38bdf8"}" opacity="0.35">
+          <circle cx="${s.x}" cy="${s.y}" r="16" fill="${matched ? "#f59e0b" : selAccent}" opacity="0.35">
             <animate attributeName="r" values="14;25;14" dur="1.6s" repeatCount="indefinite" />
             <animate attributeName="opacity" values="0.55;0.12;0.55" dur="1.6s" repeatCount="indefinite" />
           </circle>
@@ -1585,8 +1604,8 @@ function renderInteractiveMapNodes() {
           cx="${s.x}"
           cy="${s.y}"
           r="14"
-          fill="${isSelected ? "#38bdf8" : matched ? "#f59e0b" : "#10b981"}"
-          stroke="${isSelected ? "#e0f2fe" : "#64748b"}"
+          fill="${isSelected ? selAccent : matched ? "#f59e0b" : "#10b981"}"
+          stroke="${isSelected ? "#fef3c7" : "#64748b"}"
           stroke-width="3.5"
           filter="${isSelected ? "url(#glow-cyan)" : "url(#glow-emerald)"}"
         >
@@ -1596,7 +1615,7 @@ function renderInteractiveMapNodes() {
           <text
             x="${s.lx}"
             y="${s.ly}"
-            fill="${isSelected ? "#8ed5ff" : matched ? "#fde047" : "#56e5a9"}"
+            fill="${isSelected ? selText : matched ? "#fde047" : "#56e5a9"}"
             font-family="Plus Jakarta Sans"
             font-size="11.5"
             font-weight="700"
