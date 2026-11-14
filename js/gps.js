@@ -33,6 +33,7 @@ const GAME_GPS_CONFIG = {
     id: "gen2-gsc",
     name: "Pokémon Gold / Silver / Crystal",
     region: "Johto",
+    hasDualRegions: true,
     hasTimeOfDay: true,
     hasSeasons: false,
     versions: [
@@ -81,6 +82,7 @@ const GAME_GPS_CONFIG = {
     id: "gen4-hgss",
     name: "Pokémon HeartGold / SoulSilver",
     region: "Johto",
+    hasDualRegions: true,
     hasTimeOfDay: true,
     hasSeasons: false,
     versions: [
@@ -1045,6 +1047,212 @@ const JOHTO_AREAS = [
       { name: "TM29 — Psychic", move: "Psychic", moveType: "Psíquico", category: "tm", icon: "💿", how: "Casa do Sr. Psychic em Saffron City ou Cassino de Celadon (3.500 fichas)." },
       { name: "TM03 — Curse", move: "Curse", moveType: "Fantasma", category: "tm", icon: "💿", how: "Celadon Mansion 3F à noite." },
       { name: "TwistedSpoon", category: "held", icon: "🥄", how: "Entregue por Monica/Tuscany ou segurado por Kadabra/Abra." }
+    ]
+  }
+];
+
+// ============================================================================
+// 2B. DADOS DE KANTO NOS JOGOS DE JOHTO (GSC GEN 2 & HGSS GEN 4 — 2ª REGIÃO)
+// ============================================================================
+const JOHTO_KANTO_AREAS = [
+  {
+    id: "jk-vermilion-diglett-11",
+    name: "Vermilion City (Porto S.S. Aqua), Rota 6, Rota 11 & Diglett's Cave",
+    sector: "Setor Kanto Central-Sul — Chegada de Navio",
+    category: "route",
+    connections: "Porto de Olivine (S.S. Aqua) ⇄ Vermilion City ⇄ Rota 6 (Saffron) & Rota 11 (Diglett's Cave)",
+    levelRange: "Lv. 13 — 50",
+    dominantTypes: "Normal / Terra / Elétrico / Psíquico",
+    encounters: [
+      { id: 143, name: "Snorlax", types: ["Normal"], method: "static", methodLabel: "🎁 Bloqueando a entrada da Diglett's Cave na Rota 11 (Sintonize a PokéFlute na Rádio!)", levels: "Lv. 50", rateRed: 100, rateBlue: 100, highlight: "🍎 Vem segurando Leftovers!", recommended: true },
+      { id: 51, name: "Dugtrio", types: ["Terra"], method: "cave", methodLabel: "⛰️ Diglett's Cave (Liga a Rota 11 à Rota 2)", levels: "Lv. 19 — 31", rateRed: 15, rateBlue: 15, highlight: "⚡ Velocidade 120 + Earthquake", recommended: true },
+      { id: 50, name: "Diglett", types: ["Terra"], method: "cave", methodLabel: "⛰️ Diglett's Cave", levels: "Lv. 13 — 19", rateRed: 85, rateBlue: 85 },
+      { id: 81, name: "Magnemite", types: ["Elétrico", "Aço"], method: "grass", methodLabel: "🌿 Rota 6 & Rota 11", levels: "Lv. 14 — 16", rateRed: 20, rateBlue: 20, recommended: true },
+      { id: 96, name: "Drowzee", types: ["Psíquico"], method: "grass", methodLabel: "🌿 Rota 6 & Rota 11", levels: "Lv. 13 — 16", rateRed: 30, rateBlue: 30 },
+      { id: 380, name: "Latias / Latios (HGSS)", types: ["Dragão", "Psíquico"], method: "static", methodLabel: "🎁 Encontro com Steven Stone saindo do Pokémon Fan Club de Vermilion (Latias em HG / Latios em SS)", levels: "Lv. 35", rateRed: 100, rateBlue: 100, highlight: "🐉 LENDÁRIO ERRANTE (HGSS)", recommended: true }
+    ],
+    items: [
+      { name: "Leftovers", category: "held", icon: "🍎", how: "Segurado pelo Snorlax Lv. 50 estacionado na entrada da Diglett's Cave na Rota 11!" },
+      { name: "Lost Item (Poké Doll da Copycat)", category: "key", icon: "🧸", how: "Entregue pelo homem com Clefairy dentro do Pokémon Fan Club de Vermilion City (após restaurar a Power Plant). Devolva para a Copycat em Saffron City para ganhar o Pass do Magnet Train!" },
+      { name: "TM34 — Shock Wave (HGSS)", move: "Shock Wave", moveType: "Elétrico", category: "tm", icon: "💿", how: "Prêmio do Líder Lt. Surge no Ginásio de Vermilion City (HeartGold / SoulSilver)." },
+      { name: "HP Up & Rare Candy", category: "key", icon: "🍬", how: "Entregue pelo Presidente do Pokémon Fan Club de Vermilion City ao ouvir suas histórias." }
+    ]
+  },
+  {
+    id: "jk-saffron-celadon-7-8",
+    name: "Saffron City, Celadon City & Rotas 5, 7 e 8 (Houndour & Murkrow!)",
+    sector: "Metrópole de Kanto — Exclusivos Noturnos de Johto",
+    category: "route",
+    connections: "Rota 5 ⇄ Saffron City ⇄ Rota 7 ⇄ Celadon City & Rota 8",
+    levelRange: "Lv. 15 — 25",
+    dominantTypes: "Noturno / Fogo / Psíquico / Fantasma",
+    encounters: [
+      { id: 228, name: "Houndour", types: ["Noturno", "Fogo"], method: "grass", methodLabel: "🌿 Rota 7 (Grama Alta entre Saffron e Celadon — Somente à Noite!)", levels: "Lv. 15 — 18", rateRed: 30, rateBlue: 30, timeTag: "🌙 Somente à Noite", highlight: "🔥 ÚNICO LUGAR DE GSC/HGSS P/ CAPTURAR HOUNDOUR!", recommended: true },
+      { id: 198, name: "Murkrow", types: ["Noturno", "Voador"], method: "grass", methodLabel: "🌿 Rota 7 & Rota 16 (Somente à Noite!)", levels: "Lv. 15 — 18", rateRed: 20, rateBlue: 20, timeTag: "🌙 Somente à Noite", highlight: "🦅 Nativo de Johto encontrado só em Kanto!", recommended: true },
+      { id: 137, name: "Porygon", types: ["Normal"], method: "static", methodLabel: "🎁 Celadon Game Corner (Prêmio de Fichas em Celadon City)", levels: "Lv. 15 — 20", rateRed: 100, rateBlue: 100, highlight: "🤖 Evolui p/ Porygon2 com Up-Grade da Silph Co.!", recommended: true },
+      { id: 64, name: "Kadabra", types: ["Psíquico"], method: "grass", methodLabel: "🌿 Rota 8 (Entre Saffron e Lavender)", levels: "Lv. 15 — 17", rateRed: 20, rateBlue: 20, recommended: true },
+      { id: 93, name: "Haunter", types: ["Fantasma", "Veneno"], method: "grass", methodLabel: "🌿 Rota 8 (Noite)", levels: "Lv. 15 — 18", rateRed: 20, rateBlue: 20, timeTag: "🌙 Noite", recommended: true },
+      { id: 58, name: "Growlithe", types: ["Fogo"], method: "grass", methodLabel: "🌿 Rotas 7 & 8 (Gold / HeartGold)", levels: "Lv. 15 — 18", rateRed: 20, rateBlue: 0, versionTag: "🟡 Gold / HeartGold", recommended: true },
+      { id: 37, name: "Vulpix", types: ["Fogo"], method: "grass", methodLabel: "🌿 Rotas 7 & 8 (Silver / SoulSilver)", levels: "Lv. 15 — 18", rateRed: 0, rateBlue: 20, versionTag: "⚪ Silver / SoulSilver" }
+    ],
+    items: [
+      { name: "TM29 — Psychic", move: "Psychic", moveType: "Psíquico", category: "tm", icon: "💿", how: "Entregue pelo Sr. Psychic na casa ao sul de Saffron City (ou por 3.500 fichas no Cassino de Celadon)!" },
+      { name: "Leftovers", category: "held", icon: "🍎", how: "Escondido na lata de lixo no fundo do Restaurante de Celadon City!" },
+      { name: "Up-Grade (Evolui Porygon p/ Porygon2)", category: "stone", icon: "💾", how: "Entregue pelo guarda no balcão da Silph Co. em Saffron City!" },
+      { name: "TM19 — Giga Drain", move: "Giga Drain", moveType: "Planta", category: "tm", icon: "💿", how: "Prêmio da Líder Erika no Ginásio de Celadon City!" },
+      { name: "TM03 — Curse (GSC)", move: "Curse", moveType: "Fantasma", category: "tm", icon: "💿", how: "Entregue pelo homem no 3º andar da Celadon Mansion à noite (entrando pela porta dos fundos)." },
+      { name: "TM48 — Skill Swap (HGSS)", move: "Skill Swap", moveType: "Psíquico", category: "tm", icon: "💿", how: "Prêmio da Líder Sabrina no Ginásio de Saffron City (HeartGold / SoulSilver)." },
+      { name: "Magnet Train Pass & TM31 — Mimic", move: "Mimic", moveType: "Normal", category: "key", icon: "🚆", how: "Entregue pela Copycat em Saffron City ao devolver a Poké Doll perdida no Pokémon Fan Club de Vermilion." },
+      { name: "Cleanse Tag", category: "held", icon: "🧿", how: "Entregue pela avó no último andar da Celadon Mansion." }
+    ]
+  },
+  {
+    id: "jk-cerulean-24-25-power-plant",
+    name: "Cerulean City, Rotas 9–10, Rotas 24–25, Rock Tunnel, Power Plant & Cerulean Cave",
+    sector: "Setor Kanto Nordeste — Usina Elétrica & Lendários",
+    category: "cave",
+    connections: "Cerulean City ⇄ Rotas 24–25 (Casa do Bill) ⇄ Rotas 9–10 ⇄ Rock Tunnel & Power Plant",
+    levelRange: "Lv. 15 — 70",
+    dominantTypes: "Elétrico / Água / Psíquico / Lutador",
+    encounters: [
+      { id: 125, name: "Electabuzz", types: ["Elétrico"], method: "grass", methodLabel: "🌿 Grama da Rota 10 em frente à Power Plant", levels: "Lv. 15 — 18", rateRed: 25, rateBlue: 25, highlight: "⚡ Forte atacante elétrico", recommended: true },
+      { id: 245, name: "Suicune (HGSS)", types: ["Água"], method: "static", methodLabel: "🎁 Colina da Rota 25 ao lado da Casa do Bill (Após derrotar a Misty em HGSS)", levels: "Lv. 40", rateRed: 100, rateBlue: 100, highlight: "💧 LENDÁRIO ESTÁTICO (HGSS)", recommended: true },
+      { id: 145, name: "Zapdos (HGSS)", types: ["Elétrico", "Voador"], method: "static", methodLabel: "🎁 Exterior da Power Plant na Rota 10 (Após obter as 16 Insígnias em HGSS)", levels: "Lv. 50", rateRed: 100, rateBlue: 100, highlight: "⚡ AVE LENDÁRIA (HGSS)", recommended: true },
+      { id: 150, name: "Mewtwo (HGSS)", types: ["Psíquico"], method: "static", methodLabel: "🎁 Profundezas da Cerulean Cave (Após conquistar as 16 Insígnias em HGSS!)", levels: "Lv. 70", rateRed: 100, rateBlue: 100, highlight: "👑 LENDÁRIO SUPREMO LV. 70", recommended: true },
+      { id: 115, name: "Kangaskhan", types: ["Normal"], method: "cave", methodLabel: "⛰️ Rock Tunnel", levels: "Lv. 15", rateRed: 10, rateBlue: 10, recommended: true },
+      { id: 67, name: "Machoke", types: ["Lutador"], method: "cave", methodLabel: "⛰️ Rock Tunnel", levels: "Lv. 16 — 18", rateRed: 20, rateBlue: 20 },
+      { id: 105, name: "Marowak", types: ["Terra"], method: "cave", methodLabel: "⛰️ Rock Tunnel", levels: "Lv. 14 — 17", rateRed: 15, rateBlue: 15 }
+    ],
+    items: [
+      { name: "Machine Part (Peça da Usina)", category: "key", icon: "⚙️", how: "Escondida nas boias da piscina esquerda do Ginásio de Cerulean City (após encontrar o capanga da Equipe Rocket na ponte da Rota 24). Entregue na Power Plant!" },
+      { name: "TM07 — Zap Cannon (GSC) / TM57 — Charge Beam (HGSS)", move: "Charge Beam", moveType: "Elétrico", category: "tm", icon: "💿", how: "Entregue pelo Diretor da Power Plant após você devolver a Machine Part roubada!" },
+      { name: "Fire Stone, Water Stone, Thunder Stone, Leaf Stone & Everstone", category: "stone", icon: "💎", how: "Entregues pelo Avô do Bill na Casa do Bill (Cabo de Cerulean — Rota 25) ao mostrar os Pokémon que ele pede (Lickitung, Oddish, Staryu, Growlithe/Vulpix e Pichu)!" },
+      { name: "TM03 — Water Pulse (HGSS)", move: "Water Pulse", moveType: "Água", category: "tm", icon: "💿", how: "Prêmio da Líder Misty no Ginásio de Cerulean City (HeartGold / SoulSilver)." },
+      { name: "Nugget", category: "key", icon: "🪙", how: "Prêmio ao derrotar os treinadores da Nugget Bridge nas Rotas 24 e 25." },
+      { name: "Berserk Gene (GSC)", category: "held", icon: "🧬", how: "Usando Itemfinder na água ao noroeste de Cerulean City (onde ficava a entrada da Cerulean Cave em GSC)." }
+    ]
+  },
+  {
+    id: "jk-lavender-12-15-fuchsia",
+    name: "Lavender Town (Kanto Radio Tower), Rotas 12–15 & Fuchsia City",
+    sector: "Setor Kanto Sudeste — Rádio, Pesca & Chansey",
+    category: "route",
+    connections: "Lavender Town ⇄ Rota 12 (Super Rod) ⇄ Rotas 13–15 ⇄ Fuchsia City (Ginásio Veneno / Pal Park)",
+    levelRange: "Lv. 20 — 30",
+    dominantTypes: "Normal / Veneno / Água / Voador",
+    encounters: [
+      { id: 113, name: "Chansey", types: ["Normal"], method: "grass", methodLabel: "🌿 Rotas 13, 14 & 15 (Grama Alta — 1% ou Enxame!)", levels: "Lv. 23 — 25", rateRed: 5, rateBlue: 5, highlight: "🥚 Evolui p/ Blissey + pode segurar Lucky Egg!", recommended: true },
+      { id: 142, name: "Aerodactyl", types: ["Pedra", "Voador"], method: "static", methodLabel: "🎁 Troca NPC na Rota 14 (Por Chansey em GSC) ou revivendo Old Amber em Pewter (HGSS)", levels: "Lv. 20 — 25", rateRed: 100, rateBlue: 100, highlight: "🦖 Velocidade 130", recommended: true },
+      { id: 195, name: "Quagsire", types: ["Água", "Terra"], method: "grass", methodLabel: "🌿 Rotas 12, 13, 14 & 15 (Noite / Surf)", levels: "Lv. 22 — 26", rateRed: 30, rateBlue: 30, recommended: true },
+      { id: 211, name: "Qwilfish", types: ["Água", "Veneno"], method: "fish", methodLabel: "🎣 Super Rod na Rota 12 e Rota 13", levels: "Lv. 20 — 40", rateRed: 15, rateBlue: 15 },
+      { id: 33, name: "Nidorino / Nidorina", types: ["Veneno"], method: "grass", methodLabel: "🌿 Rotas 13, 14 & 15", levels: "Lv. 22 — 25", rateRed: 30, rateBlue: 30 }
+    ],
+    items: [
+      { name: "EXPN Card (Cartão de Expansão da Rádio — PokéFlute)", category: "key", icon: "📻", how: "Entregue pelo Diretor dentro da Kanto Radio Tower em Lavender Town após consertar a Power Plant! Permite tocar a PokéFlute no Pokégear para acordar o Snorlax!" },
+      { name: "Super Rod", category: "key", icon: "🎣", how: "Entregue pelo Guru da Pesca na casa da ponte da Rota 12 (ao sul de Lavender Town)!" },
+      { name: "TM06 — Toxic (GSC) / TM84 — Poison Jab (HGSS)", move: "Toxic", moveType: "Veneno", category: "tm", icon: "💿", how: "Prêmio da Líder Janine no Ginásio de Fuchsia City!" },
+      { name: "Lucky Egg", category: "held", icon: "🥚", how: "Segurado por Chansey selvagens nas Rotas 13, 14 e 15!" },
+      { name: "Soul Dew (HGSS)", category: "held", icon: "💧", how: "Evento de Latias/Latios no Museu de Pewter City (Enigma Stone)." }
+    ]
+  },
+  {
+    id: "jk-cycling-16-18",
+    name: "Cycling Road (Rotas 16, 17 & 18 — Slugma & Murkrow!)",
+    sector: "Ciclovia de Kanto",
+    category: "route",
+    connections: "Celadon City (Oeste) ⇄ Rota 16 ⇄ Rota 17 (Cycling Road) ⇄ Rota 18 ⇄ Fuchsia City",
+    levelRange: "Lv. 16 — 29",
+    dominantTypes: "Fogo / Noturno / Veneno / Voador",
+    encounters: [
+      { id: 218, name: "Slugma", types: ["Fogo"], method: "grass", methodLabel: "🌿 Grama das Rotas 16, 17 & 18 (Cycling Road)", levels: "Lv. 22 — 29", rateRed: 30, rateBlue: 30, highlight: "🌋 ÚNICO LUGAR EM GSC P/ CAPTURAR SLUGMA!", recommended: true },
+      { id: 198, name: "Murkrow", types: ["Noturno", "Voador"], method: "grass", methodLabel: "🌿 Rota 16 & Rota 18 (Noite)", levels: "Lv. 24 — 28", rateRed: 20, rateBlue: 20, timeTag: "🌙 Noite", recommended: true },
+      { id: 89, name: "Muk", types: ["Veneno"], method: "grass", methodLabel: "🌿 Rotas 16, 17 & 18", levels: "Lv. 26 — 29", rateRed: 15, rateBlue: 15 },
+      { id: 22, name: "Fearow", types: ["Normal", "Voador"], method: "grass", methodLabel: "🌿 Rotas 16, 17 & 18 (Manhã / Dia)", levels: "Lv. 25 — 29", rateRed: 35, rateBlue: 35 }
+    ],
+    items: [
+      { name: "PP Up & Max Ether", category: "key", icon: "🧪", how: "Escondidos na pista da Cycling Road (Rota 17) usando o Itemfinder / Dowsing MCHN." }
+    ]
+  },
+  {
+    id: "jk-pewter-mt-moon-3-4",
+    name: "Pewter City, Rota 3, Mt. Moon & Rota 4",
+    sector: "Setor Kanto Noroeste — Pena Lendária & Pedra da Lua",
+    category: "cave",
+    connections: "Viridian City ⇄ Pewter City ⇄ Rota 3 ⇄ Mt. Moon ⇄ Rota 4 ⇄ Cerulean City",
+    levelRange: "Lv. 10 — 20",
+    dominantTypes: "Fada / Pedra / Terra / Voador",
+    encounters: [
+      { id: 35, name: "Clefairy", types: ["Normal"], method: "cave", methodLabel: "⛰️ Mt. Moon & Mt. Moon Square (Dança nas segundas-feiras à noite!)", levels: "Lv. 12 — 16", rateRed: 20, rateBlue: 20, highlight: "🌙 Deixa Moon Stone toda segunda à noite!", recommended: true },
+      { id: 138, name: "Omanyte / Kabuto / Aerodactyl (HGSS)", types: ["Pedra", "Água"], method: "static", methodLabel: "🎁 Reviva Helix Fossil, Dome Fossil e Old Amber no Museu de Pewter City (HGSS)", levels: "Lv. 20", rateRed: 100, rateBlue: 100, recommended: true },
+      { id: 28, name: "Sandslash", types: ["Terra"], method: "cave", methodLabel: "⛰️ Mt. Moon", levels: "Lv. 15", rateRed: 20, rateBlue: 0, versionTag: "🟡 Gold / HeartGold" },
+      { id: 39, name: "Jigglypuff", types: ["Normal"], method: "grass", methodLabel: "🌿 Rotas 3 & 4", levels: "Lv. 12 — 15", rateRed: 20, rateBlue: 20 }
+    ],
+    items: [
+      { name: "Silver Wing (Gold/HG) / Rainbow Wing (Silver/SS)", category: "key", icon: "🪶", how: "Entregue pelo velhinho na saída leste de Pewter City! Libera o encontro com Lugia Lv. 70 (em Gold) ou Ho-Oh Lv. 70 (em Silver)!" },
+      { name: "Moon Stone", category: "stone", icon: "🌙", how: "Na Mt. Moon Square toda segunda-feira à noite: assista aos Clefairy dançando e use Rock Smash na pedra central!" },
+      { name: "TM80 — Rock Slide (HGSS)", move: "Rock Slide", moveType: "Pedra", category: "tm", icon: "💿", how: "Prêmio do Líder Brock no Ginásio de Pewter City (HeartGold / SoulSilver)." }
+    ]
+  },
+  {
+    id: "jk-pallet-viridian-1-2",
+    name: "Pallet Town (Lab. do Prof. Oak), Rota 1, Viridian City, Rota 2 & Viridian Forest",
+    sector: "Setor Kanto Oeste — 16ª Insígnia & Iniciais Extras",
+    category: "route",
+    connections: "Pallet Town ⇄ Rota 1 ⇄ Viridian City (Ginásio do Blue / Trainer House) ⇄ Rota 2 & Viridian Forest",
+    levelRange: "Lv. 3 — 50",
+    dominantTypes: "Elétrico / Planta / Fogo / Água / Inseto",
+    encounters: [
+      { id: 25, name: "Pikachu", types: ["Elétrico"], method: "grass", methodLabel: "🌿 Rota 2 & Viridian Forest", levels: "Lv. 3 — 7", rateRed: 10, rateBlue: 10, highlight: "⚡ Ícone de Kanto", recommended: true },
+      { id: 1, name: "Bulbasaur / Charmander / Squirtle (HGSS)", types: ["Planta", "Fogo"], method: "static", methodLabel: "🎁 Entregue pelo Prof. Oak no Laboratório de Pallet Town após derrotar Red no Mt. Silver (HGSS)!", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "👑 Inicial Clássico de Kanto!", recommended: true },
+      { id: 252, name: "Treecko / Torchic / Mudkip (HGSS)", types: ["Planta", "Água"], method: "static", methodLabel: "🎁 Entregue por Steven Stone na Silph Co. (Saffron) após derrotar Red no Mt. Silver (HGSS)!", levels: "Lv. 5", rateRed: 100, rateBlue: 100, highlight: "👑 Inicial de Hoenn!", recommended: true },
+      { id: 166, name: "Ledian / Ariados", types: ["Inseto"], method: "grass", methodLabel: "🌿 Rota 2 & Viridian Forest", levels: "Lv. 7 — 12", rateRed: 25, rateBlue: 25 }
+    ],
+    items: [
+      { name: "HM08 — Rock Climb (HGSS)", move: "Rock Climb", moveType: "Normal", category: "tm", icon: "💿", how: "Entregue pelo Prof. Oak no laboratório de Pallet Town após você conquistar todas as 16 Insígnias (Johto + Kanto)! Libera o acesso ao Mt. Silver!" },
+      { name: "TM42 — Dream Eater", move: "Dream Eater", moveType: "Psíquico", category: "tm", icon: "💿", how: "Entregue pelo homem dormindo atrás do arbusto de Cut no canto sudoeste de Viridian City!" },
+      { name: "TM92 — Trick Room (HGSS)", move: "Trick Room", moveType: "Psíquico", category: "tm", icon: "💿", how: "Prêmio do Líder Blue no Ginásio de Viridian City (16ª Insígnia em HeartGold / SoulSilver)." }
+    ]
+  },
+  {
+    id: "jk-cinnabar-seafoam-19-21",
+    name: "Rotas Marítimas 19–21, Seafoam Islands & Cinnabar Island",
+    sector: "Setor Insular Sul de Kanto — Vulcão & Caverna de Gelo",
+    category: "cave",
+    connections: "Pallet Town ⇄ Rota 21 ⇄ Cinnabar Island (Blue) ⇄ Rota 20 ⇄ Seafoam Islands (Blaine) ⇄ Rota 19 ⇄ Fuchsia City",
+    levelRange: "Lv. 20 — 50",
+    dominantTypes: "Gelo / Água / Fogo / Psíquico",
+    encounters: [
+      { id: 144, name: "Articuno (HGSS)", types: ["Gelo", "Voador"], method: "static", methodLabel: "🎁 Profundezas das Seafoam Islands (Após conquistar as 16 Insígnias em HGSS)", levels: "Lv. 50", rateRed: 100, rateBlue: 100, highlight: "❄️ AVE LENDÁRIA (HGSS)", recommended: true },
+      { id: 124, name: "Jynx", types: ["Gelo", "Psíquico"], method: "cave", methodLabel: "⛰️ Seafoam Islands (HGSS)", levels: "Lv. 30 — 34", rateRed: 20, rateBlue: 20, recommended: true },
+      { id: 87, name: "Dewgong", types: ["Água", "Gelo"], method: "cave", methodLabel: "⛰️ Seafoam Islands", levels: "Lv. 32 — 36", rateRed: 25, rateBlue: 25 },
+      { id: 120, name: "Staryu", types: ["Água"], method: "fish", methodLabel: "🎣 Rotas 19, 20 & 21 (Noite)", levels: "Lv. 20 — 30", rateRed: 30, rateBlue: 30, recommended: true }
+    ],
+    items: [
+      { name: "TM13 — Ice Beam (HGSS)", move: "Ice Beam", moveType: "Gelo", category: "tm", icon: "💿", how: "Andar subterrâneo das Seafoam Islands (HeartGold / SoulSilver)!" },
+      { name: "TM50 — Overheat (HGSS)", move: "Overheat", moveType: "Fogo", category: "tm", icon: "💿", how: "Prêmio do Líder Blaine no Ginásio reconstruído nas Seafoam Islands (HeartGold / SoulSilver)." }
+    ]
+  },
+  {
+    id: "jk-victory-mt-silver-22-28",
+    name: "Rotas 22, 26, 27, 28, Victory Road, Indigo Plateau & Mt. Silver (Red!)",
+    sector: "Fronteira Kanto-Johto & Batalha Final no Mt. Silver",
+    category: "cave",
+    connections: "Viridian City ⇄ Rota 22 ⇄ Victory Road / Indigo Plateau & Rota 28 ⇄ Mt. Silver (Treinador Red Lv. 81–88!)",
+    levelRange: "Lv. 30 — 55",
+    dominantTypes: "Pedra / Terra / Fantasma / Noturno / Fogo",
+    encounters: [
+      { id: 246, name: "Larvitar & Pupitar", types: ["Pedra", "Terra"], method: "cave", methodLabel: "⛰️ Interior do Mt. Silver (1F, 2F e Topo)", levels: "Lv. 15 — 40", rateRed: 15, rateBlue: 15, highlight: "👑 Evolui p/ Tyranitar (600 BST Pseudo-Lendário!)", recommended: true },
+      { id: 200, name: "Misdreavus", types: ["Fantasma"], method: "cave", methodLabel: "⛰️ Caverna do Mt. Silver (Somente à Noite!)", levels: "Lv. 42 — 45", rateRed: 10, rateBlue: 10, timeTag: "🌙 Somente à Noite", highlight: "👻 ÚNICO LUGAR DE GSC P/ CAPTURAR MISDREAVUS!", recommended: true },
+      { id: 215, name: "Sneasel", types: ["Noturno", "Gelo"], method: "grass", methodLabel: "🌿 Rota 28 & Exterior do Mt. Silver (Noite)", levels: "Lv. 38 — 42", rateRed: 20, rateBlue: 20, timeTag: "🌙 Noite", recommended: true },
+      { id: 146, name: "Moltres (HGSS)", types: ["Fogo", "Voador"], method: "static", methodLabel: "🎁 Interior da Caverna do Mt. Silver (Requer Waterfall & Rock Climb em HGSS)", levels: "Lv. 50", rateRed: 100, rateBlue: 100, highlight: "🔥 AVE LENDÁRIA (HGSS)", recommended: true },
+      { id: 232, name: "Donphan", types: ["Terra"], method: "cave", methodLabel: "⛰️ Rota 28 & Mt. Silver (Silver / SoulSilver)", levels: "Lv. 40 — 42", rateRed: 0, rateBlue: 25, versionTag: "⚪ Silver / SoulSilver", recommended: true },
+      { id: 217, name: "Ursaring", types: ["Normal"], method: "cave", methodLabel: "⛰️ Rota 28 & Mt. Silver (Gold / HeartGold)", levels: "Lv. 40 — 42", rateRed: 25, rateBlue: 0, versionTag: "🟡 Gold / HeartGold", recommended: true }
+    ],
+    items: [
+      { name: "TM26 — Earthquake", move: "Earthquake", moveType: "Terra", category: "tm", icon: "💿", how: "1º andar (1F) da Victory Road (caia pelo buraco no canto noroeste do 2º andar)!" },
+      { name: "TM47 — Steel Wing", move: "Steel Wing", moveType: "Aço", category: "tm", icon: "💿", how: "Entregue pela celebridade na casa isolada da Rota 28 (usando Cut ao norte da rota rumo ao Mt. Silver)!" },
+      { name: "TM22 — Solar Beam", move: "Solar Beam", moveType: "Planta", category: "tm", icon: "💿", how: "Penhasco da Rota 27 usando Whirlpool após atravessar as Tohjo Falls." },
+      { name: "Expert Belt & Flame Orb (HGSS)", category: "held", icon: "🥋", how: "Interior do Mt. Silver (Expert Belt) e loja da Battle Frontier (Flame Orb)." }
     ]
   }
 ];
@@ -2478,6 +2686,74 @@ const REGION_MAP_LAYOUTS = {
     ]
   },
 
+  // ==========================================================================
+  // KANTO NOS JOGOS DE JOHTO (GEN 2 GSC & GEN 4 HGSS — 2ª REGIÃO COM MT. SILVER)
+  // ==========================================================================
+  KantoJohto: {
+    terrainSvg: `
+      <line x1="240" y1="240" x2="620" y2="445" stroke="#10b981" stroke-width="4.5" stroke-dasharray="8 4" opacity="0.8" filter="url(#glow-emerald)" />
+      <line x1="560" y1="315" x2="40" y2="315" stroke="#38bdf8" stroke-width="3.5" stroke-dasharray="6 6" opacity="0.55" />
+    `,
+    routes: [
+      { num: "1", areaId: "jk-pallet-viridian-1-2", path: "M 240 415 L 240 560", lx: 240, ly: 492, marine: false },
+      { num: "2", areaId: "jk-pallet-viridian-1-2", path: "M 240 175 L 240 415", lx: 240, ly: 362, marine: false },
+      { num: "3", areaId: "jk-pewter-mt-moon-3-4", path: "M 240 175 L 400 175", lx: 320, ly: 175, marine: false },
+      { num: "4", areaId: "jk-pewter-mt-moon-3-4", path: "M 400 175 L 560 175", lx: 480, ly: 175, marine: false },
+      { num: "5", areaId: "jk-saffron-celadon-7-8", path: "M 560 175 L 560 315", lx: 560, ly: 245, marine: false },
+      { num: "6", areaId: "jk-vermilion-diglett-11", path: "M 560 315 L 560 445", lx: 560, ly: 380, marine: false },
+      { num: "7", areaId: "jk-saffron-celadon-7-8", path: "M 420 315 L 560 315", lx: 490, ly: 315, marine: false },
+      { num: "8", areaId: "jk-saffron-celadon-7-8", path: "M 560 315 L 760 315", lx: 660, ly: 315, marine: false },
+      { num: "9", areaId: "jk-cerulean-24-25-power-plant", path: "M 560 175 L 760 175", lx: 660, ly: 175, marine: false },
+      { num: "10", areaId: "jk-cerulean-24-25-power-plant", path: "M 760 175 L 760 315", lx: 760, ly: 255, marine: false },
+      { num: "11", areaId: "jk-vermilion-diglett-11", path: "M 560 445 L 760 445", lx: 695, ly: 445, marine: false },
+      { num: "12", areaId: "jk-lavender-12-15-fuchsia", path: "M 760 315 L 760 520", lx: 760, ly: 482, marine: false },
+      { num: "13", areaId: "jk-lavender-12-15-fuchsia", path: "M 760 520 L 650 520", lx: 705, ly: 520, marine: false },
+      { num: "14", areaId: "jk-lavender-12-15-fuchsia", path: "M 650 520 L 650 620", lx: 650, ly: 572, marine: false },
+      { num: "15", areaId: "jk-lavender-12-15-fuchsia", path: "M 650 620 L 515 620", lx: 582, ly: 620, marine: false },
+      { num: "16", areaId: "jk-cycling-16-18", path: "M 420 315 L 345 315", lx: 378, ly: 315, marine: false },
+      { num: "17", areaId: "jk-cycling-16-18", path: "M 345 315 L 345 620", lx: 345, ly: 475, marine: false },
+      { num: "18", areaId: "jk-cycling-16-18", path: "M 345 620 L 515 620", lx: 430, ly: 620, marine: false },
+      { num: "19", areaId: "jk-cinnabar-seafoam-19-21", path: "M 515 620 L 515 690 L 380 690", lx: 455, ly: 690, marine: true },
+      { num: "20", areaId: "jk-cinnabar-seafoam-19-21", path: "M 380 690 L 240 690", lx: 310, ly: 690, marine: true },
+      { num: "21", areaId: "jk-cinnabar-seafoam-19-21", path: "M 240 560 L 240 690", lx: 240, ly: 625, marine: true },
+      { num: "22", areaId: "jk-victory-mt-silver-22-28", path: "M 240 415 L 115 415", lx: 178, ly: 415, marine: false },
+      { num: "26", areaId: "jk-victory-mt-silver-22-28", path: "M 115 415 L 115 585", lx: 115, ly: 500, marine: false },
+      { num: "27", areaId: "jk-victory-mt-silver-22-28", path: "M 115 585 L 45 585", lx: 80, ly: 585, marine: true },
+      { num: "23", areaId: "jk-victory-mt-silver-22-28", path: "M 115 415 L 115 125", lx: 115, ly: 335, marine: false },
+      { num: "28", areaId: "jk-victory-mt-silver-22-28", path: "M 115 415 L 48 415", lx: 82, ly: 415, marine: false },
+      { num: "24", areaId: "jk-cerulean-24-25-power-plant", path: "M 560 175 L 560 55", lx: 560, ly: 112, marine: false },
+      { num: "25", areaId: "jk-cerulean-24-25-power-plant", path: "M 560 55 L 705 55", lx: 632, ly: 55, marine: false }
+    ],
+    cities: [
+      { name: "Indigo Plateau", areaId: "jk-victory-mt-silver-22-28", x: 115, y: 125, lx: 115, ly: 86, anchor: "middle" },
+      { name: "Pewter City", areaId: "jk-pewter-mt-moon-3-4", x: 240, y: 175, lx: 240, ly: 140, anchor: "middle" },
+      { name: "Viridian City", areaId: "jk-pallet-viridian-1-2", x: 240, y: 415, lx: 274, ly: 420, anchor: "start" },
+      { name: "Pallet Town", areaId: "jk-pallet-viridian-1-2", x: 240, y: 560, lx: 205, ly: 564, anchor: "end" },
+      { name: "Cinnabar Island", areaId: "jk-cinnabar-seafoam-19-21", x: 240, y: 690, lx: 204, ly: 694, anchor: "end" },
+      { name: "Cerulean City", areaId: "jk-cerulean-24-25-power-plant", x: 560, y: 175, lx: 594, ly: 152, anchor: "start" },
+      { name: "Celadon City", areaId: "jk-saffron-celadon-7-8", x: 420, y: 315, lx: 420, ly: 280, anchor: "middle" },
+      { name: "Saffron City", areaId: "jk-saffron-celadon-7-8", x: 560, y: 315, lx: 595, ly: 292, anchor: "start" },
+      { name: "Vermilion City", areaId: "jk-vermilion-diglett-11", x: 560, y: 445, lx: 525, ly: 449, anchor: "end" },
+      { name: "Lavender Town", areaId: "jk-lavender-12-15-fuchsia", x: 760, y: 315, lx: 760, ly: 356, anchor: "middle" },
+      { name: "Fuchsia City", areaId: "jk-lavender-12-15-fuchsia", x: 515, y: 620, lx: 515, ly: 660, anchor: "middle" }
+    ],
+    sites: [
+      { name: "Mt. Silver", areaId: "jk-victory-mt-silver-22-28", x: 48, y: 415, lx: 48, ly: 382, anchor: "middle" },
+      { name: "Victory Road", areaId: "jk-victory-mt-silver-22-28", x: 115, y: 240, lx: 142, ly: 244, anchor: "start" },
+      { name: "Tohjo Falls", areaId: "jk-victory-mt-silver-22-28", x: 45, y: 585, lx: 45, ly: 618, anchor: "middle" },
+      { name: "Diglett's Cave", areaId: "jk-vermilion-diglett-11", x: 240, y: 240, lx: 214, ly: 244, anchor: "end", hideLabel: true },
+      { name: "Viridian Forest", areaId: "jk-pallet-viridian-1-2", x: 240, y: 305, lx: 212, ly: 308, anchor: "end" },
+      { name: "Mt. Moon", areaId: "jk-pewter-mt-moon-3-4", x: 400, y: 175, lx: 400, ly: 142, anchor: "middle" },
+      { name: "Cerulean Cave", areaId: "jk-cerulean-24-25-power-plant", x: 510, y: 108, lx: 510, ly: 76, anchor: "middle" },
+      { name: "Rock Tunnel", areaId: "jk-cerulean-24-25-power-plant", x: 760, y: 175, lx: 786, ly: 179, anchor: "start" },
+      { name: "Power Plant", areaId: "jk-cerulean-24-25-power-plant", x: 786, y: 228, lx: 760, ly: 224, anchor: "end" },
+      { name: "Radio Tower", areaId: "jk-lavender-12-15-fuchsia", x: 786, y: 284, lx: 758, ly: 282, anchor: "end" },
+      { name: "Diglett's Cave", areaId: "jk-vermilion-diglett-11", x: 620, y: 445, lx: 620, ly: 482, anchor: "middle" },
+      { name: "Pal Park / Fuchsia", areaId: "jk-lavender-12-15-fuchsia", x: 515, y: 565, lx: 515, ly: 534, anchor: "middle" },
+      { name: "Seafoam Islands", areaId: "jk-cinnabar-seafoam-19-21", x: 380, y: 690, lx: 380, ly: 728, anchor: "middle" }
+    ]
+  },
+
   Hoenn: {
     terrainSvg: ``,
     routes: [
@@ -2941,6 +3217,7 @@ const REGION_MAP_LAYOUTS = {
 // ============================================================================
 let gpsState = {
   gameId: "gen1-rb",
+  subRegion: "Johto", // Usado nos jogos de Johto (gen2-gsc e gen4-hgss) para alternar entre "Johto" e "Kanto"
   mode: "pokemon", // "pokemon" | "items"
   selectedAreaId: null, // Só destaca após o usuário clicar em uma rota/cidade ou pesquisar
   methodFilter: "all",
@@ -2957,6 +3234,9 @@ function getSpriteUrl(pokemonId) {
 
 function getAreasForCurrentGame() {
   const cfg = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG["gen1-rb"];
+  if (cfg.hasDualRegions) {
+    return gpsState.subRegion === "Kanto" ? JOHTO_KANTO_AREAS : JOHTO_AREAS;
+  }
   if (cfg.region === "Johto") return JOHTO_AREAS;
   if (cfg.region === "Hoenn") return HOENN_AREAS;
   if (cfg.region === "Sinnoh") return SINNOH_AREAS;
@@ -2967,6 +3247,75 @@ function getAreasForCurrentGame() {
   if (cfg.region === "Borrius") return BORRIUS_AREAS;
   if (cfg.region === "Ilios") return ILIOS_AREAS;
   return KANTO_AREAS;
+}
+
+// Retorna todas as áreas do jogo atual (incluindo Johto + Kanto juntas nos jogos de 2ª Geração e Remakes HGSS)
+function getAllAreasForCurrentGame() {
+  const cfg = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG["gen1-rb"];
+  if (cfg.hasDualRegions) {
+    return [...JOHTO_AREAS, ...JOHTO_KANTO_AREAS];
+  }
+  return getAreasForCurrentGame();
+}
+
+function setSubRegion(targetRegion) {
+  if (targetRegion !== "Johto" && targetRegion !== "Kanto") return;
+  gpsState.subRegion = targetRegion;
+  gpsState.selectedAreaId = null;
+  renderSubRegionSwitcher();
+  renderInteractiveMapNodes();
+  renderAreaSelectorQuickList();
+  renderSelectedAreaDetails();
+}
+
+function renderSubRegionSwitcher() {
+  const switcher = document.getElementById("johto-kanto-region-switcher");
+  if (!switcher) return;
+  const cfg = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG["gen1-rb"];
+
+  if (!cfg.hasDualRegions) {
+    switcher.classList.add("hidden");
+    switcher.classList.remove("flex");
+    switcher.innerHTML = "";
+    return;
+  }
+
+  switcher.classList.remove("hidden");
+  switcher.classList.add("flex");
+
+  const isKanto = gpsState.subRegion === "Kanto";
+  switcher.innerHTML = `
+    <button
+      type="button"
+      data-switch-subregion="Johto"
+      class="px-3 py-1 rounded-md font-label-sm text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 ${
+        !isKanto
+          ? "bg-primary text-on-primary shadow-sm"
+          : "text-on-surface-variant hover:text-primary"
+      }"
+    >
+      <span>🏯</span>
+      <span>1ª Região: Johto</span>
+    </button>
+    <button
+      type="button"
+      data-switch-subregion="Kanto"
+      class="px-3 py-1 rounded-md font-label-sm text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 ${
+        isKanto
+          ? "bg-primary text-on-primary shadow-sm"
+          : "text-on-surface-variant hover:text-primary"
+      }"
+    >
+      <span>⛰️</span>
+      <span>2ª Região: Kanto</span>
+    </button>
+  `;
+
+  switcher.querySelectorAll("[data-switch-subregion]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      setSubRegion(btn.getAttribute("data-switch-subregion"));
+    });
+  });
 }
 
 function doesItemMatchQuery(item, area, query) {
@@ -3103,9 +3452,14 @@ function renderInteractiveMapNodes() {
   if (!nodesGroup) return;
 
   const cfg = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG["gen1-rb"];
-  const layout = REGION_MAP_LAYOUTS[cfg.region] || REGION_MAP_LAYOUTS.Kanto;
+  const layoutKey = cfg.hasDualRegions
+    ? (gpsState.subRegion === "Kanto" ? "KantoJohto" : "Johto")
+    : cfg.region;
+  const layout = REGION_MAP_LAYOUTS[layoutKey] || REGION_MAP_LAYOUTS.Kanto;
   const areas = getAreasForCurrentGame();
   const query = gpsState.searchQuery.trim().toLowerCase();
+
+  renderSubRegionSwitcher();
 
   const warningBanner = document.getElementById("unbound-bug-warning-banner");
   if (warningBanner) {
@@ -3248,7 +3602,27 @@ function renderInteractiveMapNodes() {
     </g>
   ` : "";
 
-  nodesGroup.innerHTML = routesSvg + citiesSvg + sitesSvg + buggedStampSvg;
+  const dualRegionPortalSvg = cfg.hasDualRegions
+    ? (gpsState.subRegion === "Kanto"
+      ? `
+        <g class="cursor-pointer group" data-portal-subregion="Johto" transform="translate(20, 16)">
+          <rect x="0" y="0" width="248" height="36" rx="8" fill="#0f172a" stroke="${selAccent}" stroke-width="2" />
+          <text x="124" y="22.5" fill="${selText}" font-family="Plus Jakarta Sans" font-size="12" font-weight="800" text-anchor="middle">
+            ⬅ VOLTAR P/ MAPA DE JOHTO 🏯
+          </text>
+        </g>
+      `
+      : `
+        <g class="cursor-pointer group" data-portal-subregion="Kanto" transform="translate(612, 16)">
+          <rect x="0" y="0" width="248" height="36" rx="8" fill="#0f172a" stroke="${selAccent}" stroke-width="2" />
+          <text x="124" y="22.5" fill="${selText}" font-family="Plus Jakarta Sans" font-size="12" font-weight="800" text-anchor="middle">
+            ⛰️ IR P/ MAPA DE KANTO ➔
+          </text>
+        </g>
+      `)
+    : "";
+
+  nodesGroup.innerHTML = routesSvg + citiesSvg + sitesSvg + buggedStampSvg + dualRegionPortalSvg;
 
   nodesGroup.querySelectorAll("[data-area-id]").forEach(node => {
     node.addEventListener("click", () => {
@@ -3256,14 +3630,31 @@ function renderInteractiveMapNodes() {
       selectArea(areaId);
     });
   });
+
+  nodesGroup.querySelectorAll("[data-portal-subregion]").forEach(portal => {
+    portal.addEventListener("click", () => {
+      setSubRegion(portal.getAttribute("data-portal-subregion"));
+    });
+  });
 }
 
 function renderAreaSelectorQuickList() {
   const bar = document.getElementById("quick-route-pills");
   if (!bar) return;
+  const cfg = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG["gen1-rb"];
   const areas = getAreasForCurrentGame();
 
-  bar.innerHTML = areas.map(area => {
+  const dualSwitchPill = cfg.hasDualRegions
+    ? `<button
+        type="button"
+        data-quick-switch-subregion="${gpsState.subRegion === "Kanto" ? "Johto" : "Kanto"}"
+        class="shrink-0 px-3 py-1 rounded font-label-sm text-label-sm font-extrabold transition-all cursor-pointer border bg-primary-container/25 hover:bg-primary-container text-primary hover:text-on-primary-container border-primary/50 shadow-sm flex items-center gap-1"
+      >
+        <span>${gpsState.subRegion === "Kanto" ? "🏯 Ver Rotas de Johto" : "⛰️ Ver Rotas de Kanto (2ª Região)"}</span>
+      </button>`
+    : "";
+
+  bar.innerHTML = dualSwitchPill + areas.map(area => {
     const active = area.id === gpsState.selectedAreaId;
     return `
       <button
@@ -3285,6 +3676,12 @@ function renderAreaSelectorQuickList() {
       selectArea(btn.getAttribute("data-quick-area"));
     });
   });
+
+  bar.querySelectorAll("[data-quick-switch-subregion]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      setSubRegion(btn.getAttribute("data-quick-switch-subregion"));
+    });
+  });
 }
 
 // ============================================================================
@@ -3292,6 +3689,7 @@ function renderAreaSelectorQuickList() {
 // ============================================================================
 function renderSelectedAreaDetails() {
   const areas = getAreasForCurrentGame();
+  const allGameAreas = getAllAreasForCurrentGame();
   const area = gpsState.selectedAreaId
     ? areas.find(a => a.id === gpsState.selectedAreaId)
     : null;
@@ -3307,6 +3705,8 @@ function renderSelectedAreaDetails() {
           ⚠️ Mapa Bugado — Será arrumado em outro momento
         </span>
       `;
+    } else if (gameConfig.hasDualRegions) {
+      regionTitleEl.textContent = `Região de ${gpsState.subRegion === "Kanto" ? "Kanto" : "Johto"}`;
     } else {
       regionTitleEl.textContent = `Região de ${gameConfig.region}`;
     }
@@ -3334,7 +3734,7 @@ function renderSelectedAreaDetails() {
 
     if (listEl) {
       if (gpsState.mode === "items" && gpsState.searchQuery.trim()) {
-        renderItemsPanelList(listEl, areas[0], areas, gameConfig);
+        renderItemsPanelList(listEl, areas[0], allGameAreas, gameConfig);
       } else {
         listEl.innerHTML = `
           <div class="bg-surface-container rounded-lg p-6 border border-outline-variant text-center space-y-2.5">
@@ -3369,7 +3769,7 @@ function renderSelectedAreaDetails() {
 
   // MODO 2: PESQUISA DE ITENS & TMs
   if (gpsState.mode === "items") {
-    renderItemsPanelList(listEl, area, areas, gameConfig);
+    renderItemsPanelList(listEl, area, allGameAreas, gameConfig);
     return;
   }
 
@@ -3614,6 +4014,14 @@ function renderItemsPanelList(listEl, currentArea, allAreas, gameConfig) {
 }
 
 function selectArea(areaId) {
+  const cfg = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG["gen1-rb"];
+  if (cfg.hasDualRegions && areaId) {
+    if (areaId.startsWith("jk-") && gpsState.subRegion !== "Kanto") {
+      gpsState.subRegion = "Kanto";
+    } else if (areaId.startsWith("johto-") && gpsState.subRegion !== "Johto") {
+      gpsState.subRegion = "Johto";
+    }
+  }
   gpsState.selectedAreaId = areaId;
   renderInteractiveMapNodes();
   renderAreaSelectorQuickList();
@@ -3631,8 +4039,17 @@ function setGpsMode(newMode) {
 
 function autoSelectMatchingAreaForQuery(q) {
   if (!q) return;
-  const areas = getAreasForCurrentGame();
-  const matchedArea = areas.find(a => doesAreaMatchSearch(a, q));
+  const cfg = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG["gen1-rb"];
+  // Primeiro tenta na sub-região ativa; se for um jogo de Johto (GSC/HGSS) e o Pokémon/Item estiver em Kanto (ou vice-versa), alterna automaticamente!
+  const currentAreas = getAreasForCurrentGame();
+  let matchedArea = currentAreas.find(a => doesAreaMatchSearch(a, q));
+  if (!matchedArea && cfg.hasDualRegions) {
+    const allAreas = getAllAreasForCurrentGame();
+    matchedArea = allAreas.find(a => doesAreaMatchSearch(a, q));
+    if (matchedArea) {
+      gpsState.subRegion = matchedArea.id.startsWith("jk-") ? "Kanto" : "Johto";
+    }
+  }
   if (matchedArea) {
     gpsState.selectedAreaId = matchedArea.id;
   }
@@ -3699,11 +4116,12 @@ function initGpsPage() {
     }
   });
 
-  // Seletor de Jogo (Até Hoenn)
+  // Seletor de Jogo
   const gameSelect = document.getElementById("gps-game-select");
   if (gameSelect) {
     gameSelect.addEventListener("change", e => {
       gpsState.gameId = e.target.value;
+      gpsState.subRegion = "Johto";
       gpsState.selectedAreaId = null;
       if (gpsState.searchQuery) {
         autoSelectMatchingAreaForQuery(gpsState.searchQuery);
