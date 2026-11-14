@@ -80,6 +80,24 @@ body.sidebar-closed #main-workspace {
   font-size: 0.68rem;
 }
 
+.type-icon-img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+  image-rendering: auto !important;
+}
+.type-badge.xs .type-icon-img {
+  width: 12px;
+  height: 12px;
+}
+.type-badge.sm .type-icon-img {
+  width: 13px;
+  height: 13px;
+}
+
 /* Modals */
 .modal-backdrop {
   display: none;

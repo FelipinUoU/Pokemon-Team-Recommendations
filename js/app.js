@@ -164,12 +164,22 @@
     return loadedActive;
   }
 
+  // Renderiza o ícone oficial de um Tipo Elemental dos jogos Pokémon
+  function renderTypeIcon(typeId, extraClass = '') {
+    const t = TYPES[typeId];
+    if (!t) return '';
+    if (t.iconUrl) {
+      return `<img src="${t.iconUrl}" alt="${t.name}" class="type-icon-img ${extraClass}" onerror="if(this.dataset.fb!=='1'){this.dataset.fb='1';this.src='${t.symbolUrl || ''}';}" />`;
+    }
+    return `<span>${t.icon}</span>`;
+  }
+
   // Renderiza badge de um Tipo Elemental
   function renderTypeBadge(typeId, extraClass = '') {
     const t = TYPES[typeId];
     if (!t) return '';
     return `<span class="type-badge ${extraClass}" style="background:${t.bg}; color:${t.color}; border-color:${t.color}55;">
-      <span>${t.icon}</span> ${t.name}
+      ${renderTypeIcon(typeId)} ${t.name}
     </span>`;
   }
 
@@ -572,7 +582,7 @@
           <div data-slot-index="${idx}" data-edit-tab="moves" data-move-idx="${mIdx}" class="bg-surface-container-lowest px-2.5 py-1.5 rounded flex items-center justify-between gap-1 hover:brightness-125 transition-all" style="border-left: 3px solid ${t.color}">
             <span class="text-xs font-semibold text-on-surface truncate">${mv.name}</span>
             <div class="flex items-center gap-1 shrink-0">
-              <span class="font-mono text-[10px]" style="color:${t.color}">${t.icon}${mv.power || 'ST'}</span>
+              <span class="font-mono text-[10px] inline-flex items-center gap-1" style="color:${t.color}">${renderTypeIcon(mv.type, 'w-3.5 h-3.5')}${mv.power || 'ST'}</span>
               <a href="gps.html?game=${encodeURIComponent(state.selectedGameId)}&mode=items&q=${encodeURIComponent(mv.name)}" data-gps-locate="true" class="inline-flex items-center justify-center w-4 h-4 rounded bg-surface-container-high/80 hover:bg-primary-container hover:text-on-primary-container text-primary transition-colors" title="Localizar TM/HM de ${mv.name} no GPS Pokémon (${game.name})">
                 <span class="material-symbols-outlined text-[12px]">search</span>
               </a>
@@ -730,12 +740,12 @@
     const activeTypes = ENGINE.getActiveTypesForGame(game);
     if (typeSelectEl && typeSelectEl.options.length <= 1) {
       typeSelectEl.innerHTML = `<option value="all">Tipo 1: Todos (${activeTypes.length})</option>` +
-        activeTypes.map(t => `<option value="${t}" ${state.pickerType === t ? 'selected' : ''}>${TYPES[t].icon} ${TYPES[t].name}</option>`).join('');
+        activeTypes.map(t => `<option value="${t}" ${state.pickerType === t ? 'selected' : ''}>${TYPES[t].name}</option>`).join('');
     }
     const type2SelectEl = document.getElementById('picker-type2-filter');
     if (type2SelectEl && type2SelectEl.options.length <= 1) {
       type2SelectEl.innerHTML = `<option value="all">Tipo 2: Qualquer</option>` +
-        activeTypes.map(t => `<option value="${t}" ${state.pickerType2 === t ? 'selected' : ''}>${TYPES[t].icon} ${TYPES[t].name}</option>`).join('');
+        activeTypes.map(t => `<option value="${t}" ${state.pickerType2 === t ? 'selected' : ''}>${TYPES[t].name}</option>`).join('');
     }
 
     const scopeInfo = ENGINE.getDexScopeInfo ? ENGINE.getDexScopeInfo(game) : { eraNationalGen: game.generation || 9, natMaxNum: 1025 };
@@ -1610,7 +1620,7 @@
       const activeTypes = ENGINE.getActiveTypesForGame(game);
       const currentVal = state.filterType;
       typeFilterEl.innerHTML = `<option value="all">Todos os Tipos (${activeTypes.length})</option>` +
-        activeTypes.map(t => `<option value="${t}" ${currentVal === t ? 'selected' : ''}>${TYPES[t].icon} ${TYPES[t].name}</option>`).join('');
+        activeTypes.map(t => `<option value="${t}" ${currentVal === t ? 'selected' : ''}>${TYPES[t].name}</option>`).join('');
     }
 
     const recommendations = ENGINE.getRecommendedPokemonForTeam(state.team, game, {
