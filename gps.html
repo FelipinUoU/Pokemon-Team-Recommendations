@@ -136,11 +136,13 @@
       animation: radarSweep 7s linear infinite;
     }
     @keyframes pulseTarget {
-      0%, 100% { transform: scale(1); opacity: 0.9; }
-      50% { transform: scale(1.18); opacity: 0.35; }
+      0%, 100% { transform: scale(0.92); opacity: 0.65; }
+      50% { transform: scale(1.28); opacity: 0.2; }
     }
     .animate-target-pulse {
-      animation: pulseTarget 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: pulseTarget 1.8s ease-in-out infinite;
     }
   </style>
 </head>
@@ -438,15 +440,15 @@
           <div class="flex items-center gap-5 font-label-sm text-label-sm whitespace-nowrap">
             <div>
               <span class="text-outline block">Nível na Rota:</span>
-              <span id="hud-level-range" class="text-on-surface font-bold text-label-md">Lv. 3 — 6</span>
+              <span id="hud-level-range" class="text-on-surface font-bold text-label-md">—</span>
             </div>
             <div class="border-l border-outline-variant/50 pl-4">
               <span class="text-outline block">Tipo Dominante:</span>
-              <span id="hud-dominant-types" class="text-primary font-semibold">Inseto / Elétrico</span>
+              <span id="hud-dominant-types" class="text-primary font-semibold">Selecione uma rota</span>
             </div>
             <div class="border-l border-outline-variant/50 pl-4">
               <span class="text-outline block">Espécies na Rota:</span>
-              <span id="hud-species-count" class="text-secondary font-bold">5 Catalogadas</span>
+              <span id="hud-species-count" class="text-secondary font-bold">18 Zonas no Mapa</span>
             </div>
           </div>
         </div>
@@ -503,7 +505,7 @@
               <span class="material-symbols-outlined text-base">pin_drop</span>
             </span>
             <div>
-              <h3 id="panel-area-title" class="font-headline-md text-headline-md text-on-surface">Viridian Forest</h3>
+              <h3 id="panel-area-title" class="font-headline-md text-headline-md text-on-surface">Selecione uma Rota ou Cidade</h3>
             </div>
           </div>
 
@@ -521,7 +523,7 @@
           </div>
         </div>
         <p id="panel-area-connections" class="font-body-sm text-body-sm text-on-surface-variant mt-1">
-          Rota 2 Sul (Viridian) ⇄ Rota 2 Norte (Pewter City)
+          Clique em qualquer rota, cidade ou caverna no mapa ao lado para destacar e inspecionar
         </p>
       </div>
 

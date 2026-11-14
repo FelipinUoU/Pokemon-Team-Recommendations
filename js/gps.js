@@ -1342,7 +1342,7 @@ const REGION_MAP_LAYOUTS = {
 let gpsState = {
   gameId: "rb",
   mode: "pokemon", // "pokemon" | "items"
-  selectedAreaId: "viridian-forest",
+  selectedAreaId: null, // Só destaca após o usuário clicar em uma rota/cidade ou pesquisar
   methodFilter: "all",
   versionFilter: "both",
   searchQuery: "",
@@ -1551,7 +1551,9 @@ function renderInteractiveMapNodes() {
 
     return `
       <g class="cursor-pointer group" data-area-id="${r.areaId}" opacity="${opacity}">
-        <path d="${r.path}" stroke="${outerStroke}" stroke-width="26" stroke-linecap="square" stroke-linejoin="miter" ${isSelected ? 'filter="url(#glow-cyan)"' : ""}></path>
+        <path d="${r.path}" stroke="${outerStroke}" stroke-width="26" stroke-linecap="square" stroke-linejoin="miter" ${isSelected ? 'filter="url(#glow-cyan)"' : ""}>
+          ${isSelected || matched ? `<animate attributeName="stroke-width" values="25;30;25" dur="1.6s" repeatCount="indefinite" />` : ""}
+        </path>
         <path d="${r.path}" stroke="${innerStroke}" stroke-width="19" stroke-linecap="square" stroke-linejoin="miter" class="group-hover:stroke-[#1e3a5f] transition-colors"></path>
         <text x="${r.lx}" y="${r.ly + 4}" fill="${numFill}" font-family="JetBrains Mono" font-size="11.5" font-weight="800" text-anchor="middle">${r.num}</text>
       </g>
@@ -1564,12 +1566,21 @@ function renderInteractiveMapNodes() {
     const matched = isAreaMatched(c.areaId);
     return `
       <g class="cursor-pointer group" data-area-id="${c.areaId}" transform="translate(${c.x}, ${c.y})">
+        ${isSelected || matched ? `
+          <rect x="-22" y="-22" width="44" height="44" rx="4" fill="none" stroke="${matched ? "#f59e0b" : "#38bdf8"}" stroke-width="2.5" opacity="0.55">
+            <animate attributeName="x" values="-18;-25;-18" dur="1.6s" repeatCount="indefinite" />
+            <animate attributeName="y" values="-18;-25;-18" dur="1.6s" repeatCount="indefinite" />
+            <animate attributeName="width" values="36;50;36" dur="1.6s" repeatCount="indefinite" />
+            <animate attributeName="height" values="36;50;36" dur="1.6s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.65;0.15;0.65" dur="1.6s" repeatCount="indefinite" />
+          </rect>
+        ` : ""}
         <rect x="-17" y="-17" width="34" height="34" fill="#475569" stroke="${isSelected ? "#38bdf8" : matched ? "#f59e0b" : "#94a3b8"}" stroke-width="${isSelected || matched ? "2.5" : "1.5"}" />
         <polygon points="-17,-17 17,-17 11,-11 -11,-11" fill="#94a3b8" opacity="0.55" />
         <polygon points="-17,17 17,17 11,11 -11,11" fill="#1e293b" opacity="0.8" />
-        <rect x="-11" y="-11" width="22" height="22" fill="${matched ? "#f59e0b" : "#ef4444"}" class="group-hover:fill-[#f87171] transition-colors" filter="url(#glow-red)" />
+        <rect x="-11" y="-11" width="22" height="22" fill="${isSelected ? "#38bdf8" : matched ? "#f59e0b" : "#ef4444"}" class="group-hover:fill-[#f87171] transition-colors" filter="url(#glow-red)" />
       </g>
-      <text x="${c.lx}" y="${c.ly}" fill="${matched ? "#fde047" : "#dde2f7"}" font-family="Plus Jakarta Sans" font-size="12" font-weight="800" text-anchor="${c.anchor}" style="paint-order: stroke; stroke: #060c1a; stroke-width: 4px; stroke-linejoin: round;">${c.name}</text>
+      <text x="${c.lx}" y="${c.ly}" fill="${isSelected ? "#8ed5ff" : matched ? "#fde047" : "#dde2f7"}" font-family="Plus Jakarta Sans" font-size="12" font-weight="800" text-anchor="${c.anchor}" style="paint-order: stroke; stroke: #060c1a; stroke-width: 4px; stroke-linejoin: round;">${c.name}</text>
     `;
   }).join("");
 
@@ -1582,7 +1593,12 @@ function renderInteractiveMapNodes() {
 
     return `
       <g class="cursor-pointer group" data-area-id="${s.areaId}" opacity="${opacity}">
-        ${isSelected || matched ? `<circle class="animate-target-pulse" cx="${s.x}" cy="${s.y}" r="24" fill="${matched ? "#f59e0b" : "#38bdf8"}" opacity="0.28"></circle>` : ""}
+        ${isSelected || matched ? `
+          <circle cx="${s.x}" cy="${s.y}" r="16" fill="${matched ? "#f59e0b" : "#38bdf8"}" opacity="0.35">
+            <animate attributeName="r" values="14;25;14" dur="1.6s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.55;0.12;0.55" dur="1.6s" repeatCount="indefinite" />
+          </circle>
+        ` : ""}
         <circle
           cx="${s.x}"
           cy="${s.y}"
@@ -1591,9 +1607,9 @@ function renderInteractiveMapNodes() {
           stroke="${isSelected ? "#e0f2fe" : "#64748b"}"
           stroke-width="3.5"
           filter="${isSelected ? "url(#glow-cyan)" : "url(#glow-emerald)"}"
-          class="group-hover:scale-110 transition-transform"
-          style="transform-origin: ${s.x}px ${s.y}px;"
-        ></circle>
+        >
+          ${isSelected || matched ? `<animate attributeName="r" values="13.5;16;13.5" dur="1.6s" repeatCount="indefinite" />` : ""}
+        </circle>
         ${!s.hideLabel ? `
           <text
             x="${s.lx}"
@@ -1654,11 +1670,9 @@ function renderAreaSelectorQuickList() {
 // ============================================================================
 function renderSelectedAreaDetails() {
   const areas = getAreasForCurrentGame();
-  let area = areas.find(a => a.id === gpsState.selectedAreaId);
-  if (!area) {
-    area = areas[0];
-    gpsState.selectedAreaId = area.id;
-  }
+  const area = gpsState.selectedAreaId
+    ? areas.find(a => a.id === gpsState.selectedAreaId)
+    : null;
 
   const gameConfig = GAME_GPS_CONFIG[gpsState.gameId] || GAME_GPS_CONFIG.rb;
 
@@ -1672,6 +1686,39 @@ function renderSelectedAreaDetails() {
   const hudTypes = document.getElementById("hud-dominant-types");
   const hudCount = document.getElementById("hud-species-count");
 
+  const titleEl = document.getElementById("panel-area-title");
+  const connEl = document.getElementById("panel-area-connections");
+  const listEl = document.getElementById("encounter-cards-list");
+
+  // Estado padrão quando o usuário ainda não clicou em nenhuma rota/cidade/caverna
+  if (!area) {
+    if (hudLevel) hudLevel.textContent = "—";
+    if (hudTypes) hudTypes.textContent = "Selecione uma rota";
+    if (hudCount) hudCount.textContent = `${areas.length} Zonas no Mapa`;
+
+    if (titleEl) titleEl.textContent = "Selecione uma Rota ou Cidade";
+    if (connEl) {
+      connEl.textContent = "Clique em qualquer rota, cidade ou caverna no mapa ao lado para destacar e inspecionar";
+    }
+
+    if (listEl) {
+      if (gpsState.mode === "items" && gpsState.searchQuery.trim()) {
+        renderItemsPanelList(listEl, areas[0], areas, gameConfig);
+      } else {
+        listEl.innerHTML = `
+          <div class="bg-surface-container rounded-lg p-6 border border-outline-variant text-center space-y-2.5">
+            <span class="material-symbols-outlined text-3xl text-primary">ads_click</span>
+            <p class="font-headline-sm text-headline-sm text-on-surface">Nenhuma localização selecionada no mapa</p>
+            <p class="font-body-sm text-body-sm text-on-surface-variant">
+              Clique em qualquer <strong>rota numerada</strong>, <strong>cidade (quadrado vermelho)</strong> ou <strong>caverna/local (círculo verde)</strong> no mapa para ver ${gpsState.mode === "items" ? "os Itens, TMs e HMs" : "os Pokémon e taxas de aparição"} daquela área.
+            </p>
+          </div>
+        `;
+      }
+    }
+    return;
+  }
+
   if (hudLevel) hudLevel.textContent = area.levelRange;
   if (hudTypes) hudTypes.textContent = area.dominantTypes;
   if (hudCount) {
@@ -1680,10 +1727,6 @@ function renderSelectedAreaDetails() {
       : `${area.encounters.length} Catalogadas`;
   }
 
-  // Update right panel header
-  const titleEl = document.getElementById("panel-area-title");
-  const connEl = document.getElementById("panel-area-connections");
-
   if (titleEl) titleEl.textContent = area.name;
   if (connEl) {
     connEl.textContent = gpsState.mode === "items"
@@ -1691,7 +1734,6 @@ function renderSelectedAreaDetails() {
       : `${area.connections} • ${area.encounters.length} Espécies Registradas`;
   }
 
-  const listEl = document.getElementById("encounter-cards-list");
   if (!listEl) return;
 
   // MODO 2: PESQUISA DE ITENS & TMs
@@ -1983,11 +2025,6 @@ function applyUrlQueryParams() {
     }
   }
 
-  const areas = getAreasForCurrentGame();
-  if (!areas.some(a => a.id === gpsState.selectedAreaId)) {
-    gpsState.selectedAreaId = areas[0].id;
-  }
-
   if (rawMode === "items" || rawMode === "pokemon") {
     gpsState.mode = rawMode;
   }
@@ -2036,8 +2073,7 @@ function initGpsPage() {
   if (gameSelect) {
     gameSelect.addEventListener("change", e => {
       gpsState.gameId = e.target.value;
-      const areas = getAreasForCurrentGame();
-      gpsState.selectedAreaId = areas[0].id;
+      gpsState.selectedAreaId = null;
       if (gpsState.searchQuery) {
         autoSelectMatchingAreaForQuery(gpsState.searchQuery);
       }
