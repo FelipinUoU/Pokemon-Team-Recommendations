@@ -68,10 +68,10 @@ Basta abrir o link do site oficial já hospedado online:
 👉 **[https://felipinuou.github.io/Pokemon-Team-Recommendations/](https://felipinuou.github.io/Pokemon-Team-Recommendations/)**
 
 ### 📱 2. Versão Mobile Android (Aplicativo APK Oficial)
-Existe uma versão nativa para celulares Android disponível na branch [`mobile`](https://github.com/FelipinUoU/Pokemon-Team-Recommendations/tree/mobile)!
+Existe uma versão nativa para celulares Android! O código-fonte completo e ambiente de desenvolvimento ficam organizados na branch [`mobile`](https://github.com/FelipinUoU/Pokemon-Team-Recommendations/tree/mobile).
 
 - **📥 Como Baixar e Instalar**:
-  1. Baixe o instalador direto pelo link: **[Pokemon-Team-Recommendations-mobile.apk](https://github.com/FelipinUoU/Pokemon-Team-Recommendations/raw/mobile/Pokemon-Team-Recommendations-mobile.apk)**.
+  1. Baixe o instalador direto pelo link: **[Pokemon-Team-Recommendations-mobile.apk](https://github.com/FelipinUoU/Pokemon-Team-Recommendations/raw/main/Pokemon-Team-Recommendations-mobile.apk)**.
   2. No seu aparelho Android, abra o arquivo `.apk` baixado.
   3. Confirme a instalação (caso o sistema pergunte, permita a instalação de apps dessa fonte/gerenciador de arquivos).
   4. Pronto! O app estará instalado com ícone próprio e navegação tática otimizada para toque.
